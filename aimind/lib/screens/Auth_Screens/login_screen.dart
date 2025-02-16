@@ -1,4 +1,5 @@
 import 'package:aimind/config/palette.dart';
+import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,6 +10,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+ bool isMale = true;
+ bool isSignupScreen = true;
+ bool isRememberMe = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 300,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('images/background.png'),
-                      fit: BoxFit.fill)),
+                image: AssetImage('images/background.png'),
+              )),
               child: Container(
                 padding: EdgeInsets.only(top: 90, left: 20),
+                // ignore: deprecated_member_use
                 color: Color(0xFF3B5999).withOpacity(.85),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,6 +59,94 @@ class _LoginScreenState extends State<LoginScreen> {
                     )
                   ],
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 200,
+            child: Container(
+              height: 380,
+              padding: EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width - 40,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                        // ignore: deprecated_member_use
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 15,
+                        spreadRadius: 5)
+                  ]),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isSignupScreen = false;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: !isSignupScreen? Palette.activeColor : Palette.textColor1),
+                            ),
+                            if(!isSignupScreen)
+                            Container(
+                              height: 2,
+                              margin: EdgeInsets.only(top: 3),
+                              width: 55,
+                              color: Colors.orange,
+                            )
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isSignupScreen = true;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              'SIGNUP',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSignupScreen? Palette.activeColor : Palette.textColor1),
+                            ),
+                            if(isSignupScreen)
+                            Container(
+                              height: 2,
+                              margin: EdgeInsets.only(top: 3),
+                              width: 55,
+                              color: Colors.orange,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                      CustomTextField(hintText: 'Usuario',prefixIcon: Icons.person,),
+                      CustomTextField(hintText: 'Correo',prefixIcon: Icons.email_outlined,),
+                      CustomTextField(hintText: 'Contraseña', prefixIcon: Icons.lock_outline, )
+                      ]
+                    ),
+                  )
+                ],
               ),
             ),
           )

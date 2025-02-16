@@ -23,33 +23,40 @@ class CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: widget.hintText,
-        contentPadding: EdgeInsets.all(5),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.black, width: 3),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          hintStyle: TextStyle(
+            color: Color(0xFFB0B0B0), // Gris medio
+          ),
+          contentPadding: EdgeInsets.all(5),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.grey, width: 3),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.green, width: 3),
+          ),
+          prefixIcon: Icon(widget.prefixIcon, color: Color(0xFFB0B0B0)),
+          suffixIcon: widget.isPassword
+              ? IconButton(
+                  icon: Icon(
+                      secureText ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () {
+                    setState(() {
+                      secureText = !secureText;
+                    });
+                  },
+                )
+              : null,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.green, width: 3),
-        ),
-        prefixIcon: Icon(widget.prefixIcon),
-        suffixIcon: widget.isPassword
-            ? IconButton(
-                icon: Icon(secureText ? Icons.visibility_off : Icons.visibility),
-                onPressed: () {
-                  setState(() {
-                    secureText = !secureText;
-                  });
-                },
-              )
-            : null,
+        keyboardType: widget.keyboardType,
+        textInputAction: TextInputAction.next,
+        obscureText: widget.isPassword ? secureText : false,
       ),
-      keyboardType: widget.keyboardType,
-      textInputAction: TextInputAction.next,
-      obscureText: widget.isPassword ? secureText : false,
     );
   }
 }
