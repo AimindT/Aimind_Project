@@ -1,3 +1,3 @@
-# aimind
+# Aimind
 
-A new Flutter project.
+
