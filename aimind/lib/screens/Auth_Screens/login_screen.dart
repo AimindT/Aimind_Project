@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 30),
+                            SizedBox(width: 29),
                             GestureDetector(
                               onTap: () {
                                 setState(() {
