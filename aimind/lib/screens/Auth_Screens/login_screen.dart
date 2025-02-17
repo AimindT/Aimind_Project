@@ -10,9 +10,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
- bool isMale = true;
- bool isSignupScreen = true;
- bool isRememberMe = false;
+  bool isMale = true;
+  bool isSignupScreen = true;
+  bool isRememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +97,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: !isSignupScreen? Palette.activeColor : Palette.textColor1),
+                                  color: !isSignupScreen
+                                      ? Palette.activeColor
+                                      : Palette.textColor1),
                             ),
-                            if(!isSignupScreen)
-                            Container(
-                              height: 2,
-                              margin: EdgeInsets.only(top: 3),
-                              width: 55,
-                              color: Colors.orange,
-                            )
+                            if (!isSignupScreen)
+                              Container(
+                                height: 2,
+                                margin: EdgeInsets.only(top: 3),
+                                width: 55,
+                                color: Colors.orange,
+                              )
                           ],
                         ),
                       ),
@@ -122,15 +124,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: isSignupScreen? Palette.activeColor : Palette.textColor1),
+                                  color: isSignupScreen
+                                      ? Palette.activeColor
+                                      : Palette.textColor1),
                             ),
-                            if(isSignupScreen)
-                            Container(
-                              height: 2,
-                              margin: EdgeInsets.only(top: 3),
-                              width: 55,
-                              color: Colors.orange,
-                            )
+                            if (isSignupScreen)
+                              Container(
+                                height: 2,
+                                margin: EdgeInsets.only(top: 3),
+                                width: 55,
+                                color: Colors.orange,
+                              )
                           ],
                         ),
                       ),
@@ -138,13 +142,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                      CustomTextField(hintText: 'Usuario',prefixIcon: Icons.person,keyboardType: TextInputType.text,),
-                      CustomTextField(hintText: 'Correo',prefixIcon: Icons.email_outlined,keyboardType: TextInputType.emailAddress),
-                      CustomTextField(hintText: 'Contraseña', prefixIcon: Icons.lock_outline, isPassword: true, keyboardType: TextInputType.text,)
-                      ,Padding(
-                        padding: const EdgeInsets.only(top: 10,left: 10),
+                    child: Column(children: [
+                      CustomTextField(
+                        hintText: 'Usuario',
+                        prefixIcon: Icons.person,
+                        keyboardType: TextInputType.text,
+                      ),
+                      CustomTextField(
+                          hintText: 'Correo',
+                          prefixIcon: Icons.email_outlined,
+                          keyboardType: TextInputType.emailAddress),
+                      CustomTextField(
+                        hintText: 'Contraseña',
+                        prefixIcon: Icons.lock_outline,
+                        isPassword: true,
+                        keyboardType: TextInputType.text,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -154,25 +169,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isMale = true;
                                 });
                               },
-                              child: Row(children: [
-                                Container(
-                                  width: 30,
-                                  height: 30,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: isMale ? Palette.textColor2 : Colors.transparent,
-                                    border: Border.all(
-                                      width: 1, color: isMale ? Colors.transparent : Palette.textColor1
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 30,
+                                    height: 30,
+                                    margin: EdgeInsets.only(right: 8),
+                                    decoration: BoxDecoration(
+                                        color: isMale
+                                            ? Palette.textColor2
+                                            : Colors.transparent,
+                                        border: Border.all(
+                                            width: 1,
+                                            color: isMale
+                                                ? Colors.transparent
+                                                : Palette.textColor1),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Icon(
+                                      Icons.person_2_outlined,
+                                      color: isMale
+                                          ? Colors.white
+                                          : Palette.iconColor,
                                     ),
-                                    borderRadius: BorderRadius.circular(15)
                                   ),
-                                  child:  Icon(
-                                    Icons.person_2_outlined,
-                                    color: isMale ? Colors.white : Palette.iconColor,
-                                  ),
-                                )
-                                ,Text("Hombre", style: TextStyle(color: Palette.textColor1),)
-                              ],),
+                                  Text(
+                                    "Hombre",
+                                    style: TextStyle(color: Palette.textColor1),
+                                  )
+                                ],
+                              ),
                             ),
                             SizedBox(width: 30),
                             GestureDetector(
@@ -181,31 +207,57 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isMale = false;
                                 });
                               },
-                              child: Row(children: [
-                                Container(
-                                  width: 30,
-                                  height: 30,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: isMale ? Colors.transparent : Palette.textColor2,
-                                    border: Border.all(
-                                      width: 1, color: isMale ? Palette.textColor1 : Colors.transparent
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 30,
+                                    height: 30,
+                                    margin: EdgeInsets.only(right: 8),
+                                    decoration: BoxDecoration(
+                                        color: isMale
+                                            ? Colors.transparent
+                                            : Palette.textColor2,
+                                        border: Border.all(
+                                            width: 1,
+                                            color: isMale
+                                                ? Palette.textColor1
+                                                : Colors.transparent),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Icon(
+                                      Icons.person_2_outlined,
+                                      color: isMale
+                                          ? Palette.iconColor
+                                          : Colors.white,
                                     ),
-                                    borderRadius: BorderRadius.circular(15)
                                   ),
-                                  child:  Icon(
-                                    Icons.person_2_outlined,
-                                    color: isMale? Palette.iconColor : Colors.white,
-                                  ),
-                                )
-                                ,Text("Mujer", style: TextStyle(color: Palette.textColor1),)
-                              ],),
+                                  Text(
+                                    "Mujer",
+                                    style: TextStyle(color: Palette.textColor1),
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),
+                      ),
+                      Container(
+                        width: 200,
+                        margin: EdgeInsets.only(top: 20),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              text:
+                                  'Presionando el botón de registro, aceptas nuestros ',
+                              style: TextStyle(color: Palette.textColor2),
+                              children: [
+                                TextSpan(
+                                  text: 'términos y condiciones',
+                                style: TextStyle(color: Colors.orange))
+                              ]),
+                        ),
                       )
-                      ]
-                    ),
+                    ]),
                   )
                 ],
               ),
