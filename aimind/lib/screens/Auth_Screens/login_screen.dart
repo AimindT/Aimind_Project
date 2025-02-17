@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Palette.backgroundColor,
       body: Stack(
         children: [
+          //Back Container
           Positioned(
             top: 0,
             right: 0,
@@ -62,10 +63,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+          // Form Container
           Positioned(
             top: 200,
             child: Container(
-              height: 380,
+              height: 402,
               padding: EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width - 40,
               margin: EdgeInsets.symmetric(horizontal: 20),
@@ -252,14 +254,57 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(color: Palette.textColor2),
                               children: [
                                 TextSpan(
-                                  text: 'términos y condiciones',
-                                style: TextStyle(color: Colors.orange))
+                                    text: 'términos y condiciones',
+                                    style: TextStyle(color: Colors.orange))
                               ]),
                         ),
-                      )
+                      ),
                     ]),
                   )
                 ],
+              ),
+            ),
+          ),
+          //Button Container
+          Positioned(
+            top: 555,
+            right: 0,
+            left: 0,
+            child: Center(
+              child: Container(
+                height: 90,
+                width: 90,
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50),
+                  boxShadow: [
+                   BoxShadow(
+                    color: Colors.black.withOpacity(.3),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(0, 1)
+                   )
+                  ]
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    colors: [Colors.orange[200]!, Colors.red[400]!],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                   BoxShadow(
+                    color: Colors.black.withOpacity(.3),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(0, 1)
+                   )
+                  ]),
+                  child: Icon(Icons.arrow_forward,color: Colors.white,),
+                ),
               ),
             ),
           )
