@@ -140,9 +140,70 @@ class _LoginScreenState extends State<LoginScreen> {
                     margin: EdgeInsets.only(top: 20),
                     child: Column(
                       children: [
-                      CustomTextField(hintText: 'Usuario',prefixIcon: Icons.person,),
-                      CustomTextField(hintText: 'Correo',prefixIcon: Icons.email_outlined,),
-                      CustomTextField(hintText: 'Contraseña', prefixIcon: Icons.lock_outline, )
+                      CustomTextField(hintText: 'Usuario',prefixIcon: Icons.person,keyboardType: TextInputType.text,),
+                      CustomTextField(hintText: 'Correo',prefixIcon: Icons.email_outlined,keyboardType: TextInputType.emailAddress),
+                      CustomTextField(hintText: 'Contraseña', prefixIcon: Icons.lock_outline, isPassword: true, keyboardType: TextInputType.text,)
+                      ,Padding(
+                        padding: const EdgeInsets.only(top: 10,left: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isMale = true;
+                                });
+                              },
+                              child: Row(children: [
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: isMale ? Palette.textColor2 : Colors.transparent,
+                                    border: Border.all(
+                                      width: 1, color: isMale ? Colors.transparent : Palette.textColor1
+                                    ),
+                                    borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child:  Icon(
+                                    Icons.person_2_outlined,
+                                    color: isMale ? Colors.white : Palette.iconColor,
+                                  ),
+                                )
+                                ,Text("Hombre", style: TextStyle(color: Palette.textColor1),)
+                              ],),
+                            ),
+                            SizedBox(width: 30),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isMale = false;
+                                });
+                              },
+                              child: Row(children: [
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: isMale ? Colors.transparent : Palette.textColor2,
+                                    border: Border.all(
+                                      width: 1, color: isMale ? Palette.textColor1 : Colors.transparent
+                                    ),
+                                    borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child:  Icon(
+                                    Icons.person_2_outlined,
+                                    color: isMale? Palette.iconColor : Colors.white,
+                                  ),
+                                )
+                                ,Text("Mujer", style: TextStyle(color: Palette.textColor1),)
+                              ],),
+                            )
+                          ],
+                        ),
+                      )
                       ]
                     ),
                   )

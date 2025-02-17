@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
   final String hintText;
@@ -26,6 +27,9 @@ class CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: TextField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(128)
+        ],
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: TextStyle(
