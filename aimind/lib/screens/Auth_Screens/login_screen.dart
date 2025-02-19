@@ -1,6 +1,8 @@
+
 import 'package:aimind/config/palette.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+          buildBottomHalfContainer(true),
           // Form Container
           Positioned(
             top: 200,
@@ -266,50 +269,93 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           //Button Container
+          buildBottomHalfContainer(false),
           Positioned(
-            top: 555,
+            top: MediaQuery.of(context).size.height-210,
             right: 0,
             left: 0,
-            child: Center(
-              child: Container(
-                height: 90,
-                width: 90,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(50),
-                  boxShadow: [
-                   BoxShadow(
-                    color: Colors.black.withOpacity(.3),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: Offset(0, 1)
-                   )
-                  ]
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [Colors.orange[200]!, Colors.red[400]!],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                   BoxShadow(
-                    color: Colors.black.withOpacity(.3),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: Offset(0, 1)
-                   )
-                  ]),
-                  child: Icon(Icons.arrow_forward,color: Colors.white,),
-                ),
-              ),
-            ),
-          )
+            child: Column(children: [
+              Text("O inicia sesión con"),
+              Row(children: [
+                LoginButton(voidCallback: (){},backgroundColor: Palette.googleColor,icon: Icons.ac_unit,text: 'Google',)
+              ],)
+            ],))
         ],
       ),
     );
+  }
+
+  Positioned buildBottomHalfContainer(bool showShadow) {
+    return Positioned(
+          top: 555,
+          right: 0,
+          left: 0,
+          child: Center(
+            child: Container(
+              height: 90,
+              width: 90,
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  if(showShadow)
+                 BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  spreadRadius: 1.5,
+                  blurRadius: 10,
+                  offset: Offset(0, 1)
+                 )
+                ]
+              ),
+              child: !showShadow ? Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: [Colors.orange[200]!, Colors.red[400]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight
+                ),
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                 BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  offset: Offset(0, 1)
+                 )
+                ]),
+                child: Icon(Icons.arrow_forward,color: Colors.white,),
+              ) : Center(),
+            ),
+          ),
+        );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback voidCallback;
+  final String text;
+  final Color backgroundColor;
+  const LoginButton({
+    super.key, required this.icon, required this.text, required this.backgroundColor, required this.voidCallback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(onPressed: voidCallback,style: TextButton.styleFrom(
+      minimumSize: Size(155, 40),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(width: 1,color: Colors.grey),
+        borderRadius: BorderRadius.circular(20)
+      ),
+      backgroundColor: backgroundColor,
+    ), child: Row(
+      children: [
+        Icon(icon,color: Colors.white,),
+        SizedBox(width: 5),
+        Text(text,style: TextStyle(color: Colors.white))
+      ],
+    ));
   }
 }
