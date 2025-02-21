@@ -70,9 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
             curve: Curves.bounceInOut,
             top: isSignupScreen ? 200 : 230,
             child: AnimatedContainer(
-              duration:Duration(milliseconds: 700) ,
+              duration: Duration(milliseconds: 700),
               curve: Curves.bounceInOut,
-              height: isSignupScreen ? MediaQuery.of(context).size.height - 480 : MediaQuery.of(context).size.height - 660,
+              height: isSignupScreen
+                  ? MediaQuery.of(context).size.height - 480
+                  : MediaQuery.of(context).size.height - 660,
               padding: EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width - 40,
               margin: EdgeInsets.symmetric(horizontal: 20),
@@ -161,7 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
             left: 0,
             child: Column(
               children: [
-                Text(isSignupScreen ? "O inicia sesión con" : "O registrate con"),
+                Text(isSignupScreen
+                    ? "O inicia sesión con"
+                    : "O registrate con"),
                 SizedBox(height: 40),
                 Column(
                   children: [
@@ -219,47 +223,45 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Container buildSignInSection() {
     return Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                          hintText: 'Correo',
-                          prefixIcon: Icons.email,
-                          keyboardType: TextInputType.emailAddress),
-                      CustomTextField(
-                        hintText: 'Contraseña',
-                        prefixIcon: Icons.lock,
-                        isPassword: true,
-                        keyboardType: TextInputType.text,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Checkbox(
-                              value: isRememberMe,
-                              activeColor: Palette.textColor2,
-                              onChanged: (value) {
-                                setState(() {
-                                  isRememberMe = !isRememberMe;
-                                });
-                              }),
-                          Text(
-                            'Remember me',
-                            style: TextStyle(
-                                fontSize: 12, color: Palette.textColor1),
-                          ),
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Forgot Password?',
-                                style: TextStyle(
-                                    fontSize: 12, color: Palette.textColor1),
-                              ))
-                        ],
-                      ),
-                    ],
-                  ),
-                );
+      margin: EdgeInsets.only(top: 20),
+      child: Column(
+        children: [
+          CustomTextField(
+              hintText: 'Correo',
+              prefixIcon: Icons.email,
+              keyboardType: TextInputType.emailAddress),
+          CustomTextField(
+            hintText: 'Contraseña',
+            prefixIcon: Icons.lock,
+            isPassword: true,
+            keyboardType: TextInputType.text,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Checkbox(
+                  value: isRememberMe,
+                  activeColor: Palette.textColor2,
+                  onChanged: (value) {
+                    setState(() {
+                      isRememberMe = !isRememberMe;
+                    });
+                  }),
+              Text(
+                'Remember me',
+                style: TextStyle(fontSize: 12, color: Palette.textColor1),
+              ),
+              TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(fontSize: 12, color: Palette.textColor1),
+                  ))
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Container buildSingupSection() {
