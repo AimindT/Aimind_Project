@@ -23,4 +23,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/background.png
+    - assets/images/background.png
+    - assets/images/google_logo.png
+    - assets/images/x_logo.png

@@ -1,7 +1,6 @@
 import 'package:aimind/config/palette.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,11 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 300,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: AssetImage('images/background.png'),
+                image: AssetImage('assets/images/background.png'),
               )),
               child: Container(
                 padding: EdgeInsets.only(top: 90, left: 20),
-                // ignore: deprecated_member_use
                 color: Color(0xFF3B5999).withOpacity(.85),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                        // ignore: deprecated_member_use
                         color: Colors.black.withOpacity(0.3),
                         blurRadius: 15,
                         spreadRadius: 5)
@@ -270,31 +267,62 @@ class _LoginScreenState extends State<LoginScreen> {
           //Button Container
           buildBottomHalfContainer(false),
           Positioned(
-              top: MediaQuery.of(context).size.height - 210,
-              right: 0,
-              left: 0,
-              child: Column(
-                children: [
-                  Text("O inicia sesión con"),
-                  SizedBox(height: 10),
-                  Row(
-                    spacing: 10,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SignInButton(
-                        Buttons.facebook,
-                        text: "Facebook",
-                        onPressed: () {},
-                      ),
-                      SignInButton(
-                        Buttons.google,
-                        text: "Google",
-                        onPressed: () {},
-                      )
-                    ],
-                  )
-                ],
-              ))
+            top: MediaQuery.of(context).size.height - 240,
+            right: 0,
+            left: 0,
+            child: Column(
+              children: [
+                Text("O inicia sesión con"),
+                SizedBox(height: 40),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        LoginButton(
+                          icon: Icons.facebook,
+                          text: "Facebook",
+                          backgroundColor: Color(0xFF3B5999),
+                          iconColor: Colors.white,
+                          textColor: Colors.white,
+                          voidCallback: () {},
+                        ),
+                        SizedBox(width: 10),
+                        LoginButtonWithImage(
+                          imagePath: 'assets/images/google_logo.png',
+                          text: "Google",
+                          backgroundColor: Colors.white,
+                          textColor: Colors.black87,
+                          voidCallback: () {},
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        LoginButton(
+                          icon: Icons.apple,
+                          text: "Apple",
+                          backgroundColor: Colors.black,
+                          iconColor: Colors.white,
+                          textColor: Colors.white,
+                          voidCallback: () {},
+                        ),
+                        SizedBox(width: 10),
+                        LoginButtonWithImage(
+                          imagePath: 'assets/images/x_logo.png',
+                          text: "",
+                          backgroundColor: Colors.black,
+                          voidCallback: () {},
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -316,7 +344,7 @@ class _LoginScreenState extends State<LoginScreen> {
               boxShadow: [
                 if (showShadow)
                   BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: Colors.black.withOpacity(0.3),
                       spreadRadius: 1.5,
                       blurRadius: 10,
                       offset: Offset(0, 1))
@@ -331,7 +359,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
+                            color: Colors.black.withOpacity(0.3),
                             spreadRadius: 1,
                             blurRadius: 1,
                             offset: Offset(0, 1))
@@ -345,5 +373,88 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  final Color? iconColor;
+  final Color? textColor;
+  final IconData icon;
+  final VoidCallback voidCallback;
+  final String text;
+  final Color backgroundColor;
+  const LoginButton({
+    super.key,
+    required this.icon,
+    required this.text,
+    required this.backgroundColor,
+    required this.voidCallback,
+    this.iconColor,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: voidCallback,
+        style: TextButton.styleFrom(
+          minimumSize: Size(155, 40),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: Colors.grey),
+              borderRadius: BorderRadius.circular(20)),
+          backgroundColor: backgroundColor,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: iconColor,
+            ),
+            SizedBox(width: 5),
+            Text(text, style: TextStyle(color: textColor))
+          ],
+        ));
+  }
+}
+
+class LoginButtonWithImage extends StatelessWidget {
+  final String imagePath;
+  final Color? textColor;
+  final VoidCallback voidCallback;
+  final String text;
+  final Color backgroundColor;
+
+  const LoginButtonWithImage({
+    super.key,
+    required this.imagePath,
+    required this.text,
+    required this.backgroundColor,
+    required this.voidCallback,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: voidCallback,
+        style: TextButton.styleFrom(
+          minimumSize: Size(155, 40),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: Colors.grey),
+              borderRadius: BorderRadius.circular(20)),
+          backgroundColor: backgroundColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 24,
+              width: 24,
+            ),
+            SizedBox(width: 8),
+            Text(text, style: TextStyle(color: textColor))
+          ],
+        ));
   }
 }
