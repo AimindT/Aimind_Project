@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
             left: 0,
             child: Column(
               children: [
-                Text(isSignupScreen
+                Text(!isSignupScreen
                     ? "O inicia sesión con"
                     : "O registrate con"),
                 SizedBox(height: 40),
