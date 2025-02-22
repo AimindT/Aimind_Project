@@ -70,25 +70,36 @@ class _LoginScreenState extends State<LoginScreen> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 700),
             curve: Curves.bounceInOut,
-            top: isSignupScreen ? 200 : 230,
+            // Posición top responsiva basada en porcentaje de altura de pantalla
+            top: MediaQuery.of(context).size.height *
+                (isSignupScreen ? 0.20 : 0.25),
+            // Posición horizontal responsiva
+            left: MediaQuery.of(context).size.width * 0.03,
+            right: MediaQuery.of(context).size.width * 0.03,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 700),
               curve: Curves.bounceInOut,
-              height: isSignupScreen
-                  ? MediaQuery.of(context).size.height - 480
-                  : MediaQuery.of(context).size.height - 660,
-              padding: EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width - 40,
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              // Altura responsiva basada en porcentaje de pantalla
+              height: MediaQuery.of(context).size.height *
+                  (isSignupScreen ? 0.45 : 0.25),
+              // Padding responsivo
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+              width: MediaQuery.of(context).size.width *
+                  0.9, // 90% del ancho de pantalla
+              margin: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.05,
+              ),
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withValues(alpha: .3),
-                        blurRadius: 15,
-                        spreadRadius: 5)
-                  ]),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 15,
+                    spreadRadius: 5,
+                  )
+                ],
+              ),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -106,17 +117,27 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 'LOGIN',
                                 style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: !isSignupScreen
-                                        ? Palette.activeColor
-                                        : Palette.textColor1),
+                                  // Tamaño de fuente responsivo
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.04,
+                                  fontWeight: FontWeight.bold,
+                                  color: !isSignupScreen
+                                      ? Palette.activeColor
+                                      : Palette.textColor1,
+                                ),
                               ),
                               if (!isSignupScreen)
                                 Container(
-                                  height: 2,
-                                  margin: EdgeInsets.only(top: 3),
-                                  width: 55,
+                                  // Altura de línea responsiva
+                                  height: MediaQuery.of(context).size.height *
+                                      0.003,
+                                  margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.004,
+                                  ),
+                                  // Ancho de línea responsivo
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.15,
                                   color: Colors.orange,
                                 )
                             ],
@@ -133,17 +154,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 'SIGNUP',
                                 style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: isSignupScreen
-                                        ? Palette.activeColor
-                                        : Palette.textColor1),
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.04,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSignupScreen
+                                      ? Palette.activeColor
+                                      : Palette.textColor1,
+                                ),
                               ),
                               if (isSignupScreen)
                                 Container(
-                                  height: 2,
-                                  margin: EdgeInsets.only(top: 3),
-                                  width: 55,
+                                  height: MediaQuery.of(context).size.height *
+                                      0.003,
+                                  margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.004,
+                                  ),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.15,
                                   color: Colors.orange,
                                 )
                             ],
@@ -157,8 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-          ),
-          //Button Container
+          ), //Button Container
           Positioned(
             top: MediaQuery.of(context).size.height - 240,
             right: 0,
