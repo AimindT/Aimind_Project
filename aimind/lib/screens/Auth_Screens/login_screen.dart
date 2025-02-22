@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: .3),
                     blurRadius: 15,
                     spreadRadius: 5,
                   )
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: "Google",
                           backgroundColor: Colors.white,
                           textColor: Colors.black87,
-                          voidCallback: () {},
+                          voidCallback: () async {},
                         ),
                       ],
                     ),
