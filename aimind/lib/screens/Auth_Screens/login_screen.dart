@@ -1,5 +1,7 @@
 import 'package:aimind/config/palette.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
+import 'package:aimind/widgets/login_button.dart';
+import 'package:aimind/widgets/login_button_with_image.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -383,85 +385,3 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class LoginButton extends StatelessWidget {
-  final Color? iconColor;
-  final Color? textColor;
-  final IconData icon;
-  final VoidCallback voidCallback;
-  final String text;
-  final Color backgroundColor;
-  const LoginButton({
-    super.key,
-    required this.icon,
-    required this.text,
-    required this.backgroundColor,
-    required this.voidCallback,
-    this.iconColor,
-    this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: voidCallback,
-        style: TextButton.styleFrom(
-          minimumSize: Size(155, 40),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(width: 1, color: Colors.grey),
-              borderRadius: BorderRadius.circular(20)),
-          backgroundColor: backgroundColor,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: iconColor,
-            ),
-            SizedBox(width: 5),
-            Text(text, style: TextStyle(color: textColor))
-          ],
-        ));
-  }
-}
-
-class LoginButtonWithImage extends StatelessWidget {
-  final String imagePath;
-  final Color? textColor;
-  final VoidCallback voidCallback;
-  final String text;
-  final Color backgroundColor;
-
-  const LoginButtonWithImage({
-    super.key,
-    required this.imagePath,
-    required this.text,
-    required this.backgroundColor,
-    required this.voidCallback,
-    this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: voidCallback,
-        style: TextButton.styleFrom(
-          minimumSize: Size(155, 40),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(width: 1, color: Colors.grey),
-              borderRadius: BorderRadius.circular(20)),
-          backgroundColor: backgroundColor,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              imagePath,
-              height: 24,
-              width: 24,
-            ),
-            SizedBox(width: 8),
-            Text(text, style: TextStyle(color: textColor))
-          ],
-        ));
-  }
-}
