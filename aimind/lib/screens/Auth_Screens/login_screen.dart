@@ -16,6 +16,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   bool isMale = true;
   bool isSignupScreen = true;
   bool isRememberMe = false;
@@ -372,10 +377,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Container buildSingupSection() {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController userController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(children: [
@@ -495,5 +496,31 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ]),
     );
+  }
+
+  Future<void> registerUser() async {
+    final String name = nameController.text;
+    final String user = userController.text;
+    final String email = emailController.text;
+    final String password = passwordController.text;
+    try {
+      final response = await Supabase.instance.client.auth
+          .signUp(email: email, password: password);
+      if (response.session == null) {
+        if (kDebugMode) {
+          print('Signup ERROR');
+        }
+      } else {
+        if (kDebugMode) {
+          print('Welcome');
+        }
+        final user = response.user;
+
+        if (user != null) {
+          final insertResponse =
+              await Supabase.instance.client.from('USERS').insert([]);
+        }
+      }
+    } catch (e) {}
   }
 }
