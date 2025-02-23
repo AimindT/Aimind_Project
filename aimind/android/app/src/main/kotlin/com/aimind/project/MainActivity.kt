@@ -1,4 +1,4 @@
-package com.example.aimind
+package com.aimind.project
 
 import io.flutter.embedding.android.FlutterActivity
 

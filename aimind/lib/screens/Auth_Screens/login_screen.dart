@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:aimind/config/palette.dart';
+import 'package:aimind/screens/Auth_Screens/test.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:aimind/widgets/login_button.dart';
 import 'package:aimind/widgets/login_button_with_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -215,7 +221,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: "Google",
                           backgroundColor: Colors.white,
                           textColor: Colors.black87,
-                          voidCallback: () async {},
+                          voidCallback: () async {
+                            if (!kIsWeb &&
+                                (Platform.isAndroid || Platform.isIOS)) {
+                              await signInNativeGoogle(context);
+                            } else {
+                              Supabase.instance.client.auth
+                                  .signInWithOAuth(OAuthProvider.google);
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -248,6 +262,42 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> signInNativeGoogle(BuildContext context) async {
+    /// Web Client ID that you registered with Google Cloud.
+    const webClientId =
+        '320672119432-b8c3ftduhpaptp8hjj885qbiqus0o7b7.apps.googleusercontent.com';
+
+    /// iOS Client ID that you registered with Google Cloud.
+    const iosClientId =
+        '320672119432-63knv9j9kan3e3og8c48vglfs6hi0fa9.apps.googleusercontent.com';
+
+    // Google sign in on Android will work without providing the Android
+    // Client ID registered on Google Cloud.
+
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId: iosClientId,
+      serverClientId: webClientId,
+    );
+    final googleUser = await googleSignIn.signIn();
+    final googleAuth = await googleUser!.authentication;
+    final accessToken = googleAuth.accessToken;
+    final idToken = googleAuth.idToken;
+
+    if (accessToken == null) {
+      throw 'No Access Token found.';
+    }
+    if (idToken == null) {
+      throw 'No ID Token found.';
+    }
+
+    await Supabase.instance.client.auth.signInWithIdToken(
+      provider: OAuthProvider.google,
+      idToken: idToken,
+      accessToken: accessToken,
+    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
   }
 
   Container buildSignInSection() {

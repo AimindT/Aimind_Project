@@ -1,1 +1,1 @@
-Aimind
+com.aimind.project
