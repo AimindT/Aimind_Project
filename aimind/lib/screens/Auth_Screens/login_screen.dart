@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:aimind/config/palette.dart';
-import 'package:aimind/screens/auth_Test_Screens/test_auth_Screen.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:aimind/widgets/login_button.dart';
 import 'package:aimind/widgets/login_button_with_image.dart';
@@ -300,23 +299,20 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: idToken,
       accessToken: accessToken,
     );
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TestAuthScreen()));
   }
 
   Future<void> signInWithFacebook() async {
-    await Supabase.instance.client.auth.signInWithOAuth(
-      OAuthProvider.facebook,
-      redirectTo: kIsWeb
-          ? null
-          : 'my.scheme://my-host', // Optionally set the redirect link to bring back the user via deeplink.
-      authScreenLaunchMode: kIsWeb
-          ? LaunchMode.platformDefault
-          : LaunchMode
-              .externalApplication, // Launch the auth screen in a new webview on mobile.
-    );
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TestAuthScreen()));
+    try {
+      await Supabase.instance.client.auth.signInWithOAuth(
+        OAuthProvider.facebook,
+        redirectTo: kIsWeb
+            ? null
+            : 'com.aimind.app://login-callback/', // Match the scheme in AndroidManifest
+        authScreenLaunchMode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint('Error during Facebook sign in: $e');
+    }
   }
 
   Future<void> signInWithTwitter() async {
@@ -330,8 +326,6 @@ class _LoginScreenState extends State<LoginScreen> {
           : LaunchMode
               .externalApplication, // Launch the auth screen in a new webview on mobile.
     );
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TestAuthScreen()));
   }
 
   Container buildSignInSection() {
@@ -378,26 +372,34 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Container buildSingupSection() {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController userController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(children: [
         CustomTextField(
           hintText: 'Nombre',
           prefixIcon: Icons.person,
+          controller: nameController,
           keyboardType: TextInputType.text,
         ),
         CustomTextField(
           hintText: 'Usuario',
           prefixIcon: Icons.supervised_user_circle_sharp,
+          controller: userController,
           keyboardType: TextInputType.text,
         ),
         CustomTextField(
             hintText: 'Correo',
             prefixIcon: Icons.email,
+            controller: emailController,
             keyboardType: TextInputType.emailAddress),
         CustomTextField(
           hintText: 'Contraseña',
           prefixIcon: Icons.lock,
+          controller: passwordController,
           isPassword: true,
           keyboardType: TextInputType.text,
         ),

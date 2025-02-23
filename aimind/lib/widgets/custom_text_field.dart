@@ -6,13 +6,14 @@ class CustomTextField extends StatefulWidget {
   final IconData prefixIcon;
   final bool isPassword;
   final TextInputType keyboardType;
-
+  final TextEditingController? controller;
   const CustomTextField({
     super.key,
     required this.hintText,
     required this.prefixIcon,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
+    this.controller,
   });
 
   @override
@@ -27,9 +28,7 @@ class CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: TextField(
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(128)
-        ],
+        inputFormatters: [LengthLimitingTextInputFormatter(128)],
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: TextStyle(
