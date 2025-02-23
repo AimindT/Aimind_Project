@@ -6,6 +6,9 @@ class Test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('Test Screen')),
+      ),
       body: Center(child: Text('Bienvenido')),
     );
   }

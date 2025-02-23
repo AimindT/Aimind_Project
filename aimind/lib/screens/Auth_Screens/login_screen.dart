@@ -213,7 +213,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: Color(0xFF3B5999),
                           iconColor: Colors.white,
                           textColor: Colors.white,
-                          voidCallback: () {},
+                          voidCallback: () {
+                            signInWithFacebook();
+                          },
                         ),
                         SizedBox(width: 10),
                         LoginButtonWithImage(
@@ -224,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           voidCallback: () async {
                             if (!kIsWeb &&
                                 (Platform.isAndroid || Platform.isIOS)) {
-                              await signInNativeGoogle(context);
+                              await signInWithGoogle(context);
                             } else {
                               Supabase.instance.client.auth
                                   .signInWithOAuth(OAuthProvider.google);
@@ -264,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> signInNativeGoogle(BuildContext context) async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     /// Web Client ID that you registered with Google Cloud.
     const webClientId =
         '320672119432-b8c3ftduhpaptp8hjj885qbiqus0o7b7.apps.googleusercontent.com';
@@ -298,6 +300,19 @@ class _LoginScreenState extends State<LoginScreen> {
       accessToken: accessToken,
     );
     Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
+  }
+
+  Future<void> signInWithFacebook() async {
+    await Supabase.instance.client.auth.signInWithOAuth(
+      OAuthProvider.facebook,
+      redirectTo: kIsWeb
+          ? null
+          : 'my.scheme://my-host', // Optionally set the redirect link to bring back the user via deeplink.
+      authScreenLaunchMode: kIsWeb
+          ? LaunchMode.platformDefault
+          : LaunchMode
+              .externalApplication, // Launch the auth screen in a new webview on mobile.
+    );
   }
 
   Container buildSignInSection() {
