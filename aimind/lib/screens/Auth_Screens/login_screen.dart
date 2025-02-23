@@ -238,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        LoginButton(
+                        /* LoginButton(
                           icon: Icons.apple,
                           text: "Apple",
                           backgroundColor: Colors.black,
@@ -246,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           textColor: Colors.white,
                           voidCallback: () {},
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 10),*/
                         LoginButtonWithImage(
                           imagePath: 'assets/images/x_logo.png',
                           text: "",
@@ -315,6 +315,8 @@ class _LoginScreenState extends State<LoginScreen> {
           : LaunchMode
               .externalApplication, // Launch the auth screen in a new webview on mobile.
     );
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => TestAuthScreen()));
   }
 
   Future<void> signInWithTwitter() async {
@@ -328,6 +330,8 @@ class _LoginScreenState extends State<LoginScreen> {
           : LaunchMode
               .externalApplication, // Launch the auth screen in a new webview on mobile.
     );
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => TestAuthScreen()));
   }
 
   Container buildSignInSection() {
