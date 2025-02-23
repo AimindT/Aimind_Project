@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:aimind/config/palette.dart';
-import 'package:aimind/screens/test_Screens/test_Google_Screen.dart';
+import 'package:aimind/screens/auth_Test_Screens/test_Google_Screen.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:aimind/widgets/login_button.dart';
 import 'package:aimind/widgets/login_button_with_image.dart';
