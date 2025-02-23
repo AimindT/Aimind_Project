@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:aimind/config/palette.dart';
-import 'package:aimind/screens/Auth_Screens/test.dart';
+import 'package:aimind/screens/test_Screens/test_Google_Screen.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:aimind/widgets/login_button.dart';
 import 'package:aimind/widgets/login_button_with_image.dart';
@@ -299,7 +299,8 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: idToken,
       accessToken: accessToken,
     );
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => TestGoogleScreen()));
   }
 
   Future<void> signInWithFacebook() async {
