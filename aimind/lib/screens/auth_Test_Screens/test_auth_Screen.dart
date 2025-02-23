@@ -2,8 +2,8 @@ import 'package:aimind/screens/auth_Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TestGoogleScreen extends StatelessWidget {
-  const TestGoogleScreen({super.key});
+class TestAuthScreen extends StatelessWidget {
+  const TestAuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
