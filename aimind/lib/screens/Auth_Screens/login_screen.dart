@@ -251,7 +251,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           imagePath: 'assets/images/x_logo.png',
                           text: "",
                           backgroundColor: Colors.black,
-                          voidCallback: () {},
+                          voidCallback: () {
+                            signInWithTwitter();
+                          },
                         ),
                       ],
                     ),
@@ -305,6 +307,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> signInWithFacebook() async {
     await Supabase.instance.client.auth.signInWithOAuth(
       OAuthProvider.facebook,
+      redirectTo: kIsWeb
+          ? null
+          : 'my.scheme://my-host', // Optionally set the redirect link to bring back the user via deeplink.
+      authScreenLaunchMode: kIsWeb
+          ? LaunchMode.platformDefault
+          : LaunchMode
+              .externalApplication, // Launch the auth screen in a new webview on mobile.
+    );
+  }
+
+  Future<void> signInWithTwitter() async {
+    await Supabase.instance.client.auth.signInWithOAuth(
+      OAuthProvider.twitter,
       redirectTo: kIsWeb
           ? null
           : 'my.scheme://my-host', // Optionally set the redirect link to bring back the user via deeplink.
