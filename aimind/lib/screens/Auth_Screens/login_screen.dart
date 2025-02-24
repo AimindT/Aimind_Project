@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
               curve: Curves.bounceInOut,
               // Altura responsiva basada en porcentaje de pantalla
               height: MediaQuery.of(context).size.height *
-                  (isSignupScreen ? 0.55 : 0.32),
+                  (isSignupScreen ? 0.60 : 0.35),
               // Padding responsivo
               padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
               width: MediaQuery.of(context).size.width *
@@ -224,8 +224,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ), //Button Container
           Positioned(
             top: isSignupScreen
-                ? MediaQuery.of(context).size.height - 210
-                : MediaQuery.of(context).size.height - 320,
+                ? MediaQuery.of(context).size.height - 170
+                : MediaQuery.of(context).size.height - 300,
             right: 0,
             left: 0,
             child: Column(
@@ -233,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(!isSignupScreen
                     ? "O inicia sesión con"
                     : "O registrate con"),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 Column(
                   children: [
                     Row(

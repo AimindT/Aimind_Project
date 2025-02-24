@@ -10,7 +10,7 @@ class AnimatedSubmitButton extends StatelessWidget {
   final Color loadingColor;
 
   const AnimatedSubmitButton({
-    Key? key,
+    super.key,
     required this.isLoading,
     required this.onPressed,
     this.buttonText = 'Registrarse',
@@ -18,11 +18,11 @@ class AnimatedSubmitButton extends StatelessWidget {
     this.height = 50,
     this.buttonColor = Colors.orange,
     this.loadingColor = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       height: height,
       child: ElevatedButton(
