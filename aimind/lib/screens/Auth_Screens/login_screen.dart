@@ -365,49 +365,55 @@ class _LoginScreenState extends State<LoginScreen> {
   Container buildSignInSection() {
     return Container(
       margin: EdgeInsets.only(top: 20),
-      child: Column(
-        children: [
-          CustomTextField(
-            hintText: 'Correo',
-            prefixIcon: Icons.email,
-            keyboardType: TextInputType.emailAddress,
-            maxLegth: 255,
-            controller: singInemailController,
-          ),
-          CustomTextField(
-            hintText: 'Contraseña',
-            prefixIcon: Icons.lock,
-            isPassword: true,
-            keyboardType: TextInputType.text,
-            maxLegth: 100,
-            controller: singInpasswordController,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Checkbox(
-                  value: isRememberMe,
-                  activeColor: Palette.textColor2,
-                  onChanged: (value) {
-                    setState(() {
-                      isRememberMe = !isRememberMe;
-                    });
-                  }),
-              Text(
-                'Remember me',
-                style: TextStyle(fontSize: 12, color: Palette.textColor1),
-              ),
-              TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(fontSize: 12, color: Palette.textColor1),
-                  ))
-            ],
-          ),
-          ElevatedButton(onPressed: login, child: Text('Iniciar'))
-        ],
-      ),
+      child: Column(children: [
+        CustomTextField(
+          hintText: 'Correo',
+          prefixIcon: Icons.email,
+          keyboardType: TextInputType.emailAddress,
+          maxLegth: 255,
+          controller: singInemailController,
+        ),
+        CustomTextField(
+          hintText: 'Contraseña',
+          prefixIcon: Icons.lock,
+          isPassword: true,
+          keyboardType: TextInputType.text,
+          maxLegth: 100,
+          controller: singInpasswordController,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Checkbox(
+                value: isRememberMe,
+                activeColor: Palette.textColor2,
+                onChanged: (value) {
+                  setState(() {
+                    isRememberMe = !isRememberMe;
+                  });
+                }),
+            Text(
+              'Remember me',
+              style: TextStyle(fontSize: 12, color: Palette.textColor1),
+            ),
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Forgot Password?',
+                  style: TextStyle(fontSize: 12, color: Palette.textColor1),
+                ))
+          ],
+        ),
+        AnimatedSubmitButton(
+          isLoading: isLoading,
+          onPressed: login,
+          buttonText: 'Iniciar Sesión',
+          buttonColor: Colors.blue,
+          width: 250,
+          height: 60,
+          loadingColor: Colors.amber,
+        )
+      ]),
     );
   }
 
@@ -545,7 +551,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         SizedBox(height: 10),
-        ElevatedButton(onPressed: signUp, child: Text('Registrate'))
+        AnimatedSubmitButton(
+          isLoading: isLoading,
+          onPressed: signUp,
+          buttonText: 'Registrarse',
+          buttonColor: Colors.blue,
+          width: 250,
+          height: 60,
+          loadingColor: Colors.amber,
+        )
       ]),
     );
   }
