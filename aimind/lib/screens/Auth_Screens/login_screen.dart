@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:aimind/config/palette.dart';
+import 'package:aimind/services/auth_services.dart';
+import 'package:aimind/widgets/animated_submit_button.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:aimind/widgets/login_button.dart';
 import 'package:aimind/widgets/login_button_with_image.dart';
@@ -20,10 +22,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController singInemailController = TextEditingController();
+  final TextEditingController singInpasswordController =
+      TextEditingController();
+  final TextEditingController confirmpasswordController =
+      TextEditingController();
+  String gender = '';
+
+  final authservice = AuthService();
 
   bool isMale = true;
   bool isSignupScreen = true;
   bool isRememberMe = false;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Aquí podrías hacer alguna inicialización si es necesario
+  }
+
+  @override
+  void dispose() {
+    // Liberar los controladores cuando el widget ya no esté en uso
+    nameController.dispose();
+    userController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
               curve: Curves.bounceInOut,
               // Altura responsiva basada en porcentaje de pantalla
               height: MediaQuery.of(context).size.height *
-                  (isSignupScreen ? 0.45 : 0.25),
+                  (isSignupScreen ? 0.55 : 0.32),
               // Padding responsivo
               padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
               width: MediaQuery.of(context).size.width *
@@ -196,7 +223,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ), //Button Container
           Positioned(
-            top: MediaQuery.of(context).size.height - 240,
+            top: isSignupScreen
+                ? MediaQuery.of(context).size.height - 210
+                : MediaQuery.of(context).size.height - 320,
             right: 0,
             left: 0,
             child: Column(
@@ -339,14 +368,19 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Column(
         children: [
           CustomTextField(
-              hintText: 'Correo',
-              prefixIcon: Icons.email,
-              keyboardType: TextInputType.emailAddress),
+            hintText: 'Correo',
+            prefixIcon: Icons.email,
+            keyboardType: TextInputType.emailAddress,
+            maxLegth: 255,
+            controller: singInemailController,
+          ),
           CustomTextField(
             hintText: 'Contraseña',
             prefixIcon: Icons.lock,
             isPassword: true,
             keyboardType: TextInputType.text,
+            maxLegth: 100,
+            controller: singInpasswordController,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -371,6 +405,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ))
             ],
           ),
+          ElevatedButton(onPressed: login, child: Text('Iniciar'))
         ],
       ),
     );
@@ -385,24 +420,37 @@ class _LoginScreenState extends State<LoginScreen> {
           prefixIcon: Icons.person,
           controller: nameController,
           keyboardType: TextInputType.text,
+          maxLegth: 100,
         ),
         CustomTextField(
           hintText: 'Usuario',
           prefixIcon: Icons.supervised_user_circle_sharp,
           controller: userController,
           keyboardType: TextInputType.text,
+          maxLegth: 50,
         ),
         CustomTextField(
-            hintText: 'Correo',
-            prefixIcon: Icons.email,
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress),
+          hintText: 'Correo',
+          prefixIcon: Icons.email,
+          controller: emailController,
+          keyboardType: TextInputType.emailAddress,
+          maxLegth: 255,
+        ),
         CustomTextField(
           hintText: 'Contraseña',
           prefixIcon: Icons.lock,
           controller: passwordController,
           isPassword: true,
           keyboardType: TextInputType.text,
+          maxLegth: 100,
+        ),
+        CustomTextField(
+          hintText: 'Confirma Contraseña',
+          prefixIcon: Icons.lock,
+          controller: confirmpasswordController,
+          isPassword: true,
+          keyboardType: TextInputType.text,
+          maxLegth: 100,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, left: 10),
@@ -413,6 +461,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   setState(() {
                     isMale = true;
+                    gender = "Male";
                   });
                 },
                 child: Row(
@@ -447,6 +496,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   setState(() {
                     isMale = false;
+                    gender = "Female";
                   });
                 },
                 child: Row(
@@ -494,33 +544,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 ]),
           ),
         ),
+        SizedBox(height: 10),
+        ElevatedButton(onPressed: signUp, child: Text('Registrate'))
       ]),
     );
   }
 
-  Future<void> registerUser() async {
-    final String name = nameController.text;
-    final String user = userController.text;
-    final String email = emailController.text;
-    final String password = passwordController.text;
-    try {
-      final response = await Supabase.instance.client.auth
-          .signUp(email: email, password: password);
-      if (response.session == null) {
-        if (kDebugMode) {
-          print('Signup ERROR');
-        }
-      } else {
-        if (kDebugMode) {
-          print('Welcome');
-        }
-        final user = response.user;
+  void signUp() async {
+    final email = emailController.text;
+    final password = passwordController.text;
+    final confirmPassword = confirmpasswordController.text;
 
-        if (user != null) {
-          final insertResponse =
-              await Supabase.instance.client.from('USERS').insert([]);
-        }
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Password don´t match')));
+      return;
+    }
+    try {
+      await authservice.signUpWithEmailPassword(email, password);
+      Navigator.pop(context);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Error: $e')));
       }
-    } catch (e) {}
+    }
+  }
+
+  void login() async {
+    final email = singInemailController.text;
+    final password = singInpasswordController.text;
+    try {
+      await authservice.signInWithEmailPassword(email, password);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
+    }
   }
 }

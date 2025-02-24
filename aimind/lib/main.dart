@@ -1,4 +1,4 @@
-import 'package:aimind/screens/auth_Screens/login_screen.dart';
+import 'package:aimind/services/auth_gates.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      home: AuthGates(),
       debugShowCheckedModeBanner: false,
     );
   }
