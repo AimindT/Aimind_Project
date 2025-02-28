@@ -68,23 +68,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       cardNumber: 12345678,
                       expiricyMonth: 10,
                       expiryYear: 24,
-                      color: Colors.deepPurple[400]!),
+                      color: Colors.deepPurple[300]!),
                   CustomCard(
                       balance: 342.23,
                       cardNumber: 12345678,
                       expiricyMonth: 11,
                       expiryYear: 23,
-                      color: Colors.blue[400]!),
+                      color: Colors.blue[300]!),
                   CustomCard(
                       balance: 420.42,
                       cardNumber: 12345678,
                       expiricyMonth: 8,
                       expiryYear: 22,
-                      color: Colors.green[400]!)
+                      color: Colors.green[300]!)
                 ],
               ),
             ),
-            SmoothPageIndicator(controller: _controller, count: 3)
+            SizedBox(height: 25),
+            SmoothPageIndicator(
+              controller: _controller,
+              count: 3,
+              effect: ExpandingDotsEffect(activeDotColor: Colors.grey.shade800),
+            )
             // 3 buttons
 
             //column -> stats + transactions
