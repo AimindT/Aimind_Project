@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:aimind/config/palette.dart';
 import 'package:aimind/services/auth_services.dart';
