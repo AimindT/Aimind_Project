@@ -1,5 +1,5 @@
 import 'package:aimind/screens/auth_Screens/login_screen.dart';
-import 'package:aimind/screens/auth_Test_Screens/auth_test_Screen_email.dart';
+import 'package:aimind/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -24,7 +24,7 @@ class AuthGates extends StatelessWidget {
         //Check if there is a valid session
         final session = snapshot.hasData ? snapshot.data!.session : null;
         if (session != null) {
-          return ProfilePage();
+          return DashboardScreen();
         } else {
           return LoginScreen();
         }
