@@ -15,7 +15,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Column(
           children: [
@@ -89,9 +89,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
               controller: _controller,
               count: 3,
               effect: ExpandingDotsEffect(activeDotColor: Colors.grey.shade800),
-            )
+            ),
+            SizedBox(height: 25)
             // 3 buttons
-
+            ,
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Center(
+                        child: Image.asset('assets/images/background.png'),
+                      ),
+                    ),
+                    // Text(
+                    //   'Habla Con Aimind',
+                    //   style: TextStyle(
+                    //       fontSize: 18,
+                    //       fontWeight: FontWeight.bold,
+                    //       color: Colors.grey[700]!),
+                    // )
+                  ],
+                )
+              ],
+            )
             //column -> stats + transactions
           ],
         ),
