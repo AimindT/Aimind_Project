@@ -1,5 +1,6 @@
 import 'package:aimind/widgets/custom_card.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
+import 'package:aimind/widgets/my_list_title.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -91,9 +92,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               count: 3,
               effect: ExpandingDotsEffect(activeDotColor: Colors.grey.shade800),
             ),
-            SizedBox(height: 25)
+            SizedBox(height: 40),
             // 3 buttons
-            ,
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
@@ -111,46 +112,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 40),
             //column -> stats + transactions
             Padding(
-              padding: const EdgeInsets.all(25.0),
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            height: 80,
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100]!,
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Image.asset('assets/images/background.png'),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Statistics',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Payments and Icome',
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[600]!),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      Icon(Icons.arrow_forward_ios)
-                    ],
-                  )
+                  MyListTitle(
+                      iconImagePath: 'assets/images/background.png',
+                      tileTitle: 'Statistics',
+                      tileSubTitle: 'Payments and Icome'),
+                  MyListTitle(
+                      iconImagePath: 'assets/images/background.png',
+                      tileTitle: 'Transactions',
+                      tileSubTitle: 'Transaction History')
                 ],
               ),
             )
