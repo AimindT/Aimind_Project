@@ -14,19 +14,16 @@ class CustomDashButton extends StatelessWidget {
           height: 110,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: Colors.white,
+              //color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.shade400,
-                    blurRadius: 40,
-                    spreadRadius: 10)
+                BoxShadow(color: Colors.white, blurRadius: 30, spreadRadius: 10)
               ]),
           child: Center(
             child: Image.asset(iconImagePath),
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 4),
         Text(buttontext,
             style: TextStyle(
                 fontSize: 18,
