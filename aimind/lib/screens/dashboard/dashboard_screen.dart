@@ -26,84 +26,87 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'My ',
-                          style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                  // Texto "Hola, Chris Chaparro"
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hola,',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[800],
                         ),
-                        TextSpan(
-                          text: 'Cards',
-                          style: TextStyle(fontSize: 28, color: Colors.black),
+                      ),
+                      Text(
+                        'Chris Chaparro',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.grey[800],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          color: Colors.grey[400], shape: BoxShape.circle),
-                      child: Icon(Icons.add)),
+                  // CircleAvatar
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/images/streak.jpg'),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
+            // PageView para las tarjetas
             SizedBox(
-              height: 200,
+              height: 160,
               child: PageView(
                 scrollDirection: Axis.horizontal,
                 controller: _controller,
                 children: [
                   CustomCard(
-                      balance: 5250.20,
-                      cardNumber: 12345678,
-                      expiricyMonth: 10,
-                      expiryYear: 24,
-                      color: Colors.deepPurple[300]!),
+                    title: 'Tarjeta 1',
+                    text: 'Este es un texto de ejemplo para la tarjeta 1.',
+                    imagePath: 'assets/images/Psic1.jpg',
+                    color: Colors.black, // Fondo negro
+                  ),
                   CustomCard(
-                      balance: 342.23,
-                      cardNumber: 12345678,
-                      expiricyMonth: 11,
-                      expiryYear: 23,
-                      color: Colors.blue[300]!),
+                    title: 'Tarjeta 2',
+                    text: 'Este es un texto de ejemplo para la tarjeta 2.',
+                    imagePath: 'assets/images/Psic2.png',
+                    color: Colors.black, // Fondo negro
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
+            // Indicador de página
             SmoothPageIndicator(
               controller: _controller,
               count: 2,
               effect: ExpandingDotsEffect(activeDotColor: Colors.grey.shade800),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 20),
+            // Botones personalizados
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomDashButton(
                     iconImagePath: 'assets/images/background.png',
-                    buttontext: 'Send',
+                    buttontext: 'Habla Con Aimind',
                     onPressed: () {},
                   ),
                   CustomDashButton(
-                    iconImagePath: 'assets/images/background.png',
-                    buttontext: 'Pay',
-                    onPressed: () {},
-                  ),
-                  CustomDashButton(
-                    iconImagePath: 'assets/images/background.png',
-                    buttontext: 'Bills',
+                    iconImagePath: 'assets/images/RapTer.jpeg',
+                    buttontext: 'Terapia Rapida',
                     onPressed: () {},
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 20),
+            // Título "Psicólogos Recomendados"
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
@@ -111,39 +114,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   Text(
                     'Psicólogos Recomendados',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.grey[800],
+                    ),
                   ),
                   Text(
                     'Ver todos',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[500]),
-                  )
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[500],
+                    ),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            // Lista horizontal de psicólogos
             Expanded(
               child: SizedBox(
-                child: Expanded(
-                  child: SizedBox(
-                    height: 200,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: const [
-                        DoctorCard(
-                          doctorImagePath: 'assets/images/Psic1.jpg',
-                          doctorName: 'Dra. Hidaelia Sánchez',
-                          doctorProfession: 'Psicología clínica',
-                          rating: '4.9',
-                        ),
-                        DoctorCard(
-                          doctorImagePath: 'assets/images/Psic2.png',
-                          doctorName: 'Dr. Fernando Guzmán',
-                          doctorProfession: 'Psicología clínica',
-                          rating: '4.5',
-                        ),
-                      ],
+                height: 200,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    DoctorCard(
+                      doctorImagePath: 'assets/images/Psic1.jpg',
+                      doctorName: 'Dra. Hidaelia Sánchez',
+                      doctorProfession: 'Psicología clínica',
+                      rating: '4.9',
                     ),
-                  ),
+                    DoctorCard(
+                      doctorImagePath: 'assets/images/Psic2.png',
+                      doctorName: 'Dr. Fernando Guzmán',
+                      doctorProfession: 'Psicología clínica',
+                      rating: '4.5',
+                    ),
+                    DoctorCard(
+                      doctorImagePath: 'assets/images/Psic3.png',
+                      doctorName: 'Lic. Rubí Montoya',
+                      doctorProfession: 'Psicología clínica',
+                      rating: '4.4',
+                    ),
+                  ],
                 ),
               ),
             ),
