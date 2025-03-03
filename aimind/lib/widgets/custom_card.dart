@@ -26,9 +26,9 @@ class CustomCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              color.withOpacity(0.8),
-              color.withOpacity(0.5),
-              Colors.white.withOpacity(0.1),
+              color.withValues(alpha: 0.8),
+              color.withValues(alpha: 0.5),
+              Colors.white.withValues(alpha: 0.1),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -36,7 +36,7 @@ class CustomCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.5),
+              color: color.withValues(alpha: 0.5),
               blurRadius: 15,
               spreadRadius: 5,
               offset: const Offset(5, 5),
@@ -50,7 +50,7 @@ class CustomCard extends StatelessWidget {
             Text(
               'Balance',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -71,14 +71,14 @@ class CustomCard extends StatelessWidget {
                 Text(
                   '**** **** **** ${cardNumber.toString().substring(cardNumber.toString().length - 4)}',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: .9),
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   '$expiricyMonth/$expiryYear',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: .9),
                     fontSize: 16,
                   ),
                 ),

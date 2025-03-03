@@ -30,13 +30,13 @@ class CustomDashButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: .2),
                   blurRadius: 15,
                   spreadRadius: 2,
                   offset: const Offset(5, 5), // Sombra 3D
                 ),
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: .5),
                   blurRadius: 15,
                   spreadRadius: 2,
                   offset: const Offset(-5, -5), // Sombra interna para efecto de relieve
@@ -44,9 +44,9 @@ class CustomDashButton extends StatelessWidget {
               ],
               gradient: LinearGradient(
                 colors: [
-                  color.withOpacity(0.9),
-                  color.withOpacity(0.6),
-                  Colors.white.withOpacity(0.3),
+                  color.withValues(alpha: .9),
+                  color.withValues(alpha: .6),
+                  Colors.white.withValues(alpha: .3),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
