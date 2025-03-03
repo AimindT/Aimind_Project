@@ -38,4 +38,6 @@ flutter:
     - assets/images/background.png
     - assets/images/google_logo.png
     - assets/images/x_logo.png
+    - assets/images/Psic1.jpg
+    - assets/images/Psic2.png
     - .env
