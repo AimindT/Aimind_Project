@@ -70,7 +70,8 @@ class CustomDashButton extends StatelessWidget {
           child: Text(
             buttontext,
             style: TextStyle(
-              fontSize: 16,
+              fontFamily: 'Roboto',
+              fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.grey[800], // Color del texto
             ),

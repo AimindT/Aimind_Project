@@ -121,7 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       CustomDashButton(
-                        iconImagePath: 'assets/images/background.png',
+                        iconImagePath: 'assets/images/calender.png',
                         buttontext: 'Agenda Una Cita',
                         onPressed: () {},
                       ),
