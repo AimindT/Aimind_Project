@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
-  final String title; // Título de la tarjeta
-  final String text; // Texto a la izquierda
-  final String imagePath; // Ruta de la imagen
-  final Color color; // Color de fondo
+  final String title;
+  final String text;
+  final String imagePath;
+  final Color color;
 
   const CustomCard({
     super.key,
@@ -19,76 +19,73 @@ class CustomCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Container(
-        width: 300,
-        height: 180, // Alto fijo para la tarjeta
+        width: 350,
+        height: 350,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: RadialGradient(
             colors: [
-              Colors.black.withOpacity(0.8), // Negro
-              Colors.black.withOpacity(0.5), // Negro más claro
-              Colors.white.withOpacity(0.1), // Blanco con transparencia
+              Colors.blue[900]!,
+              Colors.blue[700]!,
+              Colors.blue[400]!,
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            center: Alignment.center,
+            radius: 1.0,
           ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.6), // Sombra más oscura
-              blurRadius: 20,
-              spreadRadius: 5,
-              offset: const Offset(7, 7), // Sombra 3D más pronunciada
-            ),
-            BoxShadow(
-              color: Colors.white.withOpacity(0.6), // Sombra interna más clara
-              blurRadius: 20,
-              spreadRadius: 5,
-              offset: const Offset(-7, -7), // Sombra interna para efecto de relieve
-            ),
-          ],
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            // Título en la parte superior centrado
-            Center(
+            Align(
+              alignment: Alignment.topCenter,
               child: Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white, // Texto en blanco
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            // Contenido: Texto a la izquierda e imagen en el centro
-            Expanded(
+            Positioned(
+              top: 50,
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: Row(
                 children: [
-                  // Texto a la izquierda
                   Expanded(
-                    flex: 2, // 2 partes del espacio para el texto
+                    flex: 2,
                     child: Text(
                       text,
                       style: const TextStyle(
-                        color: Colors.white, // Texto en blanco
+                        color: Colors.white,
                         fontSize: 16,
                       ),
-                      maxLines: 3, // Máximo de 3 líneas
-                      overflow: TextOverflow.ellipsis, // Puntos suspensivos si el texto es muy largo
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 10),
-                  // Imagen en el centro
                   Expanded(
-                    flex: 3, // 3 partes del espacio para la imagen
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        imagePath,
-                        fit: BoxFit.cover, // Ajustar la imagen al espacio disponible
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 5,
+                            spreadRadius: 2,
+                            offset: const Offset(3, 3),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          imagePath,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
