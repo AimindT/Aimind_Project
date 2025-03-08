@@ -20,76 +20,55 @@ class CustomCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Container(
         width: 350,
-        height: 350,
-        padding: const EdgeInsets.all(20),
+        height: 150,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: RadialGradient(
-            colors: [
-              Colors.blue[900]!,
-              Colors.blue[700]!,
-              Colors.blue[400]!,
-            ],
-            center: Alignment.center,
-            radius: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border:
+              Border.all(color: Colors.grey.shade300, width: 1), // Borde sutil
         ),
-        child: Stack(
+        child: Row(
           children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 50,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Row(
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      text,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 5,
-                            spreadRadius: 2,
-                            offset: const Offset(3, 3),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          imagePath,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                  const SizedBox(height: 8),
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: (title == 'Tu racha') ? 36 : 14,
+                      color: (title == 'Tu racha')
+                          ? Colors.blue
+                          : Colors.grey[600],
+                      fontWeight: (title == 'Tu racha')
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              flex: 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ],

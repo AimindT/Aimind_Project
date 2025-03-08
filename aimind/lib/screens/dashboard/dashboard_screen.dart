@@ -79,15 +79,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     CustomCard(
                       title: 'Tu racha',
-                      text: 'Este es un texto de ejemplo para la tarjeta 1.',
-                      imagePath: 'assets/images/Psic1.jpg',
-                      color: Colors.black,
+                      text: '7 días', // Contador de la racha
+                      imagePath:
+                          'assets/images/streak.jpg', // Imagen de la racha
+                      color: Colors.transparent, // Sin color de fondo
                     ),
                     CustomCard(
                       title: 'Novedades',
-                      text: 'Este es un texto de ejemplo para la tarjeta 2.',
-                      imagePath: 'assets/images/Psic2.png',
-                      color: Colors.black,
+                      text:
+                          'Mantente al día con las últimas noticias y actualizaciones sobre salud mental.',
+                      imagePath:
+                          'assets/images/background.png', // Imagen de novedades
+                      color: Colors.transparent, // Sin color de fondo
                     ),
                   ],
                 ),
