@@ -24,8 +24,8 @@ class CustomDashButton extends StatelessWidget {
         GestureDetector(
           onTap: onPressed, // Ejecuta la función onPressed
           child: Container(
-            height: 110,
-            width: 110, // Ancho fijo para que sea cuadrado
+            height: 200,
+            width: 200, // Ancho fijo para que sea cuadrado
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: color,
@@ -38,10 +38,12 @@ class CustomDashButton extends StatelessWidget {
                   offset: const Offset(7, 7), // Sombra 3D más pronunciada
                 ),
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.6), // Sombra interna más intensa
+                  color: Colors.white
+                      .withOpacity(0.6), // Sombra interna más intensa
                   blurRadius: 20,
                   spreadRadius: 5,
-                  offset: const Offset(-7, -7), // Sombra interna para efecto de relieve
+                  offset: const Offset(
+                      -7, -7), // Sombra interna para efecto de relieve
                 ),
               ],
               gradient: LinearGradient(
@@ -64,7 +66,7 @@ class CustomDashButton extends StatelessWidget {
         SizedBox(height: spaceBetween), // Espacio personalizable
         // Texto del botón
         SizedBox(
-          width: 110, // Mismo ancho que el contenedor del ícono
+          width: 110,
           child: Text(
             buttontext,
             style: TextStyle(
@@ -74,7 +76,8 @@ class CustomDashButton extends StatelessWidget {
             ),
             textAlign: TextAlign.center, // Centrar el texto
             maxLines: 2, // Máximo de dos líneas
-            overflow: TextOverflow.ellipsis, // Mostrar puntos suspensivos si el texto es muy largo
+            overflow: TextOverflow
+                .ellipsis, // Mostrar puntos suspensivos si el texto es muy largo
           ),
         ),
       ],
