@@ -1,9 +1,6 @@
-import 'package:aimind/widgets/custom_card.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
-import 'package:aimind/widgets/doctor_card.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -13,8 +10,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final _controller = PageController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               //   effect:
               //       ExpandingDotsEffect(activeDotColor: Colors.grey.shade800),
               // ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Column(children: [
@@ -121,7 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 60),
+                  SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

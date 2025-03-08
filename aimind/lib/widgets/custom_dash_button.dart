@@ -63,7 +63,7 @@ class CustomDashButton extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: spaceBetween), // Espacio personalizable
+        SizedBox(height: 40), // Espacio personalizable
         // Texto del botón
         SizedBox(
           width: 110,
