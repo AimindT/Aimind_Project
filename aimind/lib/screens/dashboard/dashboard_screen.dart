@@ -122,7 +122,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       CustomDashButton(
                         iconImagePath: 'assets/images/background.png',
-                        buttontext: 'Habla Con Aimind',
+                        buttontext: 'Agenda Una Cita',
                         onPressed: () {},
                       ),
                       CustomDashButton(
