@@ -44,6 +44,5 @@ flutter:
     - assets/images/Psic2.png
     - assets/images/Psic3.png
     - assets/images/RapTer.jpeg
-    - assets/images/streak.jpg
     - assets/images/calender.png
     - .env
