@@ -56,6 +56,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 // Página de Inicio
 class HomePage extends StatelessWidget {
+  final String url =
+      'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
+
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -97,7 +102,7 @@ class HomePage extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/images/streak.jpg'),
+                    backgroundImage: NetworkImage(url),
                   ),
                 ),
               )
