@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:aimind/config/palette.dart';
+import 'package:aimind/screens/dashboard/dashboard_screen.dart';
 import 'package:aimind/services/auth_services.dart';
 import 'package:aimind/widgets/animated_submit_button.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
@@ -10,6 +11,8 @@ import 'package:aimind/widgets/login_button_with_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,12 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // Aquí podrías hacer alguna inicialización si es necesario
   }
 
   @override
   void dispose() {
-    // Liberar los controladores cuando el widget ya no esté en uso
     nameController.dispose();
     userController.dispose();
     emailController.dispose();
@@ -79,14 +80,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     RichText(
                         text: TextSpan(
-                            text: "Welcome to",
+                            text: "Bienvenid@",
                             style: TextStyle(
                                 fontSize: 25,
                                 letterSpacing: 2,
                                 color: Colors.yellow[700]),
                             children: [
                           TextSpan(
-                              text: isSignupScreen ? " Aimind" : " Back",
+                              text: isSignupScreen ? "A Aimind" : " De Vuelta",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.yellow[700],
@@ -95,8 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: 5),
                     Text(
                       isSignupScreen
-                          ? 'Singup to Continue'
-                          : "Signin to Continue",
+                          ? 'Registrate Para Continuar'
+                          : "Incia Sesion Para Continuar",
                       style: TextStyle(letterSpacing: 1, color: Colors.white),
                     )
                   ],
@@ -108,22 +109,17 @@ class _LoginScreenState extends State<LoginScreen> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 700),
             curve: Curves.bounceInOut,
-            // Posición top responsiva basada en porcentaje de altura de pantalla
             top: MediaQuery.of(context).size.height *
                 (isSignupScreen ? 0.20 : 0.25),
-            // Posición horizontal responsiva
             left: MediaQuery.of(context).size.width * 0.03,
             right: MediaQuery.of(context).size.width * 0.03,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 700),
               curve: Curves.bounceInOut,
-              // Altura responsiva basada en porcentaje de pantalla
               height: MediaQuery.of(context).size.height *
                   (isSignupScreen ? 0.60 : 0.35),
-              // Padding responsivo
               padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-              width: MediaQuery.of(context).size.width *
-                  0.9, // 90% del ancho de pantalla
+              width: MediaQuery.of(context).size.width * 0.9,
               margin: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * 0.05,
               ),
@@ -155,7 +151,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 'LOGIN',
                                 style: TextStyle(
-                                  // Tamaño de fuente responsivo
                                   fontSize:
                                       MediaQuery.of(context).size.width * 0.04,
                                   fontWeight: FontWeight.bold,
@@ -166,14 +161,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               if (!isSignupScreen)
                                 Container(
-                                  // Altura de línea responsiva
                                   height: MediaQuery.of(context).size.height *
                                       0.003,
                                   margin: EdgeInsets.only(
                                     top: MediaQuery.of(context).size.height *
                                         0.004,
                                   ),
-                                  // Ancho de línea responsivo
                                   width:
                                       MediaQuery.of(context).size.width * 0.15,
                                   color: Colors.orange,
@@ -223,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-          ), //Button Container
+          ),
           Positioned(
             top: isSignupScreen
                 ? MediaQuery.of(context).size.height - 170
@@ -341,9 +334,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await Supabase.instance.client.auth.signInWithOAuth(
         OAuthProvider.facebook,
-        redirectTo: kIsWeb
-            ? null
-            : 'com.aimind.app://login-callback/', // Match the scheme in AndroidManifest
+        redirectTo: kIsWeb ? null : 'com.aimind.app://login-callback/',
         authScreenLaunchMode: LaunchMode.externalApplication,
       );
     } catch (e) {
@@ -354,13 +345,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> signInWithTwitter() async {
     await Supabase.instance.client.auth.signInWithOAuth(
       OAuthProvider.twitter,
-      redirectTo: kIsWeb
-          ? null
-          : 'my.scheme://my-host', // Optionally set the redirect link to bring back the user via deeplink.
-      authScreenLaunchMode: kIsWeb
-          ? LaunchMode.platformDefault
-          : LaunchMode
-              .externalApplication, // Launch the auth screen in a new webview on mobile.
+      redirectTo: kIsWeb ? null : 'my.scheme://my-host',
+      authScreenLaunchMode:
+          kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication,
     );
   }
 
@@ -384,7 +371,7 @@ class _LoginScreenState extends State<LoginScreen> {
           controller: singInpasswordController,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Checkbox(
                 value: isRememberMe,
@@ -395,13 +382,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 }),
             Text(
-              'Remember me',
+              'Recuérdame',
               style: TextStyle(fontSize: 12, color: Palette.textColor1),
             ),
             TextButton(
                 onPressed: () {},
                 child: Text(
-                  'Forgot Password?',
+                  '¿Olvidaste tu contraseña?',
                   style: TextStyle(fontSize: 12, color: Palette.textColor1),
                 ))
           ],
@@ -567,36 +554,155 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void signUp() async {
-    final email = emailController.text;
-    final password = passwordController.text;
-    final confirmPassword = confirmpasswordController.text;
+    final name = nameController.text.trim();
+    final user = userController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmpasswordController.text.trim();
 
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Password don´t match')));
+    if (name.isEmpty ||
+        user.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Por favor, complete todos los campos.',
+      );
       return;
     }
+
+    if (password.length < 6 || confirmPassword.length < 6) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'La contraseña debe tener al menos 6 caracteres.',
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Las contraseñas no coinciden.',
+      );
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Por favor, ingrese un correo electrónico válido.',
+      );
+      return;
+    }
+
     try {
       await authservice.signUpWithEmailPassword(email, password);
-      Navigator.pop(context);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+    } on AuthException catch (e) {
+      if (e.statusCode == '422') {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'El usuario con este correo electrónico ya existe.',
+        );
+      } else {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Error al registrar: ${e.message}',
+        );
       }
+    } catch (e) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error al registrar: $e',
+      );
     }
   }
 
   void login() async {
-    final email = singInemailController.text;
-    final password = singInpasswordController.text;
+    final email = singInemailController.text.trim();
+    final password = singInpasswordController.text.trim();
+
+    // Mostrar el QuickAlert de carga
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.loading,
+      title: 'Cargando',
+      text: 'Iniciando sesión',
+      barrierDismissible: false, // Prevents dismiss on tap outside
+    );
+
+    if (email.isEmpty || password.isEmpty) {
+      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Por favor, complete todos los campos.',
+      );
+      return;
+    }
+
     try {
       await authservice.signInWithEmailPassword(email, password);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+
+      // Navegar a DashboardScreen
+      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+      );
+
+      // Mostrar el QuickAlert de éxito después de la navegación
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        text: 'Sesión iniciada con éxito!',
+        barrierDismissible: false,
+      );
+    } on AuthException catch (e) {
+      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
+      if (e.statusCode == '400') {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Correo o contraseña incorrectos.',
+        );
+      } else {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Error al iniciar sesión: ${e.message}',
+        );
       }
+    } catch (e) {
+      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error al iniciar sesión: $e',
+      );
     }
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
   }
 }

@@ -4,46 +4,47 @@ class CustomDashButton extends StatelessWidget {
   final String iconImagePath;
   final String buttontext;
   final Color color;
-  final VoidCallback onPressed; // Callback para el evento onPressed
-  final double spaceBetween; // Espacio personalizable entre el ícono y el texto
+  final VoidCallback onPressed;
+  final double spaceBetween;
 
   const CustomDashButton({
     super.key,
     required this.iconImagePath,
     required this.buttontext,
-    this.color = Colors.white, // Color predeterminado
-    required this.onPressed, // Parámetro requerido
-    this.spaceBetween = 8.0, // Espacio predeterminado entre ícono y texto
+    this.color = Colors.white,
+    required this.onPressed,
+    this.spaceBetween = 8.0,
   });
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double buttonSize = screenWidth * 0.35;
+
     return Column(
       children: [
-        // GestureDetector para detectar toques
-        GestureDetector(
-          onTap: onPressed, // Ejecuta la función onPressed
+        InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(buttonSize * 0.125),
           child: Container(
-            height: 200,
-            width: 200, // Ancho fijo para que sea cuadrado
-            padding: const EdgeInsets.all(20),
+            height: buttonSize,
+            width: buttonSize,
+            padding: EdgeInsets.all(buttonSize * 0.125),
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(buttonSize * 0.125),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.4), // Sombra más intensa
+                  color: Colors.black.withOpacity(0.4),
                   blurRadius: 20,
                   spreadRadius: 5,
-                  offset: const Offset(7, 7), // Sombra 3D más pronunciada
+                  offset: const Offset(7, 7),
                 ),
                 BoxShadow(
-                  color: Colors.white
-                      .withOpacity(0.6), // Sombra interna más intensa
+                  color: Colors.white.withOpacity(0.6),
                   blurRadius: 20,
                   spreadRadius: 5,
-                  offset: const Offset(
-                      -7, -7), // Sombra interna para efecto de relieve
+                  offset: const Offset(-7, -7),
                 ),
               ],
               gradient: LinearGradient(
@@ -58,27 +59,27 @@ class CustomDashButton extends StatelessWidget {
             ),
             child: Center(
               child: Image.asset(
-                iconImagePath, // Mostrar la imagen en su color normal
+                iconImagePath,
+                width: buttonSize * 1,
+                height: buttonSize * 1,
               ),
             ),
           ),
         ),
-        SizedBox(height: 40), // Espacio personalizable
-        // Texto del botón
+        SizedBox(height: screenWidth * 0.1),
         SizedBox(
-          width: 110,
+          width: screenWidth * 0.3,
           child: Text(
             buttontext,
             style: TextStyle(
               fontFamily: 'Roboto',
-              fontSize: 22,
+              fontSize: screenWidth * 0.055,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800], // Color del texto
+              color: Colors.grey[800],
             ),
-            textAlign: TextAlign.center, // Centrar el texto
-            maxLines: 2, // Máximo de dos líneas
-            overflow: TextOverflow
-                .ellipsis, // Mostrar puntos suspensivos si el texto es muy largo
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

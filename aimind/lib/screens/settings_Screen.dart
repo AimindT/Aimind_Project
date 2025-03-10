@@ -1,4 +1,7 @@
+import 'package:aimind/screens/Auth_Screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:aimind/services/auth_services.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -7,22 +10,29 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
+AuthService authService = AuthService();
+
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffffffff),
-      body: ListView(
-        padding: EdgeInsets.all(12),
-        physics: BouncingScrollPhysics(),
-        children: [
-          Container(height: 35),
-          userTile(),
-          divider(),
-          colorTiles(),
-          divider(),
-          bwTiles()
-        ],
+      backgroundColor: const Color(0xffffffff),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double padding = constraints.maxWidth * 0.05;
+          return ListView(
+            padding: EdgeInsets.all(padding),
+            physics: const BouncingScrollPhysics(),
+            children: [
+              SizedBox(height: constraints.maxHeight * 0.05),
+              userTile(),
+              divider(),
+              colorTiles(),
+              divider(),
+              bwTiles(context),
+            ],
+          );
+        },
       ),
     );
   }
@@ -34,8 +44,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       leading: CircleAvatar(
         backgroundColor: const Color.fromARGB(255, 230, 228, 228),
         backgroundImage: NetworkImage(url),
+        radius: MediaQuery.of(context).size.width * 0.07,
       ),
-      title: Text(
+      title: const Text(
         'Chris Chaparro',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
@@ -44,53 +55,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 Widget divider() {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Divider(
-      thickness: 1.5,
-    ),
+  return const Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Divider(thickness: 1.5),
   );
 }
 
 Widget colorTiles() {
   return Column(
     children: [
-      colorTile(Icons.person_outline, Colors.deepPurple, 'Personal data'),
-      colorTile(Icons.settings_outlined, Colors.blue, 'Settings'),
-      colorTile(Icons.credit_card, Colors.pink, 'Payment'),
-      colorTile(Icons.favorite_border, Colors.orange, 'Personal Data')
+      colorTile(Icons.person_outline, Colors.deepPurple, 'Tu perfil',
+          onTap: () {}),
+      SizedBox(
+        height: 20,
+      ),
+      colorTile(Icons.settings_outlined, Colors.blue, 'Configuración',
+          onTap: () {}),
     ],
   );
 }
 
-Widget bwTiles() {
-  return Column(
-    children: [
-      bwTile(Icons.info_outline, 'FAQs'),
-      bwTile(Icons.border_color_outlined, 'Handbook'),
-      bwTile(Icons.textsms_outlined, 'Community')
-    ],
-  );
-}
+Widget bwTiles(BuildContext context) {
+    return Column(
+      children: [
+        bwTile(Icons.info_outline, 'FAQs', () {}),
+        SizedBox(height: 20),
+        colorTile(
+          Icons.login_outlined,
+          Colors.pink,
+          'Salir',
+          onTap: () {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.warning,
+              barrierDismissible: false,
+              confirmBtnText: 'Sí',
+              cancelBtnText: 'No',
+              cancelBtnTextStyle: TextStyle(color: Colors.red),
+              showCancelBtn: true,
+              text: '¿Deseas cerrar sesión?',
+              onConfirmBtnTap: () async {
+                Navigator.pop(context); // Cerrar el QuickAlert de confirmación
+                try {
+                  await authService.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                  QuickAlert.show(
+                    context: context,
+                    title: 'Exito',
+                    type: QuickAlertType.success,
+                    text: 'Sesión cerrada con éxito!',
+                    barrierDismissible: false,
+                  );
+                } catch (e) {
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    text: 'Error al cerrar sesión: $e',
+                    barrierDismissible: false,
+                  );
+                }
+              },
+              onCancelBtnTap: () {
+                Navigator.pop(context); 
+              },
+              title: '¿Estás seguro?',
+            );
+          },
+        ),
+      ],
+    );
+  }
 
-Widget bwTile(IconData icon, String text) {
-  return colorTile(icon, Colors.black, text, blackAndWhite: true);
+Widget bwTile(IconData icon, String text, VoidCallback onTap) {
+  return colorTile(icon, Colors.black, text, blackAndWhite: true, onTap: onTap);
 }
 
 Widget colorTile(IconData icon, Color color, String text,
-    {bool blackAndWhite = false}) {
-  Color pickedColor = Color(0xfff3f4fe);
-  return ListTile(
-    leading: Container(
-      height: 45,
-      width: 45,
-      decoration: BoxDecoration(
-        color: blackAndWhite ? pickedColor : color.withValues(alpha: 0.09),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Icon(icon, color: color),
-    ),
-    title: Text(text, style: TextStyle(fontWeight: FontWeight.w600)),
-    trailing: Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20),
+    {bool blackAndWhite = false, required VoidCallback onTap}) {
+  Color pickedColor = const Color(0xfff3f4fe);
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      double iconSize = constraints.maxWidth * 0.07;
+      return ListTile(
+        leading: Container(
+          height: iconSize * 2,
+          width: iconSize * 2,
+          decoration: BoxDecoration(
+            color: blackAndWhite ? pickedColor : color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(iconSize * 0.8),
+          ),
+          child: Icon(icon, color: color, size: iconSize),
+        ),
+        title: Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
+        trailing:
+            const Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20),
+        onTap: onTap,
+      );
+    },
   );
 }
