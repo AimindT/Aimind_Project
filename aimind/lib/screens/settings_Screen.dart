@@ -76,58 +76,70 @@ Widget colorTiles() {
 }
 
 Widget bwTiles(BuildContext context) {
-    return Column(
-      children: [
-        bwTile(Icons.info_outline, 'FAQs', () {}),
-        SizedBox(height: 20),
-        colorTile(
-          Icons.login_outlined,
-          Colors.pink,
-          'Salir',
-          onTap: () {
-            QuickAlert.show(
-              context: context,
-              type: QuickAlertType.warning,
-              barrierDismissible: false,
-              confirmBtnText: 'Sí',
-              cancelBtnText: 'No',
-              cancelBtnTextStyle: TextStyle(color: Colors.red),
-              showCancelBtn: true,
-              text: '¿Deseas cerrar sesión?',
-              onConfirmBtnTap: () async {
-                Navigator.pop(context); // Cerrar el QuickAlert de confirmación
-                try {
-                  await authService.signOut();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                  QuickAlert.show(
-                    context: context,
-                    title: 'Exito',
-                    type: QuickAlertType.success,
-                    text: 'Sesión cerrada con éxito!',
-                    barrierDismissible: false,
-                  );
-                } catch (e) {
-                  QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.error,
-                    text: 'Error al cerrar sesión: $e',
-                    barrierDismissible: false,
-                  );
-                }
-              },
-              onCancelBtnTap: () {
-                Navigator.pop(context); 
-              },
-              title: '¿Estás seguro?',
-            );
-          },
-        ),
-      ],
-    );
-  }
+  return Column(
+    children: [
+      bwTile(Icons.info_outline, 'FAQs', () {}),
+      SizedBox(height: 20),
+      colorTile(
+        Icons.login_outlined,
+        Colors.pink,
+        'Salir',
+        onTap: () {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.warning,
+            barrierDismissible: false,
+            confirmBtnText: 'Sí',
+            cancelBtnText: 'No',
+            cancelBtnTextStyle: TextStyle(color: Colors.red),
+            showCancelBtn: true,
+            text: '¿Deseas cerrar sesión?',
+            onConfirmBtnTap: () async {
+              Navigator.pop(context); // Cerrar el QuickAlert de confirmación
+
+              // Mostrar QuickAlert de carga
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.loading,
+                title: 'Cargando',
+                text: 'Cerrando sesión...',
+                barrierDismissible: false,
+              );
+
+              try {
+                await authService.signOut();
+                Navigator.pop(context); // cerrar el QuickAlert de carga
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+                QuickAlert.show(
+                  context: context,
+                  title: 'Éxito',
+                  type: QuickAlertType.success,
+                  text: 'Sesión cerrada con éxito!',
+                  barrierDismissible: false,
+                );
+              } catch (e) {
+                Navigator.pop(context); // cerrar el QuickAlert de carga
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.error,
+                  text: 'Error al cerrar sesión: $e',
+                  barrierDismissible: false,
+                );
+              }
+            },
+            onCancelBtnTap: () {
+              Navigator.pop(context);
+            },
+            title: '¿Estás seguro?',
+          );
+        },
+      ),
+    ],
+  );
+}
 
 Widget bwTile(IconData icon, String text, VoidCallback onTap) {
   return colorTile(icon, Colors.black, text, blackAndWhite: true, onTap: onTap);

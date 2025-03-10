@@ -669,12 +669,13 @@ class _LoginScreenState extends State<LoginScreen> {
       // Mostrar el QuickAlert de éxito después de la navegación
       QuickAlert.show(
         context: context,
+        title: 'Exito',
         type: QuickAlertType.success,
         text: 'Sesión iniciada con éxito!',
         barrierDismissible: false,
       );
     } on AuthException catch (e) {
-      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
+      Navigator.of(context).pop(); 
       if (e.statusCode == '400') {
         QuickAlert.show(
           context: context,
