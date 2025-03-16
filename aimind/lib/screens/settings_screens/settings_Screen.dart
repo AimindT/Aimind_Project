@@ -1,4 +1,5 @@
 import 'package:aimind/screens/Auth_Screens/login_screen.dart';
+import 'package:aimind/screens/settings_screens/faq_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:aimind/services/auth_services.dart';
@@ -78,7 +79,10 @@ Widget colorTiles() {
 Widget bwTiles(BuildContext context) {
   return Column(
     children: [
-      bwTile(Icons.info_outline, 'FAQs', () {}),
+      bwTile(Icons.info_outline, 'FAQs', () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FaqScreen()));
+      }),
       SizedBox(height: 20),
       colorTile(
         Icons.login_outlined,

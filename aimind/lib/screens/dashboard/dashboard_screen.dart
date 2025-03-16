@@ -1,4 +1,4 @@
-import 'package:aimind/screens/settings_Screen.dart';
+import 'package:aimind/screens/settings_screens/settings_Screen.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
