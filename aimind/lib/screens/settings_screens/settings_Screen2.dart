@@ -26,115 +26,128 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
           onPressed: () {},
           icon: Icon(Ionicons.chevron_back_outline),
         ),
-        leadingWidth: 100,
+        leadingWidth: 80,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Settings',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 40),
-          Text(
-            'Account',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Container(
-            width: double.infinity,
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 32,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 3.0,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Settings',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 40),
+              Text(
+                'Account',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 32,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                          radius: 30,
+                          backgroundImage: NetworkImage(url),
+                        ),
                       ),
                     ),
-                    child: CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 230, 228, 228),
-                      radius: 30,
-                      backgroundImage: NetworkImage(url),
+                    SizedBox(
+                      width: 20,
                     ),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Uranus Code',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Chris Chaparro',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Fullstack Dev',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        )
+                      ],
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Youtube Channel',
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    Spacer(),
+                    ForwardButton(
+                      onTap: () {},
                     )
                   ],
                 ),
-                Spacer(),
-                ForwardButton(
-                  onTap: () {},
-                )
-              ],
-            ),
+              ),
+              SizedBox(height: 40),
+              Text(
+                'Settings',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SettingItem(
+                title: 'Language',
+                icon: Ionicons.earth,
+                bgColor: Colors.orange.shade100,
+                iconColor: Colors.orange,
+                value: 'English',
+                onTap: () {},
+              ),
+              SizedBox(height: 20),
+              SettingItem(
+                title: 'Notifications',
+                icon: Ionicons.notifications,
+                bgColor: Colors.blue.shade100,
+                iconColor: Colors.blue,
+                onTap: () {},
+              ),
+              SizedBox(height: 20),
+              SettingSwitch(
+                title: 'Dark Mode',
+                icon: Ionicons.moon,
+                bgColor: Colors.purple.shade100,
+                iconColor: Colors.purple,
+                value: isDarkMode,
+                onTap: (value) {
+                  setState(() {
+                    isDarkMode = value;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              SettingItem(
+                title: 'FAQs',
+                icon: Ionicons.information_circle_outline,
+                bgColor: Colors.grey.shade100,
+                iconColor: Colors.grey,
+                onTap: () {},
+              ),
+              SizedBox(height: 20),
+              SettingItem(
+                title: 'Exit',
+                icon: Ionicons.exit_outline,
+                bgColor: Colors.red.shade100,
+                iconColor: Colors.red,
+                onTap: () {},
+              ),
+            ],
           ),
-          SizedBox(height: 40),
-          Text(
-            'Settings',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          SettingItem(
-            title: 'Language',
-            icon: Ionicons.earth,
-            bgColor: Colors.orange.shade100,
-            iconColor: Colors.orange,
-            value: 'English',
-            onTap: () {},
-          ),
-          SizedBox(height: 20),
-          SettingItem(
-            title: 'Notifications',
-            icon: Ionicons.notifications,
-            bgColor: Colors.blue.shade100,
-            iconColor: Colors.blue,
-            onTap: () {},
-          ),
-          SizedBox(height: 20),
-          SettingSwitch(
-            title: 'Language',
-            icon: Ionicons.earth,
-            bgColor: Colors.purple.shade100,
-            iconColor: Colors.purple,
-            value: isDarkMode,
-            onTap: (value) {
-              setState(() {
-                isDarkMode = value;
-              });
-            },
-          ),
-          SizedBox(height: 20),
-          SettingItem(
-            title: 'Help',
-            icon: Ionicons.nuclear,
-            bgColor: Colors.red.shade100,
-            iconColor: Colors.red,
-            onTap: () {},
-          ),
-        ],
+        ),
       ),
     );
   }

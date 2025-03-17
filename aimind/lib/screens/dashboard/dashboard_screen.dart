@@ -1,4 +1,3 @@
-import 'package:aimind/screens/settings_screens/settings_Screen.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -23,7 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Cambia la vista según el índice seleccionado
           _currentIndex == 0
               ? HomePage()
-              : _currentIndex == 2
+              : _currentIndex == 1
                   ? SettingsScreen2()
                   : Container(), // Página vacía para "Notificaciones"
 
@@ -39,7 +38,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               animationDuration: const Duration(milliseconds: 300),
               items: const <Widget>[
                 Icon(Icons.home, size: 26, color: Colors.white),
-                Icon(Icons.notifications, size: 26, color: Colors.white),
                 Icon(Icons.person, size: 26, color: Colors.white),
               ],
               onTap: (index) {
