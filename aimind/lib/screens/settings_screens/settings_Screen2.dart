@@ -1,5 +1,6 @@
 import 'package:aimind/widgets/forward_button.dart';
 import 'package:aimind/widgets/setting_Item.dart';
+import 'package:aimind/widgets/setting_Switch.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -11,6 +12,7 @@ class SettingsScreen2 extends StatefulWidget {
 }
 
 class _SettingsScreen2State extends State<SettingsScreen2> {
+  bool isDarkMode = false;
   final String url =
       'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
 
@@ -98,36 +100,38 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
           SettingItem(
             title: 'Language',
             icon: Ionicons.earth,
-            bgColor: Colors.red.shade100,
-            iconColor: Colors.red,
+            bgColor: Colors.orange.shade100,
+            iconColor: Colors.orange,
             value: 'English',
             onTap: () {},
           ),
           SizedBox(height: 20),
           SettingItem(
-            title: 'Language',
-            icon: Ionicons.earth,
-            bgColor: Colors.red.shade100,
-            iconColor: Colors.red,
-            value: 'English',
+            title: 'Notifications',
+            icon: Ionicons.notifications,
+            bgColor: Colors.blue.shade100,
+            iconColor: Colors.blue,
             onTap: () {},
           ),
           SizedBox(height: 20),
-          SettingItem(
+          SettingSwitch(
             title: 'Language',
             icon: Ionicons.earth,
-            bgColor: Colors.red.shade100,
-            iconColor: Colors.red,
-            value: 'English',
-            onTap: () {},
+            bgColor: Colors.purple.shade100,
+            iconColor: Colors.purple,
+            value: isDarkMode,
+            onTap: (value) {
+              setState(() {
+                isDarkMode = value;
+              });
+            },
           ),
           SizedBox(height: 20),
           SettingItem(
-            title: 'Language',
-            icon: Ionicons.earth,
+            title: 'Help',
+            icon: Ionicons.nuclear,
             bgColor: Colors.red.shade100,
             iconColor: Colors.red,
-            value: 'English',
             onTap: () {},
           ),
         ],
