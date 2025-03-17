@@ -1,4 +1,5 @@
 import 'package:aimind/screens/settings_screens/settings_Screen.dart';
+import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _currentIndex == 0
               ? HomePage()
               : _currentIndex == 2
-                  ? SettingsScreen()
+                  ? SettingsScreen2()
                   : Container(), // Página vacía para "Notificaciones"
 
           // Barra de navegación inferior

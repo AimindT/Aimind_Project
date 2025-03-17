@@ -33,7 +33,7 @@ class MainApp extends StatelessWidget {
           const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
         ],
       ),
-      theme: ThemeData(colorSchemeSeed: Colors.black),
+      theme: ThemeData(colorSchemeSeed: Colors.black, fontFamily: 'SFPro'),
       home: AuthGates(),
       debugShowCheckedModeBanner: false,
     );
