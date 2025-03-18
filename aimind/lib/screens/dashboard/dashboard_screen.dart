@@ -1,7 +1,9 @@
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
+import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -15,13 +17,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeProvider.themeData.colorScheme.background,
       body: Stack(
         children: [
           // Cambia la vista según el índice seleccionado
           _currentIndex == 0
-              ? HomePage()
+              ? HomePage(isDarkMode: isDarkMode)
               : _currentIndex == 1
                   ? SettingsScreen2()
                   : Container(), // Página vacía para "Notificaciones"
@@ -33,12 +38,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             bottom: 0,
             child: CurvedNavigationBar(
               backgroundColor: Colors.transparent,
-              buttonBackgroundColor: Colors.black,
-              color: Colors.black,
+              buttonBackgroundColor: isDarkMode ? Colors.black : Colors.white,
+              color: isDarkMode ? Colors.black : Colors.white,
               animationDuration: const Duration(milliseconds: 300),
-              items: const <Widget>[
-                Icon(Icons.home, size: 26, color: Colors.white),
-                Icon(Icons.person, size: 26, color: Colors.white),
+              items: [
+                Icon(Icons.home,
+                    size: 26, color: isDarkMode ? Colors.white : Colors.black),
+                Icon(Icons.settings,
+                    size: 26, color: isDarkMode ? Colors.white : Colors.black),
               ],
               onTap: (index) {
                 setState(() {
@@ -57,8 +64,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 class HomePage extends StatelessWidget {
   final String url =
       'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
+  final bool isDarkMode;
 
-  const HomePage({super.key});
+  const HomePage({super.key, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +85,14 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
+                      color: isDarkMode ? Colors.white : Colors.grey[800],
                     ),
                   ),
                   Text(
                     'Chris Chaparro',
                     style: TextStyle(
                       fontSize: 24,
-                      color: Colors.grey[800],
+                      color: isDarkMode ? Colors.white : Colors.grey[800],
                     ),
                   ),
                 ],
@@ -95,12 +103,14 @@ class HomePage extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.black,
+                      color: isDarkMode ? Colors.white : Colors.black,
                       width: 3.0,
                     ),
                   ),
                   child: CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                    backgroundColor: isDarkMode
+                        ? Color.fromARGB(255, 40, 40, 40)
+                        : Color.fromARGB(255, 230, 228, 228),
                     radius: 30,
                     backgroundImage: NetworkImage(url),
                   ),

@@ -20,36 +20,34 @@ class SettingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: bgColor),
-              child: Icon(
-                icon,
-                color: iconColor,
-              ),
+    return SizedBox(
+      width: double.infinity,
+      child: Row(
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: bgColor),
+            child: Icon(
+              icon,
+              color: iconColor,
             ),
-            SizedBox(width: 20),
-            Text(title,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Spacer(),
-            value != null
-                ? Text(
-                    value!,
-                    style: TextStyle(fontSize: 20, color: Colors.grey),
-                  )
-                : SizedBox(),
-            SizedBox(width: 20),
-            ForwardButton(
-              onTap: onTap,
-            )
-          ],
-        ),
+          ),
+          SizedBox(width: 20),
+          Text(title,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Spacer(),
+          value != null
+              ? Text(
+                  value!,
+                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                )
+              : SizedBox(),
+          SizedBox(width: 20),
+          ForwardButton(
+            onTap: onTap,
+          )
+        ],
       ),
     );
   }

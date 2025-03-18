@@ -21,6 +21,9 @@ class CustomDashButton extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double buttonSize = screenWidth * 0.35;
 
+    // Detect the current theme (dark or light)
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         InkWell(
@@ -31,17 +34,23 @@ class CustomDashButton extends StatelessWidget {
             width: buttonSize,
             padding: EdgeInsets.all(buttonSize * 0.125),
             decoration: BoxDecoration(
-              color: color,
+              color: isDarkMode
+                  ? Colors.grey.shade700
+                  : color, // Darker color for dark mode
               borderRadius: BorderRadius.circular(buttonSize * 0.125),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
+                  color: isDarkMode
+                      ? Colors.black.withOpacity(0.6)
+                      : Colors.black.withOpacity(0.4),
                   blurRadius: 20,
                   spreadRadius: 5,
                   offset: const Offset(7, 7),
                 ),
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.6),
+                  color: isDarkMode
+                      ? Colors.grey.withOpacity(0.6)
+                      : Colors.white.withOpacity(0.6),
                   blurRadius: 20,
                   spreadRadius: 5,
                   offset: const Offset(-7, -7),
@@ -75,7 +84,9 @@ class CustomDashButton extends StatelessWidget {
               fontFamily: 'Roboto',
               fontSize: screenWidth * 0.055,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+              color: isDarkMode
+                  ? Colors.white
+                  : Colors.grey[800], // White text in dark mode
             ),
             textAlign: TextAlign.center,
             maxLines: 2,
