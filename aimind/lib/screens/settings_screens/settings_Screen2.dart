@@ -1,4 +1,5 @@
 import 'package:aimind/screens/auth_Screens/login_screen.dart';
+import 'package:aimind/screens/settings_screens/edit_Account_Screen.dart';
 import 'package:aimind/screens/settings_screens/faq_Screen.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen.dart';
 import 'package:aimind/theme/theme_provider.dart';
@@ -28,8 +29,7 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: themeProvider
-          .themeData.colorScheme.surface, // Fondo basado en el tema
+      backgroundColor: themeProvider.themeData.colorScheme.surface,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(30),
@@ -90,7 +90,12 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                     ),
                     Spacer(),
                     ForwardButton(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditAccountScreen()));
+                      },
                     )
                   ],
                 ),
@@ -110,14 +115,14 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                 onTap: () {},
               ),
               SizedBox(height: 20),
-              SettingItem(
-                title: 'Notificaciones',
-                icon: Ionicons.notifications,
-                bgColor: Colors.blue.shade100,
-                iconColor: Colors.blue,
-                onTap: () {},
-              ),
-              SizedBox(height: 20),
+              // SettingItem(
+              //   title: 'Notificaciones',
+              //   icon: Ionicons.notifications,
+              //   bgColor: Colors.blue.shade100,
+              //   iconColor: Colors.blue,
+              //   onTap: () {},
+              // ),
+              // SizedBox(height: 20),
               SettingSwitch(
                 title: "Modo Oscuro",
                 icon: Icons.dark_mode,

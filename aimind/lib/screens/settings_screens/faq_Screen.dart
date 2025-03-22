@@ -10,6 +10,7 @@ class FaqScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: themeProvider.themeData.colorScheme.surface,
       appBar: AppBar(
@@ -19,7 +20,8 @@ class FaqScreen extends StatelessWidget {
           child: Center(child: Text('FAQS')),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios,
+              color: isDarkMode ? Colors.white : Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -40,13 +42,13 @@ class FaqScreen extends StatelessWidget {
                   question: '¿Que es AImind?',
                   answer:
                       'AImind es una plataforma innovadora diseñada para brindar apoyo en el cuidado de la salud mental. A través de un asistente virtual basado en inteligencia artificial, los usuarios pueden expresar sus preocupaciones y recibir orientación complementaria. La plataforma también ofrece herramientas interactivas en tiempo real para gestionar emociones negativas y facilita la programación de citas con profesionales de la salud mental, garantizando un acceso ágil y seguro a la ayuda especializada.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(Icons.remove, color: Colors.black),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -58,13 +60,13 @@ class FaqScreen extends StatelessWidget {
                       '¿Cómo garantizarás que el chatbot no sustituya el diagnóstico profesional, sino que motive a los usuarios a buscar ayuda especializada?',
                   answer:
                       'Se incluirán mensajes aclaratorios indicando que el chatbot no reemplaza a un profesional. Además, si detecta señales de alerta, recomendará contactar a un especialista.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(Icons.remove, color: Colors.black),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -76,13 +78,13 @@ class FaqScreen extends StatelessWidget {
                       '¿Tendrá integración con modelos preentrenados como GPT o se desarrollará con un motor propio?',
                   answer:
                       'Se basará en modelos preentrenados, pero con ajustes específicos para el contexto de la salud mental, asegurando respuestas seguras y adecuadas.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
                   expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -102,13 +104,13 @@ class FaqScreen extends StatelessWidget {
                   question: '¿Es seguro mi información?',
                   answer:
                       'Sí, utilizamos protocolos de seguridad avanzados para proteger los datos de los usuarios y garantizar su privacidad.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(Icons.remove, color: Colors.black),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -120,13 +122,13 @@ class FaqScreen extends StatelessWidget {
                       '¿Cumplirá con normativas como GDPR o HIPAA si se planea una expansión internacional?',
                   answer:
                       'Sí, se adaptará a las regulaciones de protección de datos según la región.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(Icons.remove, color: Colors.black),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -150,13 +152,13 @@ class FaqScreen extends StatelessWidget {
                       '¿Cómo será el proceso de conexión con profesionales de la salud mental? ¿Habrá filtros por especialidad o disponibilidad?',
                   answer:
                       'Los usuarios podrán filtrar profesionales por especialidad, disponibilidad y enfoque terapéutico.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(Icons.remove, color: Colors.black),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -168,13 +170,13 @@ class FaqScreen extends StatelessWidget {
                       '¿Habrá recordatorios automáticos para fomentar el uso constante de la plataforma?',
                   answer:
                       'Sí, se enviarán recordatorios personalizados para fomentar la continuidad en el uso de la plataforma.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(Icons.remove, color: Colors.black),
+                  collapsedIcon: const Icon(Icons.add, color: Colors.black),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
@@ -186,13 +188,19 @@ class FaqScreen extends StatelessWidget {
                       '¿Se integrará con plataformas de videollamadas o solo será un sistema de gestión de citas?',
                   answer:
                       'Se integrará con servicios de videollamada en un futuro para facilitar las sesiones en línea, pero de momento solo se agendarán citas.',
-                  questionTextStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
+                  questionTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                   anserTextStyle: const TextStyle(
                       fontSize: 14, color: Color.fromRGBO(108, 108, 109, 1)),
                   duration: const Duration(milliseconds: 200),
-                  expandedIcon: const Icon(Icons.remove),
-                  collapsedIcon: const Icon(Icons.add),
+                  expandedIcon: const Icon(
+                    Icons.remove,
+                    color: Colors.black,
+                  ),
+                  collapsedIcon: const Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  ),
                   backgroundColor: Color.fromRGBO(241, 240, 242, 1.0),
                   borderRadius: BorderRadius.circular(12),
                   padding:
