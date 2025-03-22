@@ -51,7 +51,7 @@ class SettingSwitch extends StatelessWidget {
           CupertinoSwitch(
             value: value,
             onChanged: onTap,
-            activeColor: isDarkMode ? Colors.blueGrey : Colors.blue,
+            activeTrackColor: isDarkMode ? Colors.blueGrey : Colors.blue,
           ),
         ],
       ),

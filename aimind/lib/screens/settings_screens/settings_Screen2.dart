@@ -29,7 +29,7 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
 
     return Scaffold(
       backgroundColor: themeProvider
-          .themeData.colorScheme.background, // Fondo basado en el tema
+          .themeData.colorScheme.surface, // Fondo basado en el tema
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(30),

@@ -1,15 +1,19 @@
+import 'package:aimind/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easy_faq/flutter_easy_faq.dart';
+import 'package:provider/provider.dart';
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeProvider.themeData.colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeProvider.themeData.colorScheme.surface,
         title: Padding(
           padding: const EdgeInsets.only(right: 60.0),
           child: Center(child: Text('FAQS')),
@@ -133,9 +137,12 @@ class FaqScreen extends StatelessWidget {
                   thickness: 3,
                 ),
                 SizedBox(height: 20),
-                Text(
-                  'Sobre La Experiencia Del Usuario',
-                  style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Sobre La Experiencia Del Usuario',
+                    style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(height: 10),
                 EasyFaq(

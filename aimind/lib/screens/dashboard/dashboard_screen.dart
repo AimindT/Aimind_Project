@@ -21,7 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: themeProvider.themeData.colorScheme.background,
+      backgroundColor: themeProvider.themeData.colorScheme.surface,
       body: Stack(
         children: [
           // Cambia la vista según el índice seleccionado
@@ -108,9 +108,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   child: CircleAvatar(
-                    backgroundColor: isDarkMode
-                        ? Color.fromARGB(255, 40, 40, 40)
-                        : Color.fromARGB(255, 230, 228, 228),
+                    backgroundColor: Color.fromARGB(255, 230, 228, 228),
                     radius: 30,
                     backgroundImage: NetworkImage(url),
                   ),

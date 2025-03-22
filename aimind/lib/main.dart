@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       theme: themeProvider.themeData,
-      home: const AuthGates(),
+      home: const AuthGates (),
       debugShowCheckedModeBanner: false,
     );
   }
