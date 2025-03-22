@@ -64,7 +64,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             title: '',
             widget: Padding(
               padding: EdgeInsets.only(
-                  right: 60), // Ajusta el valor según lo necesites
+                  right: 80), // Ajusta el valor según lo necesites
               child: Column(
                 children: [
                   CircleAvatar(
