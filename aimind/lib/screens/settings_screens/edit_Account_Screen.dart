@@ -1,4 +1,5 @@
 import 'package:aimind/theme/theme_provider.dart';
+import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:aimind/widgets/edit_item.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -49,67 +50,111 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Center(
-                child: Text(
-                  'Tu Cuenta',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Center(
+                  child: Text(
+                    'Tu Cuenta',
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 40),
-            EditItem(
-              title: '',
-              widget: Padding(
-                padding: EdgeInsets.only(right: 80),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 52,
-                      backgroundColor: isDarkMode ? Colors.white : Colors.black,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Color.fromARGB(255, 230, 228, 228),
-                        backgroundImage: NetworkImage(url),
+              SizedBox(height: 40),
+              EditItem(
+                title: '',
+                widget: Padding(
+                  padding: EdgeInsets.only(right: 80),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 52,
+                        backgroundColor:
+                            isDarkMode ? Colors.white : Colors.black,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                          backgroundImage: NetworkImage(url),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.lightBlueAccent,
-                      ),
-                      child: Text('Subir Foto'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            EditItem(widget: TextField(), title: 'Nombre'),
-            SizedBox(height: 40),
-            EditItem(
-                widget: Row(
-                  children: [
-                    IconButton(
+                      SizedBox(height: 10),
+                      TextButton(
                         onPressed: () {},
-                        style: IconButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
-                            fixedSize: Size(50, 50)),
-                        icon: Icon(
-                          Ionicons.male,
-                          color: Colors.white,
-                          size: 18,
-                        ))
-                  ],
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.lightBlueAccent,
+                        ),
+                        child: Text('Subir Foto'),
+                      ),
+                    ],
+                  ),
                 ),
-                title: 'Gender')
-          ],
+              ),
+              SizedBox(height: 20),
+              EditItem(
+                  widget: CustomTextField(
+                    keyboardType: TextInputType.text,
+                    maxLegth: 100,
+                  ),
+                  title: 'Nombre'),
+              SizedBox(height: 40),
+              EditItem(
+                  widget: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              gender = 'man';
+                            });
+                          },
+                          style: IconButton.styleFrom(
+                              backgroundColor: gender == 'man'
+                                  ? Colors.deepPurple
+                                  : Colors.grey.shade200,
+                              fixedSize: Size(50, 50)),
+                          icon: Icon(
+                            Ionicons.male,
+                            color:
+                                gender == 'man' ? Colors.white : Colors.black,
+                            size: 18,
+                          )),
+                      SizedBox(width: 20),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              gender = 'woman';
+                            });
+                          },
+                          style: IconButton.styleFrom(
+                              backgroundColor: gender == 'woman'
+                                  ? Colors.deepPurple
+                                  : Colors.grey.shade200,
+                              fixedSize: Size(50, 50)),
+                          icon: Icon(
+                            Ionicons.female,
+                            color:
+                                gender == 'woman' ? Colors.white : Colors.black,
+                            size: 18,
+                          )),
+                    ],
+                  ),
+                  title: 'Genero'),
+              SizedBox(height: 40),
+              EditItem(widget: TextField(), title: 'Edad'),
+              SizedBox(height: 40),
+              EditItem(
+                  widget: CustomTextField(
+                    keyboardType: TextInputType.emailAddress,
+                    maxLegth: 100,
+                  ),
+                  title: 'Email')
+            ],
+          ),
         ),
       ),
     );

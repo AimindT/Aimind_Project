@@ -16,12 +16,13 @@ class EditItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
+          flex: 2,
             child: Text(title,
                 style: TextStyle(fontSize: 18, color: Colors.grey))),
         SizedBox(
           width: 40,
         ),
-        Expanded(flex: 4, child: widget)
+        Expanded(flex: 5, child: widget)
       ],
     );
   }
