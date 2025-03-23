@@ -14,6 +14,8 @@ class EditAccountScreen extends StatefulWidget {
 class _EditAccountScreenState extends State<EditAccountScreen> {
   final String url =
       'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
+
+  String gender = 'man';
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -47,49 +49,68 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           )
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Center(
-              child: Text(
-                'Tu Cuenta',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Center(
+                child: Text(
+                  'Tu Cuenta',
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 40),
-          EditItem(
-            title: '',
-            widget: Padding(
-              padding: EdgeInsets.only(
-                  right: 80), // Ajusta el valor según lo necesites
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 52,
-                    backgroundColor: isDarkMode ? Colors.white : Colors.black,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Color.fromARGB(255, 230, 228, 228),
-                      backgroundImage: NetworkImage(url),
+            SizedBox(height: 40),
+            EditItem(
+              title: '',
+              widget: Padding(
+                padding: EdgeInsets.only(right: 80),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 52,
+                      backgroundColor: isDarkMode ? Colors.white : Colors.black,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                        backgroundImage: NetworkImage(url),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.lightBlueAccent,
+                    SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.lightBlueAccent,
+                      ),
+                      child: Text('Subir Foto'),
                     ),
-                    child: Text('Subir Foto'),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          EditItem(widget: TextField(), title: 'Nombre')
-        ],
+            EditItem(widget: TextField(), title: 'Nombre'),
+            SizedBox(height: 40),
+            EditItem(
+                widget: Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {},
+                        style: IconButton.styleFrom(
+                            backgroundColor: Colors.deepPurple,
+                            fixedSize: Size(50, 50)),
+                        icon: Icon(
+                          Ionicons.male,
+                          color: Colors.white,
+                          size: 18,
+                        ))
+                  ],
+                ),
+                title: 'Gender')
+          ],
+        ),
       ),
     );
   }

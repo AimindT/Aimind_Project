@@ -19,9 +19,9 @@ class EditItem extends StatelessWidget {
             child: Text(title,
                 style: TextStyle(fontSize: 18, color: Colors.grey))),
         SizedBox(
-          width: 30,
+          width: 40,
         ),
-        Expanded(flex: 5, child: widget)
+        Expanded(flex: 4, child: widget)
       ],
     );
   }
