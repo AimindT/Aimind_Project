@@ -1,5 +1,5 @@
 import 'package:aimind/screens/auth_Screens/login_screen.dart';
-import 'package:aimind/screens/settings_screens/edit_Account_Screen.dart';
+import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/faq_Screen.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen.dart';
 import 'package:aimind/theme/theme_provider.dart';
@@ -94,7 +94,7 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditAccountScreen()));
+                                builder: (context) => EditAccountScreen2()));
                       },
                     )
                   ],

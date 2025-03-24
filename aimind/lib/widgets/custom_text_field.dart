@@ -36,10 +36,12 @@ class CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: TextStyle(
-            color: Color(0xFFB0B0B0), // Gris medio
-            fontFamily: 'SFPro', // Familia de fuente para el hint
-          ),
-          contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              color: Color(0xFFB0B0B0), // Gris medio
+              fontFamily: 'SFPro',
+              fontSize: 20),
+          alignLabelWithHint: true,
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide(color: Colors.grey, width: 3),
@@ -68,9 +70,9 @@ class CustomTextFieldState extends State<CustomTextField> {
         textInputAction: TextInputAction.next,
         obscureText: widget.isPassword ? secureText : false,
         maxLength: widget.maxLegth,
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.start,
         style: TextStyle(
-          fontFamily: 'SFPro', // Familia de fuente para el texto
+          fontFamily: 'SFPro',
         ),
       ),
     );
