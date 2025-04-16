@@ -94,7 +94,8 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditAccountScreen2()));
+                                builder: (context) => EditAccountScreen2(
+                                    isDarkMode: isDarkMode)));
                       },
                     )
                   ],

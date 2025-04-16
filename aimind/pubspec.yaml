@@ -46,6 +46,7 @@ flutter:
     - assets/images/Psic3.png
     - assets/images/RapTer.jpeg
     - assets/images/calender.png
+    - assets/images/diary.png
     - .env
 
   fonts:

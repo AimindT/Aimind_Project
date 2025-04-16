@@ -1,3 +1,4 @@
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida_Screen/fast_Therapy_Screen.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
@@ -133,7 +134,12 @@ class HomePage extends StatelessWidget {
                   CustomDashButton(
                     iconImagePath: 'assets/images/RapTer.jpeg',
                     buttontext: 'Terapia Rapida',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FastTherapyScreen()));
+                    },
                   ),
                 ],
               ),
@@ -141,10 +147,20 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  // CustomDashButton(
+                  //   iconImagePath: 'assets/images/calender.png',
+                  //   buttontext: 'Agenda Una Cita',
+                  //   onPressed: () {},
+                  // ),
                   CustomDashButton(
-                    iconImagePath: 'assets/images/calender.png',
-                    buttontext: 'Agenda Una Cita',
-                    onPressed: () {},
+                    iconImagePath: 'assets/images/diary.png',
+                    buttontext: 'Diario Terapéutico',
+                    onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => DIARY()));
+                    },
                   ),
                 ],
               )

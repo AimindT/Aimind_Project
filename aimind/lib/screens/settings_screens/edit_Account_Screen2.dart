@@ -1,8 +1,11 @@
+import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EditAccountScreen2 extends StatefulWidget {
-  const EditAccountScreen2({super.key});
+  final bool isDarkMode;
+  const EditAccountScreen2({super.key, required this.isDarkMode});
 
   @override
   State<EditAccountScreen2> createState() => _EditAccountScreen2State();
@@ -14,6 +17,9 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -38,9 +44,23 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                     SizedBox(
                       width: 120,
                       height: 120,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.network(url),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: Container(
+                            color: Colors.white,
+                            child: Image.network(
+                              url,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Positioned(
@@ -105,13 +125,21 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                         maxLegth: 100,
                       ),
                     ),
-                    SizedBox(height: 100),
+                    SizedBox(height: 50),
                     SizedBox(
-                      width: double.infinity,
+                      width: 350,
+                      height: 70,
                       child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Guardar Cambios',
-                              style: TextStyle(color: Colors.black))),
+                        onPressed: () {},
+                        child: Text('Guardar Cambios',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          side: BorderSide.none,
+                          shape: StadiumBorder(),
+                        ),
+                      ),
                     )
                   ],
                 ),
