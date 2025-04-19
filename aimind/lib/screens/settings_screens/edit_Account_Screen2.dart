@@ -131,14 +131,14 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                       height: 70,
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text('Guardar Cambios',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           side: BorderSide.none,
                           shape: StadiumBorder(),
                         ),
+                        child: Text('Guardar Cambios',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)),
                       ),
                     )
                   ],

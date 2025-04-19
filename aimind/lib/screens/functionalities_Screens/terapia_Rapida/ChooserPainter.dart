@@ -1,8 +1,5 @@
-import 'dart:ui';
-
-import 'package:aimind/screens/functionalities_Screens/terapia_Rapida_Screen/ArcChooser.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/ArcChooser.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class ChooserPainter extends CustomPainter {
   final List<ArcItem> arcItems;
