@@ -3,6 +3,7 @@ import 'package:aimind/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -48,7 +49,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 lastDate: DateTime(2101),
                 onDateChanged: (date) {
                   setState(() {
-                    selectedDate = date;
+                    selectedDate = DateTime(date.year, date.month, date.day);
                   });
                 },
               )
@@ -56,17 +57,52 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   .fadeIn(duration: 600.ms)
                   .slide(begin: const Offset(0, 1), end: Offset.zero),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DiarioScreen(selectedDate: selectedDate)));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                side: BorderSide.none,
-                shape: StadiumBorder(),
+            Text(
+              "Fecha seleccionada: ${DateFormat('dd/MM/yyyy').format(selectedDate)}",
+              style: TextStyle(
+                fontSize: 18,
+                color: isDarkMode ? Colors.white70 : Colors.black87,
               ),
-              child: Text('Confirmar',
-                  style: TextStyle(color: Colors.white, fontSize: 30)),
+            ).animate().fadeIn(duration: 300.ms),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        DiarioScreen(selectedDate: selectedDate),
+                  ),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.4),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    'Confirmar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+                  .animate()
+                  .fadeIn(duration: 400.ms)
+                  .slide(begin: const Offset(0, 1), end: Offset.zero),
             ),
           ],
         ),

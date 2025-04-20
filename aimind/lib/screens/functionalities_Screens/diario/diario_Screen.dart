@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DiarioScreen extends StatefulWidget {
-    final DateTime? selectedDate; // Recibe la fecha seleccionada
-    
+  final DateTime? selectedDate; // Recibe la fecha seleccionada
+
   const DiarioScreen({super.key, this.selectedDate});
 
   @override
@@ -18,14 +18,12 @@ class DiarioScreen extends StatefulWidget {
 }
 
 class _DiarioScreenState extends State<DiarioScreen> {
-  
   List<Note> filteredNotes = [];
   bool sorted = false;
 
   @override
   void initState() {
     super.initState();
-      print('Fecha seleccionada: ${widget.selectedDate}');
     filteredNotes = sampleNotes;
   }
 
@@ -85,7 +83,9 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: isDarkMode ? Colors.grey.shade800.withValues(alpha: .8) : Colors.transparent,
+                          color: isDarkMode
+                              ? Colors.grey.shade800.withValues(alpha: .8)
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(10)),
                       child: Icon(
                         Icons.arrow_back_ios_new,
@@ -94,7 +94,9 @@ class _DiarioScreenState extends State<DiarioScreen> {
                     )),
                 Text(
                   'Mis Notas',
-                  style: TextStyle(fontSize: 30, color: isDarkMode ? Colors.white : Colors.black),
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
                 IconButton(
                     onPressed: () {
@@ -107,12 +109,12 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: isDarkMode ? Colors.grey.shade800.withValues(alpha: .8) : Colors.transparent ,
+                          color: isDarkMode
+                              ? Colors.grey.shade800.withValues(alpha: .8)
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Icon(
-                        Icons.sort,
-                        color: isDarkMode ? Colors.white : Colors.black
-                      ),
+                      child: Icon(Icons.sort,
+                          color: isDarkMode ? Colors.white : Colors.black),
                     ))
               ],
             ),
@@ -121,7 +123,9 @@ class _DiarioScreenState extends State<DiarioScreen> {
             ),
             TextField(
               onChanged: onSearchTextChanged,
-              style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(
+                  fontSize: 16,
+                  color: isDarkMode ? Colors.white : Colors.black),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 12),
                   hintText: 'Buscar Notas...',
@@ -137,86 +141,86 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       borderSide: BorderSide(color: Colors.transparent))),
             ),
             Expanded(
-                child: ListView.builder(
-              padding: EdgeInsets.only(top: 30),
-              itemCount: filteredNotes.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: EdgeInsets.only(bottom: 20),
-                  color: getRandomColor(),
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListTile(
-                      onTap: () async {
-                        final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => EditScreen(
-                                      note: filteredNotes[index],
-                                    )));
-                        if (result != null) {
-                          setState(() {
-                            int originalIndex =
-                                sampleNotes.indexOf(filteredNotes[index]);
-                            sampleNotes[originalIndex] = Note(
-                                id: sampleNotes[originalIndex].id,
-                                title: result[0],
-                                content: result[1],
-                                modifiedTime: DateTime.now());
-                            filteredNotes[index] = Note(
-                                id: filteredNotes[index].id,
-                                title: result[0],
-                                content: result[1],
-                                modifiedTime: DateTime.now());
-                          });
-                        }
-                      },
-                      title: RichText(
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                              text: '${filteredNotes[index].title}\n',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  height: 1.5),
-                              children: [
-                                TextSpan(
-                                    text: filteredNotes[index].content,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 14,
-                                        height: 1.5))
-                              ])),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          'Editado: ${DateFormat('EEE MMM d, yyyy h:mm a').format(filteredNotes[index].modifiedTime)}',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.grey.shade800),
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: 30),
+                itemCount: filteredNotes.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: EdgeInsets.only(bottom: 20),
+                    color: getRandomColor(),
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListTile(
+                        onTap: () async {
+                          final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => EditScreen(
+                                        note: filteredNotes[index],
+                                      )));
+                          if (result != null) {
+                            setState(() {
+                              int originalIndex =
+                                  sampleNotes.indexOf(filteredNotes[index]);
+                              sampleNotes[originalIndex] = Note(
+                                  id: sampleNotes[originalIndex].id,
+                                  title: result[0],
+                                  content: result[1],
+                                  modifiedTime: DateTime.now());
+                              filteredNotes[index] = Note(
+                                  id: filteredNotes[index].id,
+                                  title: result[0],
+                                  content: result[1],
+                                  modifiedTime: DateTime.now());
+                            });
+                          }
+                        },
+                        title: RichText(
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                                text: '${filteredNotes[index].title}\n',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    height: 1.5),
+                                children: [
+                                  TextSpan(
+                                      text: filteredNotes[index].content,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                          height: 1.5))
+                                ])),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            'Editado: ${DateFormat('EEE MMM d, yyyy h:mm a').format(filteredNotes[index].modifiedTime)}',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey.shade800),
+                          ),
                         ),
+                        trailing: IconButton(
+                            onPressed: () async {
+                              final result = await confirmDialog(context);
+                              if (result != null && result) {
+                                deleteNote(index);
+                              }
+                            },
+                            icon: Icon(color: Colors.black, Icons.delete)),
                       ),
-                      trailing: IconButton(
-                          onPressed: () async {
-                            final result = await confirmDialog(context);
-                            if (result != null && result) {
-                              deleteNote(index);
-                            }
-                          },
-                          icon: Icon( color: Colors.black,
-                            Icons.delete)),
                     ),
-                  ),
-                );
-              },
-            ))
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
