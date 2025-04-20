@@ -160,7 +160,7 @@ Widget colorTile(IconData icon, Color color, String text,
           height: iconSize * 2,
           width: iconSize * 2,
           decoration: BoxDecoration(
-            color: blackAndWhite ? pickedColor : color.withOpacity(0.1),
+            color: blackAndWhite ? pickedColor : color.withValues(alpha: .1),
             borderRadius: BorderRadius.circular(iconSize * 0.8),
           ),
           child: Icon(icon, color: color, size: iconSize),

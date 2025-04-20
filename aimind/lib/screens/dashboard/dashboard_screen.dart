@@ -1,5 +1,7 @@
+import 'package:aimind/screens/functionalities_Screens/diario/calender_Screen.dart';
 import 'package:aimind/screens/functionalities_Screens/diario/diario_Screen.dart';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/fast_Therapy_Screen.dart';
+import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
@@ -99,20 +101,25 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              CircleAvatar(
-                radius: 32,
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isDarkMode ? Colors.white : Colors.black,
-                      width: 3.0,
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditAccountScreen2(isDarkMode: isDarkMode)));
+                },
+                child: CircleAvatar(
+                  radius: 32,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                        width: 3.0,
+                      ),
                     ),
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 230, 228, 228),
-                    radius: 30,
-                    backgroundImage: NetworkImage(url),
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                      radius: 30,
+                      backgroundImage: NetworkImage(url),
+                    ),
                   ),
                 ),
               )
@@ -160,7 +167,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DiarioScreen()));
+                              builder: (context) => CalendarScreen()));
                     },
                   ),
                 ],

@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 import 'package:aimind/config/palette.dart';
 import 'package:aimind/screens/dashboard/dashboard_screen.dart';
@@ -52,248 +50,289 @@ class _LoginScreenState extends State<LoginScreen> {
     userController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    singInemailController.dispose();
+    singInpasswordController.dispose();
+    confirmpasswordController.dispose();
     super.dispose();
+  }
+
+  // Utilidad para obtener tamaños responsivos
+  double getResponsiveSize(BuildContext context, double percentage) {
+    return MediaQuery.of(context).size.width * percentage;
+  }
+
+  double getResponsiveHeight(BuildContext context, double percentage) {
+    return MediaQuery.of(context).size.height * percentage;
+  }
+
+  // Función para determinar si estamos en un dispositivo pequeño
+  bool isSmallDevice(BuildContext context) {
+    return MediaQuery.of(context).size.height < 700;
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = isSmallDevice(context);
+
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
-      body: Stack(
-        children: [
-          //Back Container
-          Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),
-              )),
+      // Envolvemos todo en un SafeArea para manejar notches y áreas seguras
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Fondo
+            Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
               child: Container(
-                padding: EdgeInsets.only(top: 90, left: 20),
-                color: Color(0xFF3B5999).withValues(alpha: .85),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
+                height: getResponsiveHeight(context, 0.25),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/background.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: getResponsiveHeight(context, 0.03),
+                    left: getResponsiveSize(context, 0.05),
+                  ),
+                  color: Color(0xFF3B5999).withValues(alpha: 0.85),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
                         text: TextSpan(
-                            text: "Bienvenid@",
-                            style: TextStyle(
-                                fontSize: 25,
-                                letterSpacing: 2,
-                                color: Colors.yellow[700]),
-                            children: [
-                          TextSpan(
+                          text: "Bienvenid@",
+                          style: TextStyle(
+                            fontSize: isSmall ? 20 : 25,
+                            letterSpacing: 2,
+                            color: Colors.yellow[700],
+                          ),
+                          children: [
+                            TextSpan(
                               text: isSignupScreen ? "A Aimind" : " De Vuelta",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.yellow[700],
-                              ))
-                        ])),
-                    SizedBox(height: 5),
-                    Text(
-                      isSignupScreen
-                          ? 'Registrate Para Continuar'
-                          : "Incia Sesion Para Continuar",
-                      style: TextStyle(letterSpacing: 1, color: Colors.white),
-                    )
-                  ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        isSignupScreen
+                            ? 'Registrate Para Continuar'
+                            : "Incia Sesion Para Continuar",
+                        style: TextStyle(
+                          letterSpacing: 1,
+                          color: Colors.white,
+                          fontSize: isSmall ? 12 : 14,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          // Form Container
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 700),
-            curve: Curves.bounceInOut,
-            top: MediaQuery.of(context).size.height *
-                (isSignupScreen ? 0.20 : 0.25),
-            left: MediaQuery.of(context).size.width * 0.03,
-            right: MediaQuery.of(context).size.width * 0.03,
-            child: AnimatedContainer(
+
+            // Formulario principal
+            AnimatedPositioned(
               duration: Duration(milliseconds: 700),
               curve: Curves.bounceInOut,
-              height: MediaQuery.of(context).size.height *
-                  (isSignupScreen ? 0.60 : 0.35),
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-              width: MediaQuery.of(context).size.width * 0.9,
-              margin: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.05,
+              top: getResponsiveHeight(
+                context,
+                isSignupScreen ? 0.11 : 0.22,
               ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: .3),
-                    blurRadius: 15,
-                    spreadRadius: 5,
-                  )
-                ],
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isSignupScreen = false;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  color: !isSignupScreen
-                                      ? Palette.activeColor
-                                      : Palette.textColor1,
-                                ),
-                              ),
-                              if (!isSignupScreen)
-                                Container(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.003,
-                                  margin: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.004,
-                                  ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.15,
-                                  color: Colors.orange,
-                                )
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isSignupScreen = true;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                'SIGNUP',
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  color: isSignupScreen
-                                      ? Palette.activeColor
-                                      : Palette.textColor1,
-                                ),
-                              ),
-                              if (isSignupScreen)
-                                Container(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.003,
-                                  margin: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.004,
-                                  ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.15,
-                                  color: Colors.orange,
-                                )
-                            ],
-                          ),
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SingleChildScrollView(
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 700),
+                    curve: Curves.bounceInOut,
+                    width: size.width * 0.9,
+                    constraints: BoxConstraints(
+                      maxHeight: isSignupScreen
+                          ? size.height * 0.65
+                          : size.height * 0.4,
+                    ),
+                    padding: EdgeInsets.all(getResponsiveSize(context, 0.05)),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: .3),
+                          blurRadius: 15,
+                          spreadRadius: 5,
                         ),
                       ],
                     ),
-                    if (isSignupScreen) buildSingupSection(),
-                    if (!isSignupScreen) buildSignInSection()
-                  ],
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isSignupScreen = false;
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'LOGIN',
+                                      style: TextStyle(
+                                        fontSize:
+                                            getResponsiveSize(context, 0.04),
+                                        fontWeight: FontWeight.bold,
+                                        color: !isSignupScreen
+                                            ? Palette.activeColor
+                                            : Palette.textColor1,
+                                      ),
+                                    ),
+                                    if (!isSignupScreen)
+                                      Container(
+                                        height:
+                                            getResponsiveHeight(context, 0.003),
+                                        margin: EdgeInsets.only(
+                                          top: getResponsiveHeight(
+                                              context, 0.004),
+                                        ),
+                                        width: getResponsiveSize(context, 0.15),
+                                        color: Colors.orange,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isSignupScreen = true;
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'SIGNUP',
+                                      style: TextStyle(
+                                        fontSize:
+                                            getResponsiveSize(context, 0.04),
+                                        fontWeight: FontWeight.bold,
+                                        color: isSignupScreen
+                                            ? Palette.activeColor
+                                            : Palette.textColor1,
+                                      ),
+                                    ),
+                                    if (isSignupScreen)
+                                      Container(
+                                        height:
+                                            getResponsiveHeight(context, 0.003),
+                                        margin: EdgeInsets.only(
+                                          top: getResponsiveHeight(
+                                              context, 0.004),
+                                        ),
+                                        width: getResponsiveSize(context, 0.15),
+                                        color: Colors.orange,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (isSignupScreen) buildSingupSection(),
+                          if (!isSignupScreen) buildSignInSection(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: isSignupScreen
-                ? MediaQuery.of(context).size.height - 170
-                : MediaQuery.of(context).size.height - 300,
-            right: 0,
-            left: 0,
-            child: Column(
-              children: [
-                Text(!isSignupScreen
-                    ? "O inicia sesión con"
-                    : "O registrate con"),
-                SizedBox(height: 20),
-                Column(
+            // Botones de inicio de sesión con redes sociales (debajo del container)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: isSignupScreen ? EdgeInsets.symmetric(vertical:0.5) : EdgeInsets.symmetric(vertical:10),
+                child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        LoginButton(
-                          icon: Icons.facebook,
-                          text: "Facebook",
-                          backgroundColor: Color(0xFF3B5999),
-                          iconColor: Colors.white,
-                          textColor: Colors.white,
-                          voidCallback: () {
-                            signInWithFacebook();
-                          },
-                        ),
-                        SizedBox(width: 10),
-                        LoginButtonWithImage(
-                          imagePath: 'assets/images/google_logo.png',
-                          text: "Google",
-                          backgroundColor: Colors.white,
-                          textColor: Colors.black87,
-                          voidCallback: () async {
-                            if (!kIsWeb &&
-                                (Platform.isAndroid || Platform.isIOS)) {
-                              await signInWithGoogle(context);
-                            } else {
-                              Supabase.instance.client.auth
-                                  .signInWithOAuth(OAuthProvider.google);
-                            }
-                          },
-                        ),
-                      ],
+                    Text(
+                      !isSignupScreen
+                          ? "O inicia sesión con"
+                          : "O registrate con",
+                      style: TextStyle(fontSize: isSmall ? 16 : 18),
                     ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    SizedBox(height: isSmall ? 10 : 20),
+                    Column(
                       children: [
-                        /* LoginButton(
-                          icon: Icons.apple,
-                          text: "Apple",
-                          backgroundColor: Colors.black,
-                          iconColor: Colors.white,
-                          textColor: Colors.white,
-                          voidCallback: () {},
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            LoginButton(
+                              icon: Icons.facebook,
+                              text: "Facebook",
+                              backgroundColor: Color(0xFF3B5999),
+                              iconColor: Colors.white,
+                              textColor: Colors.white,
+                              voidCallback: () {
+                                signInWithFacebook();
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            LoginButtonWithImage(
+                              imagePath: 'assets/images/google_logo.png',
+                              text: "Google",
+                              backgroundColor: Colors.white,
+                              textColor: Colors.black87,
+                              voidCallback: () async {
+                                if (!kIsWeb &&
+                                    (Platform.isAndroid || Platform.isIOS)) {
+                                  await signInWithGoogle(context);
+                                } else {
+                                  Supabase.instance.client.auth
+                                      .signInWithOAuth(OAuthProvider.google);
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 10),*/
-                        LoginButtonWithImage(
-                          imagePath: 'assets/images/x_logo.png',
-                          text: "",
-                          backgroundColor: Colors.black,
-                          voidCallback: () {
-                            signInWithTwitter();
-                          },
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            LoginButtonWithImage(
+                              imagePath: 'assets/images/x_logo.png',
+                              text: "",
+                              backgroundColor: Colors.black,
+                              voidCallback: () {
+                                signInWithTwitter();
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
-                )
-              ],
-            ),
-          )
-        ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
+
+
 
   Future<void> signInWithGoogle(BuildContext context) async {
     /// Web Client ID that you registered with Google Cloud.
@@ -351,9 +390,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Container buildSignInSection() {
+  Widget buildSignInSection() {
+    final isSmall = isSmallDevice(context);
+
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: isSmall ? 10 : 20),
       child: Column(children: [
         CustomTextField(
           hintText: 'Correo',
@@ -371,25 +412,14 @@ class _LoginScreenState extends State<LoginScreen> {
           controller: singInpasswordController,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Checkbox(
-                value: isRememberMe,
-                activeColor: Palette.textColor2,
-                onChanged: (value) {
-                  setState(() {
-                    isRememberMe = !isRememberMe;
-                  });
-                }),
-            Text(
-              'Recuérdame',
-              style: TextStyle(fontSize: 12, color: Palette.textColor1),
-            ),
             TextButton(
                 onPressed: () {},
                 child: Text(
                   '¿Olvidaste tu contraseña?',
-                  style: TextStyle(fontSize: 12, color: Palette.textColor1),
+                  style: TextStyle(
+                      fontSize: isSmall ? 14 : 16, color: Palette.textColor1),
                 ))
           ],
         ),
@@ -398,17 +428,19 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: login,
           buttonText: 'Iniciar Sesión',
           buttonColor: Colors.blue,
-          width: 250,
-          height: 60,
+          width: getResponsiveSize(context, 0.6),
+          height: getResponsiveHeight(context, 0.06),
           loadingColor: Colors.amber,
         )
       ]),
     );
   }
 
-  Container buildSingupSection() {
+  Widget buildSingupSection() {
+    final isSmall = isSmallDevice(context);
+
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: isSmall ? 10 : 20),
       child: Column(children: [
         CustomTextField(
           hintText: 'Nombre',
@@ -448,7 +480,8 @@ class _LoginScreenState extends State<LoginScreen> {
           maxLegth: 100,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10, left: 10),
+          padding:
+              EdgeInsets.only(top: isSmall ? 5 : 10, left: isSmall ? 5 : 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -462,8 +495,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   children: [
                     Container(
-                      width: 30,
-                      height: 30,
+                      width: isSmall ? 25 : 30,
+                      height: isSmall ? 25 : 30,
                       margin: EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
                           color:
@@ -477,16 +510,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Icon(
                         Icons.person_2_outlined,
                         color: isMale ? Colors.white : Palette.iconColor,
+                        size: isSmall ? 16 : 20,
                       ),
                     ),
                     Text(
                       "Hombre",
-                      style: TextStyle(color: Palette.textColor1),
+                      style: TextStyle(
+                        color: Palette.textColor1,
+                        fontSize: isSmall ? 12 : 14,
+                      ),
                     )
                   ],
                 ),
               ),
-              SizedBox(width: 29),
+              SizedBox(width: isSmall ? 20 : 29),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -497,8 +534,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   children: [
                     Container(
-                      width: 30,
-                      height: 30,
+                      width: isSmall ? 25 : 30,
+                      height: isSmall ? 25 : 30,
                       margin: EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
                           color:
@@ -512,11 +549,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Icon(
                         Icons.person_2_outlined,
                         color: isMale ? Palette.iconColor : Colors.white,
+                        size: isSmall ? 16 : 20,
                       ),
                     ),
                     Text(
                       "Mujer",
-                      style: TextStyle(color: Palette.textColor1),
+                      style: TextStyle(
+                        color: Palette.textColor1,
+                        fontSize: isSmall ? 12 : 14,
+                      ),
                     )
                   ],
                 ),
@@ -525,28 +566,35 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         Container(
-          width: 200,
-          margin: EdgeInsets.only(top: 20),
+          width: getResponsiveSize(context, 0.6),
+          margin: EdgeInsets.only(top: isSmall ? 10 : 20),
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
                 text: 'Presionando el botón de registro, aceptas nuestros ',
-                style: TextStyle(color: Palette.textColor2),
+                style: TextStyle(
+                  color: Palette.textColor2,
+                  fontSize: isSmall ? 10 : 12,
+                ),
                 children: [
                   TextSpan(
-                      text: 'términos y condiciones',
-                      style: TextStyle(color: Colors.orange))
+                    text: 'términos y condiciones',
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: isSmall ? 10 : 12,
+                    ),
+                  )
                 ]),
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: isSmall ? 5 : 10),
         AnimatedSubmitButton(
           isLoading: isLoading,
           onPressed: signUp,
           buttonText: 'Registrarse',
           buttonColor: Colors.blue,
-          width: 250,
-          height: 60,
+          width: getResponsiveSize(context, 0.6),
+          height: getResponsiveHeight(context, 0.06),
           loadingColor: Colors.amber,
         )
       ]),
@@ -604,9 +652,19 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       await authservice.signUpWithEmailPassword(email, password);
+      setState(() {
+        isLoading = false;
+      });
     } on AuthException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       if (e.statusCode == '422') {
         QuickAlert.show(
           context: context,
@@ -623,6 +681,9 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
@@ -636,17 +697,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = singInemailController.text.trim();
     final password = singInpasswordController.text.trim();
 
-    // Mostrar el QuickAlert de carga
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.loading,
-      title: 'Cargando',
-      text: 'Iniciando sesión',
-      barrierDismissible: false, // Prevents dismiss on tap outside
-    );
-
     if (email.isEmpty || password.isEmpty) {
-      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
@@ -656,11 +707,30 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
+    // Mostrar el QuickAlert de carga
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.loading,
+      title: 'Cargando',
+      text: 'Iniciando sesión',
+      barrierDismissible: false, // Prevents dismiss on tap outside
+    );
+
     try {
       await authservice.signInWithEmailPassword(email, password);
 
+      // Cerrar el QuickAlert de carga
+      Navigator.of(context).pop();
+
+      setState(() {
+        isLoading = false;
+      });
+
       // Navegar a DashboardScreen
-      Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardScreen()),
@@ -675,7 +745,10 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
       );
     } on AuthException catch (e) {
-      Navigator.of(context).pop(); 
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
       if (e.statusCode == '400') {
         QuickAlert.show(
           context: context,
@@ -692,6 +765,9 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       Navigator.of(context).pop(); // Cerrar el QuickAlert de carga
       QuickAlert.show(
         context: context,

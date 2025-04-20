@@ -435,10 +435,10 @@ class ParticleOverlay extends StatefulWidget {
   final double intensity;
 
   const ParticleOverlay({
-    Key? key,
+    super.key,
     required this.baseColor,
     required this.intensity,
-  }) : super(key: key);
+  });
 
   @override
   _ParticleOverlayState createState() => _ParticleOverlayState();

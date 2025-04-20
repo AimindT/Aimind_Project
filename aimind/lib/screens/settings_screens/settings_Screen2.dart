@@ -1,7 +1,7 @@
 import 'package:aimind/screens/auth_Screens/login_screen.dart';
 import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/faq_Screen.dart';
-import 'package:aimind/screens/settings_screens/settings_Screen.dart';
+import 'package:aimind/services/auth_services.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/forward_button.dart';
 import 'package:aimind/widgets/setting_Item.dart';
@@ -158,10 +158,8 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                     showCancelBtn: true,
                     text: '¿Deseas cerrar sesión?',
                     onConfirmBtnTap: () async {
-                      Navigator.pop(
-                          context); // Cerrar el QuickAlert de confirmación
+                      Navigator.pop(context);
 
-                      // Mostrar QuickAlert de carga
                       QuickAlert.show(
                         context: context,
                         type: QuickAlertType.loading,
@@ -171,13 +169,18 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                       );
 
                       try {
+                        final authService = Provider.of<AuthService>(context,
+                            listen: false); 
                         await authService.signOut();
-                        Navigator.pop(context); // cerrar el QuickAlert de carga
+
+                        Navigator.pop(context); // cerrar QuickAlert de carga
+
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => LoginScreen()),
                         );
+
                         QuickAlert.show(
                           context: context,
                           title: 'Éxito',
@@ -186,7 +189,7 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                           barrierDismissible: false,
                         );
                       } catch (e) {
-                        Navigator.pop(context); // cerrar el QuickAlert de carga
+                        Navigator.pop(context); // cerrar QuickAlert de carga
                         QuickAlert.show(
                           context: context,
                           type: QuickAlertType.error,

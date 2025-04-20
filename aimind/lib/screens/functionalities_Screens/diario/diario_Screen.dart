@@ -3,23 +3,29 @@ import 'dart:math';
 import 'package:aimind/constants/colors.dart';
 import 'package:aimind/models/note.dart';
 import 'package:aimind/screens/functionalities_Screens/diario/edit.dart';
+import 'package:aimind/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DiarioScreen extends StatefulWidget {
-  const DiarioScreen({super.key});
+    final DateTime? selectedDate; // Recibe la fecha seleccionada
+    
+  const DiarioScreen({super.key, this.selectedDate});
 
   @override
   State<DiarioScreen> createState() => _DiarioScreenState();
 }
 
 class _DiarioScreenState extends State<DiarioScreen> {
+  
   List<Note> filteredNotes = [];
   bool sorted = false;
 
   @override
   void initState() {
     super.initState();
+      print('Fecha seleccionada: ${widget.selectedDate}');
     filteredNotes = sampleNotes;
   }
 
@@ -59,8 +65,10 @@ class _DiarioScreenState extends State<DiarioScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: themeProvider.themeData.colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(
@@ -77,16 +85,16 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: Colors.grey.shade800.withValues(alpha: .8),
+                          color: isDarkMode ? Colors.grey.shade800.withValues(alpha: .8) : Colors.transparent,
                           borderRadius: BorderRadius.circular(10)),
                       child: Icon(
                         Icons.arrow_back_ios_new,
-                        color: Colors.white,
+                        color: isDarkMode ? Colors.white : Colors.black,
                       ),
                     )),
                 Text(
                   'Mis Notas',
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+                  style: TextStyle(fontSize: 30, color: isDarkMode ? Colors.white : Colors.black),
                 ),
                 IconButton(
                     onPressed: () {
@@ -99,11 +107,11 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: Colors.grey.shade800.withValues(alpha: .8),
+                          color: isDarkMode ? Colors.grey.shade800.withValues(alpha: .8) : Colors.transparent ,
                           borderRadius: BorderRadius.circular(10)),
                       child: Icon(
                         Icons.sort,
-                        color: Colors.white,
+                        color: isDarkMode ? Colors.white : Colors.black
                       ),
                     ))
               ],
@@ -113,13 +121,13 @@ class _DiarioScreenState extends State<DiarioScreen> {
             ),
             TextField(
               onChanged: onSearchTextChanged,
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.white : Colors.black),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 12),
                   hintText: 'Buscar Notas...',
                   hintStyle: TextStyle(color: Colors.grey),
                   prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  fillColor: Colors.grey.shade800,
+                  fillColor: isDarkMode ? Colors.grey.shade800 : Colors.white,
                   filled: true,
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -202,7 +210,8 @@ class _DiarioScreenState extends State<DiarioScreen> {
                               deleteNote(index);
                             }
                           },
-                          icon: Icon(Icons.delete)),
+                          icon: Icon( color: Colors.black,
+                            Icons.delete)),
                     ),
                   ),
                 );
@@ -228,9 +237,10 @@ class _DiarioScreenState extends State<DiarioScreen> {
             });
           }
         },
-        elevation: 10,
-        backgroundColor: Colors.grey.shade800,
+        elevation: 2,
+        backgroundColor: isDarkMode ? Colors.grey.shade800 : Colors.white,
         child: Icon(
+          color: isDarkMode ? Colors.white : Colors.black,
           Icons.add,
           size: 38,
         ),
