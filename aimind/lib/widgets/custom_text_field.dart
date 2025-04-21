@@ -34,7 +34,7 @@ class CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: Container(
+      child: SizedBox(
         width: widget.width,  // Ancho personalizado
         height: widget.height,  // Altura personalizada
         child: TextField(

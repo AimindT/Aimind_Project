@@ -1,5 +1,4 @@
 import 'package:aimind/screens/functionalities_Screens/diario/calender_Screen.dart';
-import 'package:aimind/screens/functionalities_Screens/diario/diario_Screen.dart';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/fast_Therapy_Screen.dart';
 import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
