@@ -2,6 +2,7 @@ import 'package:aimind/screens/functionalities_Screens/diario/calender_Screen.da
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/fast_Therapy_Screen.dart';
 import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
+import 'package:aimind/services/supabase_Service%20.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_dash_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -17,24 +18,48 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
+  String userName = '';
+  bool isLoading = true;
+
+  final SupabaseService _supabaseService = SupabaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserName();
+  }
+
+  Future<void> fetchUserName() async {
+    final nombre = await _supabaseService.getName();
+    if (mounted) {
+      setState(() {
+        userName = nombre ?? 'usuario';
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       backgroundColor: themeProvider.themeData.colorScheme.surface,
       body: Stack(
         children: [
-          // Cambia la vista según el índice seleccionado
           _currentIndex == 0
-              ? HomePage(isDarkMode: isDarkMode)
+              ? HomePage(
+                  isDarkMode: isDarkMode,
+                  userName: userName,
+                )
               : _currentIndex == 1
-                  ? SettingsScreen2()
-                  : Container(), // Página vacía para "Notificaciones"
-
-          // Barra de navegación inferior
+                  ? const SettingsScreen2()
+                  : Container(),
           Positioned(
             left: 0,
             right: 0,
@@ -63,13 +88,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-// Página de Inicio
 class HomePage extends StatelessWidget {
   final String url =
       'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
   final bool isDarkMode;
+  final String userName;
 
-  const HomePage({super.key, required this.isDarkMode});
+  const HomePage({super.key, required this.isDarkMode, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +117,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Chris Chaparro',
+                    userName,
                     style: TextStyle(
                       fontSize: 24,
                       color: isDarkMode ? Colors.white : Colors.grey[800],
@@ -101,8 +126,12 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditAccountScreen2(isDarkMode: isDarkMode)));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              EditAccountScreen2(isDarkMode: isDarkMode)));
                 },
                 child: CircleAvatar(
                   radius: 32,
@@ -115,7 +144,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     child: CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                      backgroundColor: const Color.fromARGB(255, 230, 228, 228),
                       radius: 30,
                       backgroundImage: NetworkImage(url),
                     ),
@@ -145,20 +174,15 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FastTherapyScreen()));
+                              builder: (context) => const FastTherapyScreen()));
                     },
                   ),
                 ],
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // CustomDashButton(
-                  //   iconImagePath: 'assets/images/calender.png',
-                  //   buttontext: 'Agenda Una Cita',
-                  //   onPressed: () {},
-                  // ),
                   CustomDashButton(
                     iconImagePath: 'assets/images/diary.png',
                     buttontext: 'Diario Terapéutico',
@@ -166,7 +190,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CalendarScreen()));
+                              builder: (context) => const CalendarScreen()));
                     },
                   ),
                 ],

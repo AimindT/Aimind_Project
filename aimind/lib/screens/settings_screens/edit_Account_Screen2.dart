@@ -1,7 +1,9 @@
+import 'package:aimind/services/supabase_Service%20.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditAccountScreen2 extends StatefulWidget {
   final bool isDarkMode;
@@ -12,8 +14,35 @@ class EditAccountScreen2 extends StatefulWidget {
 }
 
 class _EditAccountScreen2State extends State<EditAccountScreen2> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String userName = '';
+  bool isLoading = true;
   final String url =
       'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) {
+      final data = await SupabaseService().getProfile(user.id);
+      if (data != null) {
+        setState(() {
+          nameController.text = data['nombre'] ?? '';
+          usernameController.text = data['usuario'] ?? '';
+          emailController.text = user.email ?? '';
+          isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +118,7 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                       width: 350,
                       child: CustomTextField(
                         hintText: 'Nombre',
+                        controller: nameController,
                         prefixIcon: Icons.person,
                         keyboardType: TextInputType.text,
                         maxLegth: 100,
@@ -99,6 +129,7 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                       width: 350,
                       child: CustomTextField(
                         hintText: 'Usuario',
+                        controller: usernameController,
                         prefixIcon: Icons.supervised_user_circle_sharp,
                         keyboardType: TextInputType.text,
                         maxLegth: 50,
@@ -109,6 +140,7 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                       width: 350,
                       child: CustomTextField(
                         hintText: 'Correo',
+                        controller: emailController,
                         prefixIcon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
                         maxLegth: 255,
@@ -119,6 +151,7 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                       width: 350,
                       child: CustomTextField(
                         hintText: 'Contraseña',
+                        controller: passwordController,
                         prefixIcon: Icons.lock,
                         isPassword: true,
                         keyboardType: TextInputType.text,
@@ -130,7 +163,33 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                       width: 350,
                       height: 70,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final user =
+                              Supabase.instance.client.auth.currentUser;
+                          if (user != null) {
+                            await SupabaseService().updateProfile(user.id, {
+                              'nombre': nameController.text,
+                              'usuario': usernameController.text,
+                            });
+
+                            if (emailController.text != user.email) {
+                              await Supabase.instance.client.auth.updateUser(
+                                UserAttributes(email: emailController.text),
+                              );
+                            }
+
+                            if (passwordController.text.isNotEmpty) {
+                              await Supabase.instance.client.auth.updateUser(
+                                UserAttributes(
+                                    password: passwordController.text),
+                              );
+                            }
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Perfil actualizado')),
+                            );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           side: BorderSide.none,

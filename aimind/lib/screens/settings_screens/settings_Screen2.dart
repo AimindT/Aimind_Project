@@ -2,6 +2,7 @@ import 'package:aimind/screens/auth_Screens/login_screen.dart';
 import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/faq_Screen.dart';
 import 'package:aimind/services/auth_services.dart';
+import 'package:aimind/services/supabase_Service%20.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/forward_button.dart';
 import 'package:aimind/widgets/setting_Item.dart';
@@ -20,6 +21,27 @@ class SettingsScreen2 extends StatefulWidget {
 }
 
 class _SettingsScreen2State extends State<SettingsScreen2> {
+  String userName = '';
+  bool isLoading = true;
+
+  final SupabaseService _supabaseService = SupabaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserName();
+  }
+
+  Future<void> fetchUserName() async {
+    final nombre = await _supabaseService.getName();
+    if (mounted) {
+      setState(() {
+        userName = nombre ?? 'usuario';
+        isLoading = false;
+      });
+    }
+  }
+
   final String url =
       'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
 
@@ -77,15 +99,10 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Chris Chaparro',
+                          userName,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Fullstack Dev',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        )
                       ],
                     ),
                     Spacer(),
@@ -169,8 +186,8 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                       );
 
                       try {
-                        final authService = Provider.of<AuthService>(context,
-                            listen: false); 
+                        final authService =
+                            Provider.of<AuthService>(context, listen: false);
                         await authService.signOut();
 
                         Navigator.pop(context); // cerrar QuickAlert de carga

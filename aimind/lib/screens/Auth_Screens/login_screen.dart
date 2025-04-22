@@ -263,7 +263,9 @@ class _LoginScreenState extends State<LoginScreen> {
               left: 0,
               right: 0,
               child: Container(
-                padding: isSignupScreen ? EdgeInsets.symmetric(vertical:0.5) : EdgeInsets.symmetric(vertical:10),
+                padding: isSignupScreen
+                    ? EdgeInsets.symmetric(vertical: 0.5)
+                    : EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
                     Text(
@@ -331,8 +333,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-
 
   Future<void> signInWithGoogle(BuildContext context) async {
     /// Web Client ID that you registered with Google Cloud.
@@ -657,30 +657,32 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      await authservice.signUpWithEmailPassword(email, password);
-      setState(() {
-        isLoading = false;
-      });
-    } on AuthException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      if (e.statusCode == '422') {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          title: 'Error',
-          text: 'El usuario con este correo electrónico ya existe.',
-        );
-      } else {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          title: 'Error',
-          text: 'Error al registrar: ${e.message}',
-        );
+      final response = await Supabase.instance.client.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      final userId = response.user?.id;
+      if (userId != null) {
+        await Supabase.instance.client.from('profiles').insert({
+          'id': userId,
+          'nombre': name,
+          'usuario': user,
+          'correo': email,
+        });
       }
-    } catch (e) {
+
+      setState(() {
+        isLoading = false;
+      });
+
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: 'Éxito',
+        text: 'Registro completado. Por favor verifica tu correo.',
+      );
+    } on AuthException catch (e) {
       setState(() {
         isLoading = false;
       });
@@ -688,7 +690,19 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         type: QuickAlertType.error,
         title: 'Error',
-        text: 'Error al registrar: $e',
+        text: 'Error al registrar: ${e.message}',
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error inesperado: $e',
       );
     }
   }
