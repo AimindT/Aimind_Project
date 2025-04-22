@@ -209,7 +209,8 @@ class _DiarioScreenState extends State<DiarioScreen> {
                         ),
                         trailing: IconButton(
                             onPressed: () async {
-                              final result = await confirmDialog(context);
+                              final result =
+                                  await confirmDialog(context, isDarkMode);
                               if (result != null && result) {
                                 deleteNote(index);
                               }
@@ -252,16 +253,16 @@ class _DiarioScreenState extends State<DiarioScreen> {
     );
   }
 
-  Future<dynamic> confirmDialog(BuildContext context) {
+  Future<dynamic> confirmDialog(BuildContext context, bool isDarkMode) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Colors.grey.shade900,
+            backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
             icon: Icon(Icons.info, color: Colors.grey),
             title: Text(
               '¿Seguro que quieres eliminar esta nota?',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
             ),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -277,7 +278,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       child: Text(
                         'Sí',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     )),
                 ElevatedButton(
@@ -291,7 +292,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       child: Text(
                         'No',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ))
               ],
