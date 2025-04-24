@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
@@ -29,6 +32,48 @@ class SupabaseService {
       }
     }
     return null;
+  }
+
+  Future<String> uploadProfileImage(String userId, File imageFile) async {
+    try {
+      // Validamos el archivo
+      if (!await imageFile.exists()) {
+        throw Exception('❗ El archivo no existe');
+      }
+
+      // Verificamos el tamaño (máx 5MB)
+      if (await imageFile.length() > 5 * 1024 * 1024) {
+        throw Exception('⚠️ La imagen es muy pesada (máx 5MB)');
+      }
+
+      // Preparamos el nombre del archivo
+      final fileExt = imageFile.path.split('.').last;
+      final fileName = 'avatar_$userId.${fileExt}';
+      final filePath = 'users/$userId/$fileName';
+
+      // Subimos la imagen
+      await _supabase.storage
+          .from('profiles-images')
+          .upload(filePath, imageFile,
+              fileOptions: FileOptions(
+                upsert: true,
+                contentType: 'image/$fileExt',
+              ));
+
+      // Obtenemos la URL pública
+      final imageUrl =
+          _supabase.storage.from('profiles-images').getPublicUrl(filePath);
+
+      // Actualizamos el perfil
+      await _supabase
+          .from('profiles')
+          .update({'avatar_url': imageUrl}).eq('id', userId);
+
+      return imageUrl;
+    } catch (e) {
+      debugPrint('🔥 Error en uploadProfileImage: $e');
+      throw Exception('No se pudo subir la imagen: ${e.toString()}');
+    }
   }
 
   Future<String?> getEmail() async {
@@ -77,4 +122,8 @@ class SupabaseService {
       print('Error al eliminar perfil: $e');
     }
   }
+}
+
+extension on String {
+  get error => null;
 }

@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:aimind/services/supabase_Service%20.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,8 +22,10 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
   final TextEditingController passwordController = TextEditingController();
   String userName = '';
   bool isLoading = true;
-  final String url =
-      'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
+  File? _imageFile;
+  String? avatarUrl;
+  final ImagePicker _picker = ImagePicker();
+  final String defaultAvatarUrl = 'assets/images/background.png';
 
   @override
   void initState() {
@@ -38,10 +42,59 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
           nameController.text = data['nombre'] ?? '';
           usernameController.text = data['usuario'] ?? '';
           emailController.text = data['correo'] ?? '';
+          avatarUrl = data['avatar_url'];
           isLoading = false;
         });
       }
     }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al seleccionar imagen: $e')),
+      );
+    }
+  }
+
+  void _showImagePickerDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Seleccionar imagen'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Tomar foto'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Elegir de galería'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -53,9 +106,9 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new),
         ),
-        title: Text(
+        title: const Text(
           'Editar Perfil',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
         ),
@@ -63,31 +116,43 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Center(
                 child: Stack(
                   children: [
-                    SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 3.0,
-                          ),
-                        ),
-                        child: ClipOval(
-                          child: Container(
-                            color: Colors.white,
-                            child: Image.network(
-                              url,
-                              fit: BoxFit.cover,
+                    GestureDetector(
+                      onTap: _showImagePickerDialog,
+                      child: SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 3.0,
                             ),
+                          ),
+                          child: ClipOval(
+                            child: _imageFile != null
+                                ? Image.file(_imageFile!, fit: BoxFit.cover)
+                                : (avatarUrl != null && avatarUrl!.isNotEmpty)
+                                    ? Image.network(
+                                        avatarUrl!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error,
+                                                stackTrace) =>
+                                            Image.asset(
+                                                'assets/images/background.png',
+                                                fit: BoxFit.cover),
+                                      )
+                                    : Image.asset(
+                                        'assets/images/background.png',
+                                        fit: BoxFit.cover,
+                                      ),
                           ),
                         ),
                       ),
@@ -95,22 +160,25 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                     Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.black,
+                      child: GestureDetector(
+                        onTap: _showImagePickerDialog,
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.black,
+                          ),
+                          child: const Icon(Icons.camera_alt_outlined,
+                              color: Colors.white),
                         ),
-                        child: Icon(Icons.camera_alt_outlined,
-                            color: Colors.white),
                       ),
                     )
                   ],
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.only(top: 50),
                 child: Column(
                   children: [
                     SizedBox(
@@ -158,48 +226,63 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                         maxLegth: 100,
                       ),
                     ),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     SizedBox(
                       width: 350,
                       height: 70,
                       child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all<Color>(Colors.black),
+                        ),
                         onPressed: () async {
                           final user =
                               Supabase.instance.client.auth.currentUser;
-                          if (user != null) {
+                          if (user == null) return;
+
+                          try {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => const Center(
+                                  child: CircularProgressIndicator()),
+                            );
+
+                            String? newAvatarUrl = avatarUrl;
+
+                            if (_imageFile != null) {
+                              newAvatarUrl = await SupabaseService()
+                                  .uploadProfileImage(user.id, _imageFile!);
+                            }
+
                             await SupabaseService().updateProfile(user.id, {
                               'nombre': nameController.text,
                               'usuario': usernameController.text,
-                              'correo': emailController.text
+                              'correo': emailController.text,
+                              'avatar_url': newAvatarUrl,
                             });
-                            await loadUserData();
 
-                            if (emailController.text != user.email) {
-                              await Supabase.instance.client.auth.updateUser(
-                                UserAttributes(email: emailController.text),
+                            if (mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('✅ Perfil actualizado!')),
                               );
                             }
-
-                            if (passwordController.text.isNotEmpty) {
-                              await Supabase.instance.client.auth.updateUser(
-                                UserAttributes(
-                                    password: passwordController.text),
+                          } catch (e) {
+                            if (mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('❌ Error: ${e.toString()}')),
                               );
                             }
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Perfil actualizado')),
-                            );
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          side: BorderSide.none,
-                          shape: StadiumBorder(),
+                        child: const Text(
+                          'Guardar Cambios',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
-                        child: Text('Guardar Cambios',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
                       ),
                     )
                   ],
