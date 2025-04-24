@@ -175,44 +175,34 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                     showCancelBtn: true,
                     text: '¿Deseas cerrar sesión?',
                     onConfirmBtnTap: () async {
+                      // Cerrar el diálogo de confirmación primero
                       Navigator.pop(context);
 
-                      QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.loading,
-                        title: 'Cargando',
-                        text: 'Cerrando sesión...',
-                        barrierDismissible: false,
-                      );
-
                       try {
+                        // Obtener el servicio de autenticación y cerrar sesión
                         final authService =
                             Provider.of<AuthService>(context, listen: false);
+
+                        // Guardar el BuildContext actual antes de cualquier navegación
+                        final currentContext = context;
+
+                        // Cerrar sesión
                         await authService.signOut();
 
-                        Navigator.pop(context); // cerrar QuickAlert de carga
+                        // Verificar si el contexto todavía está disponible
+                        if (!currentContext.mounted) return;
 
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
+                        // Navegar a la pantalla de inicio de sesión
+                        await Navigator.pushReplacement(
+                          currentContext,
+                          MaterialPageRoute(builder: (_) => LoginScreen()),
                         );
 
-                        QuickAlert.show(
-                          context: context,
-                          title: 'Éxito',
-                          type: QuickAlertType.success,
-                          text: 'Sesión cerrada con éxito!',
-                          barrierDismissible: false,
-                        );
+                        // El contexto después de pushReplacement ya no es válido para mostrar alertas,
+                        // así que usamos un enfoque diferente
                       } catch (e) {
-                        Navigator.pop(context); // cerrar QuickAlert de carga
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.error,
-                          text: 'Error al cerrar sesión: $e',
-                          barrierDismissible: false,
-                        );
+                        print('Error al cerrar sesión: $e');
+                        // No intentes mostrar ninguna alerta aquí, ya que el contexto puede ser inválido
                       }
                     },
                     onCancelBtnTap: () {
