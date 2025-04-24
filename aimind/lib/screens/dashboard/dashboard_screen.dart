@@ -19,7 +19,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
   String userName = '';
-  bool isLoading = true;
 
   final SupabaseService _supabaseService = SupabaseService();
 
@@ -34,7 +33,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (mounted) {
       setState(() {
         userName = nombre ?? 'usuario';
-        isLoading = false;
       });
     }
   }
@@ -44,22 +42,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     return Scaffold(
       backgroundColor: themeProvider.themeData.colorScheme.surface,
       body: Stack(
         children: [
-          _currentIndex == 0
-              ? HomePage(
-                  isDarkMode: isDarkMode,
-                  userName: userName,
-                )
-              : _currentIndex == 1
-                  ? const SettingsScreen2()
-                  : Container(),
+          IndexedStack(
+            index: _currentIndex,
+            children: [
+              HomePage(
+                isDarkMode: isDarkMode,
+                userName: userName,
+              ),
+              const SettingsScreen2(),
+            ],
+          ),
           Positioned(
             left: 0,
             right: 0,
