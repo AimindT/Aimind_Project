@@ -1,3 +1,4 @@
+import 'package:aimind/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,11 +15,16 @@ void main() async {
   await Supabase.initialize(
     url: supabaseUrl,
     anonKey: supabaseAnonKey,
+    debug: true,
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        Provider(
+            create: (context) => AuthService()), // Usa Provider en su lugar
+      ],
       child: const MainApp(),
     ),
   );
@@ -32,7 +38,7 @@ class MainApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       theme: themeProvider.themeData,
-      home: const AuthGates (),
+      home: const AuthGates(),
       debugShowCheckedModeBanner: false,
     );
   }

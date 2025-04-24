@@ -35,12 +35,12 @@ class SettingItem extends StatelessWidget {
           ),
           SizedBox(width: 20),
           Text(title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
           Spacer(),
           value != null
               ? Text(
                   value!,
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: TextStyle(fontSize: 22, color: Colors.grey),
                 )
               : SizedBox(),
           SizedBox(width: 20),

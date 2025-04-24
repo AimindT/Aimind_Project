@@ -111,7 +111,7 @@ class HomePage extends StatelessWidget {
                   Text(
                     'Hola,',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.grey[800],
                     ),
@@ -119,7 +119,7 @@ class HomePage extends StatelessWidget {
                   Text(
                     userName,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 30,
                       color: isDarkMode ? Colors.white : Colors.grey[800],
                     ),
                   ),

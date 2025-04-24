@@ -96,12 +96,12 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                     ),
                     SizedBox(width: 20),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           userName,
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),

@@ -26,7 +26,7 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
   @override
   void initState() {
     super.initState();
-    loadUserData();
+    Supabase.instance.client.auth.refreshSession().then((_) => loadUserData());
   }
 
   Future<void> loadUserData() async {
@@ -37,7 +37,7 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
         setState(() {
           nameController.text = data['nombre'] ?? '';
           usernameController.text = data['usuario'] ?? '';
-          emailController.text = user.email ?? '';
+          emailController.text = data['correo'] ?? '';
           isLoading = false;
         });
       }
@@ -170,7 +170,9 @@ class _EditAccountScreen2State extends State<EditAccountScreen2> {
                             await SupabaseService().updateProfile(user.id, {
                               'nombre': nameController.text,
                               'usuario': usernameController.text,
+                              'correo': emailController.text
                             });
+                            await loadUserData();
 
                             if (emailController.text != user.email) {
                               await Supabase.instance.client.auth.updateUser(

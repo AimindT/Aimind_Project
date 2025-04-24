@@ -43,8 +43,8 @@ class SmilePainter extends CustomPainter {
     final Paint cheekPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          Colors.pink.withOpacity(0.5),
-          Colors.pink.withOpacity(0.0),
+          Colors.pink.withValues(alpha: 0.5),
+          Colors.pink.withValues(alpha: 0.0),
         ],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 

@@ -8,8 +8,8 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final int maxLegth;
-  final double height;  // Nuevo parámetro para la altura
-  final double width;   // Nuevo parámetro para el ancho
+  final double height; // Nuevo parámetro para la altura
+  final double width; // Nuevo parámetro para el ancho
 
   const CustomTextField({
     super.key,
@@ -19,8 +19,8 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.controller,
     required this.maxLegth,
-    this.height = 60.0,  // Valor predeterminado de la altura
-    this.width = double.infinity,  // Valor predeterminado del ancho (ancho completo)
+    this.height = 60.0,
+    this.width = double.infinity,
   });
 
   @override
@@ -35,17 +35,15 @@ class CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: SizedBox(
-        width: widget.width,  // Ancho personalizado
-        height: widget.height,  // Altura personalizada
+        width: widget.width,
+        height: widget.height,
         child: TextField(
           controller: widget.controller,
           inputFormatters: [LengthLimitingTextInputFormatter(widget.maxLegth)],
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: TextStyle(
-                color: Color(0xFFB0B0B0), // Gris medio
-                fontFamily: 'SFPro',
-                fontSize: 20),
+                color: Color(0xFFB0B0B0), fontFamily: 'SFPro', fontSize: 20),
             alignLabelWithHint: true,
             contentPadding:
                 EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
@@ -80,6 +78,7 @@ class CustomTextFieldState extends State<CustomTextField> {
           textAlign: TextAlign.start,
           style: TextStyle(
             fontFamily: 'SFPro',
+            fontSize: 20,
           ),
         ),
       ),
