@@ -12,6 +12,8 @@ import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SettingsScreen2 extends StatefulWidget {
   const SettingsScreen2({super.key});
@@ -22,6 +24,7 @@ class SettingsScreen2 extends StatefulWidget {
 
 class _SettingsScreen2State extends State<SettingsScreen2> {
   String userName = '';
+  String? avatarUrl;
   bool isLoading = true;
 
   final SupabaseService _supabaseService = SupabaseService();
@@ -29,21 +32,32 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
   @override
   void initState() {
     super.initState();
-    fetchUserName();
+    fetchUserData();
   }
 
-  Future<void> fetchUserName() async {
-    final nombre = await _supabaseService.getName();
+  Future<void> fetchUserData() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    final userData = await _supabaseService.getProfile(user!.id);
     if (mounted) {
       setState(() {
-        userName = nombre ?? 'usuario';
+        userName = userData?['nombre'] ?? 'Usuario';
+        avatarUrl = userData?['avatar_url'];
         isLoading = false;
       });
     }
   }
 
-  final String url =
-      'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
+  Widget _buildImagePlaceholder() {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey[200],
+      ),
+      child: Icon(Icons.person, size: 30, color: Colors.grey[400]),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,14 +97,23 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.black,
+                            color: isDarkMode ? Colors.white : Colors.black,
                             width: 3.0,
                           ),
                         ),
-                        child: CircleAvatar(
-                          backgroundColor: Color.fromARGB(255, 230, 228, 228),
-                          radius: 30,
-                          backgroundImage: NetworkImage(url),
+                        child: ClipOval(
+                          child: avatarUrl != null
+                              ? CachedNetworkImage(
+                                  imageUrl: avatarUrl!,
+                                  fit: BoxFit.cover,
+                                  width: 60,
+                                  height: 60,
+                                  placeholder: (context, url) =>
+                                      _buildImagePlaceholder(),
+                                  errorWidget: (context, url, error) =>
+                                      _buildImagePlaceholder(),
+                                )
+                              : _buildImagePlaceholder(),
                         ),
                       ),
                     ),
@@ -107,12 +130,16 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                     ),
                     Spacer(),
                     ForwardButton(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EditAccountScreen2(
                                     isDarkMode: isDarkMode)));
+                        if (result == true) {
+                          // Refresh user data if profile was updated
+                          fetchUserData();
+                        }
                       },
                     )
                   ],
@@ -133,14 +160,6 @@ class _SettingsScreen2State extends State<SettingsScreen2> {
                 onTap: () {},
               ),
               SizedBox(height: 20),
-              // SettingItem(
-              //   title: 'Notificaciones',
-              //   icon: Ionicons.notifications,
-              //   bgColor: Colors.blue.shade100,
-              //   iconColor: Colors.blue,
-              //   onTap: () {},
-              // ),
-              // SizedBox(height: 20),
               SettingSwitch(
                 title: "Modo Oscuro",
                 icon: Icons.dark_mode,

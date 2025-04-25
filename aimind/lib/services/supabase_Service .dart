@@ -48,7 +48,7 @@ class SupabaseService {
 
       // Preparamos el nombre del archivo
       final fileExt = imageFile.path.split('.').last;
-      final fileName = 'avatar_$userId.${fileExt}';
+      final fileName = 'avatar_$userId.$fileExt';
       final filePath = 'users/$userId/$fileName';
 
       // Subimos la imagen

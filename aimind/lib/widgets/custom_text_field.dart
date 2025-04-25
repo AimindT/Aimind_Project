@@ -8,8 +8,9 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final int maxLegth;
-  final double height; // Nuevo parámetro para la altura
-  final double width; // Nuevo parámetro para el ancho
+  final double height;
+  final double width;
+  final bool enabled;
 
   const CustomTextField({
     super.key,
@@ -21,6 +22,7 @@ class CustomTextField extends StatefulWidget {
     required this.maxLegth,
     this.height = 60.0,
     this.width = double.infinity,
+    this.enabled = true,
   });
 
   @override
@@ -38,30 +40,41 @@ class CustomTextFieldState extends State<CustomTextField> {
         width: widget.width,
         height: widget.height,
         child: TextField(
+          enabled: widget.enabled,
           controller: widget.controller,
           inputFormatters: [LengthLimitingTextInputFormatter(widget.maxLegth)],
           decoration: InputDecoration(
             hintText: widget.hintText,
-            hintStyle: TextStyle(
-                color: Color(0xFFB0B0B0), fontFamily: 'SFPro', fontSize: 20),
+            hintStyle: const TextStyle(
+              color: Color(0xFFB0B0B0),
+              fontFamily: 'SFPro',
+              fontSize: 20,
+            ),
             alignLabelWithHint: true,
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 20.0,
+              horizontal: 16.0,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.grey, width: 3),
+              borderSide: const BorderSide(color: Colors.grey, width: 3),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.green, width: 3),
+              borderSide: const BorderSide(color: Colors.green, width: 3),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.grey, width: 3),
             ),
             prefixIcon: widget.prefixIcon != null
-                ? Icon(widget.prefixIcon, color: Color(0xFFB0B0B0))
+                ? Icon(widget.prefixIcon, color: const Color(0xFFB0B0B0))
                 : null,
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
-                        secureText ? Icons.visibility_off : Icons.visibility),
+                      secureText ? Icons.visibility_off : Icons.visibility,
+                    ),
                     onPressed: () {
                       setState(() {
                         secureText = !secureText;
@@ -76,7 +89,7 @@ class CustomTextFieldState extends State<CustomTextField> {
           obscureText: widget.isPassword ? secureText : false,
           maxLength: widget.maxLegth,
           textAlign: TextAlign.start,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'SFPro',
             fontSize: 20,
           ),

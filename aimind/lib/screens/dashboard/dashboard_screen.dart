@@ -8,6 +8,8 @@ import 'package:aimind/widgets/custom_dash_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -19,20 +21,25 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
   String userName = '';
+  String? avatarUrl;
+  bool isLoading = true;
 
   final SupabaseService _supabaseService = SupabaseService();
 
   @override
   void initState() {
     super.initState();
-    fetchUserName();
+    fetchUserData();
   }
 
-  Future<void> fetchUserName() async {
-    final nombre = await _supabaseService.getName();
+  Future<void> fetchUserData() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    final userData = await _supabaseService.getProfile(user!.id);
     if (mounted) {
       setState(() {
-        userName = nombre ?? 'usuario';
+        userName = userData?['nombre'] ?? 'Usuario';
+        avatarUrl = userData?['avatar_url'];
+        isLoading = false;
       });
     }
   }
@@ -52,6 +59,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               HomePage(
                 isDarkMode: isDarkMode,
                 userName: userName,
+                avatarUrl: avatarUrl,
+                onProfileUpdated: () => fetchUserData(),
               ),
               const SettingsScreen2(),
             ],
@@ -85,12 +94,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class HomePage extends StatelessWidget {
-  final String url =
-      'https://static.wikia.nocookie.net/mokeys-show/images/4/43/Screenshot_2025-01-10_212625.png/revision/latest?cb=20250112022914';
   final bool isDarkMode;
   final String userName;
+  final String? avatarUrl;
+  final VoidCallback? onProfileUpdated;
 
-  const HomePage({super.key, required this.isDarkMode, required this.userName});
+  const HomePage({
+    super.key,
+    required this.isDarkMode,
+    required this.userName,
+    this.avatarUrl,
+    this.onProfileUpdated,
+  });
+
+  Widget _buildImagePlaceholder() {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey[200],
+      ),
+      child: Icon(Icons.person, size: 30, color: Colors.grey[400]),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,12 +149,15 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
                               EditAccountScreen2(isDarkMode: isDarkMode)));
+                  if (result == true && onProfileUpdated != null) {
+                    onProfileUpdated!();
+                  }
                 },
                 child: CircleAvatar(
                   radius: 32,
@@ -139,10 +169,19 @@ class HomePage extends StatelessWidget {
                         width: 3.0,
                       ),
                     ),
-                    child: CircleAvatar(
-                      backgroundColor: const Color.fromARGB(255, 230, 228, 228),
-                      radius: 30,
-                      backgroundImage: NetworkImage(url),
+                    child: ClipOval(
+                      child: avatarUrl != null
+                          ? CachedNetworkImage(
+                              imageUrl: avatarUrl!,
+                              fit: BoxFit.cover,
+                              width: 60,
+                              height: 60,
+                              placeholder: (context, url) =>
+                                  _buildImagePlaceholder(),
+                              errorWidget: (context, url, error) =>
+                                  _buildImagePlaceholder(),
+                            )
+                          : _buildImagePlaceholder(),
                     ),
                   ),
                 ),
