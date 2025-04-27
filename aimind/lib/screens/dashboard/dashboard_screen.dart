@@ -1,3 +1,4 @@
+import 'package:aimind/screens/functionalities_Screens/chat_bot/chatScreen.dart';
 import 'package:aimind/screens/functionalities_Screens/diario/calender_Screen.dart';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/fast_Therapy_Screen.dart';
 import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
@@ -200,8 +201,14 @@ class HomePage extends StatelessWidget {
                   CustomDashButton(
                     iconImagePath: 'assets/images/background.png',
                     buttontext: 'Habla Con Aimind',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChatScreen()),
+                      );
+                    },
                   ),
+
                   CustomDashButton(
                     iconImagePath: 'assets/images/RapTer.jpeg',
                     buttontext: 'Terapia Rapida',
