@@ -1,6 +1,5 @@
 import 'package:aimind/screens/functionalities_Screens/chat_bot/chatScreen.dart';
 import 'package:aimind/screens/functionalities_Screens/diario/calender_Screen.dart';
-import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/fast_Therapy_Screen.dart';
 import 'package:aimind/screens/settings_screens/edit_Account_Screen2.dart';
 import 'package:aimind/screens/settings_screens/settings_Screen2.dart';
 import 'package:aimind/services/supabase_Service%20.dart';
@@ -209,16 +208,16 @@ class HomePage extends StatelessWidget {
                     },
                   ),
 
-                  CustomDashButton(
-                    iconImagePath: 'assets/images/RapTer.jpeg',
-                    buttontext: 'Terapia Rapida',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const FastTherapyScreen()));
-                    },
-                  ),
+                  // CustomDashButton(
+                  //   iconImagePath: 'assets/images/RapTer.jpeg',
+                  //   buttontext: 'Terapia Rapida',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => const FastTherapyScreen()));
+                  //   },
+                  // ),
                 ],
               ),
               const SizedBox(height: 40),

@@ -124,6 +124,4 @@ class SupabaseService {
   }
 }
 
-extension on String {
-  get error => null;
-}
+extension on String {}
