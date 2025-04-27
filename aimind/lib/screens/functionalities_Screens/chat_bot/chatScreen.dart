@@ -16,7 +16,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final List<ChatMessage> messages = [];
   final TextEditingController controller = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  final String backendUrl = 'https://psicologo-virtual.onrender.com/chat';
+  final String backendUrl = 'https://aimind-project.onrender.com/chat';
 
   bool isLoading = false;
 
@@ -44,7 +44,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       final response = await http.post(
         Uri.parse(backendUrl),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"mensaje": userInput}),
+        body: jsonEncode(
+            {"text": userInput}), // Usamos "text" en vez de "mensaje"
       );
 
       if (response.statusCode == 200) {
@@ -52,6 +53,27 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         setState(() {
           final botMessage = ChatMessage(
             text: reply,
+            isUser: false,
+            animationController: AnimationController(
+              duration: const Duration(milliseconds: 300),
+              vsync: this,
+            ),
+          );
+          messages.add(botMessage);
+          botMessage.animationController.forward();
+          isLoading = false;
+        });
+        _scrollToBottom();
+      } else if (response.statusCode == 307) {
+        var redirectUrl = response.headers['location'];
+        final redirectResponse = await http.post(
+          Uri.parse(redirectUrl!),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({"text": userInput}),
+        );
+        setState(() {
+          final botMessage = ChatMessage(
+            text: jsonDecode(redirectResponse.body)['respuesta'],
             isUser: false,
             animationController: AnimationController(
               duration: const Duration(milliseconds: 300),
@@ -80,6 +102,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         _scrollToBottom();
       }
     } catch (e) {
+      print("Error de conexión: $e"); // <-- AGREGA ESTO
       setState(() {
         final errorMessage = ChatMessage(
           text: "Error de conexión.",
