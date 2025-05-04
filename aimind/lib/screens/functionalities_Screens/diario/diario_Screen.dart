@@ -1,15 +1,16 @@
+// lib/screens/functionalities_Screens/diario/diario_Screen.dart
 import 'dart:math';
-
 import 'package:aimind/constants/colors.dart';
 import 'package:aimind/models/note.dart';
 import 'package:aimind/screens/functionalities_Screens/diario/edit.dart';
+import 'package:aimind/services/supabase_Service%20.dart';
 import 'package:aimind/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DiarioScreen extends StatefulWidget {
-  final DateTime? selectedDate; // Recibe la fecha seleccionada
+  final DateTime? selectedDate;
 
   const DiarioScreen({super.key, this.selectedDate});
 
@@ -18,13 +19,43 @@ class DiarioScreen extends StatefulWidget {
 }
 
 class _DiarioScreenState extends State<DiarioScreen> {
+  List<Note> allNotes = [];
   List<Note> filteredNotes = [];
   bool sorted = false;
+  bool isLoading = true;
+  final SupabaseService _supabaseService = SupabaseService();
 
   @override
   void initState() {
     super.initState();
-    filteredNotes = sampleNotes;
+    _loadNotes();
+  }
+
+  Future<void> _loadNotes() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      if (widget.selectedDate != null) {
+        allNotes = await _supabaseService.getNotesByDate(widget.selectedDate!);
+      } else {
+        allNotes = await _supabaseService.getNotes();
+      }
+
+      setState(() {
+        filteredNotes = List.from(allNotes);
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Manejar errores
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al cargar las notas: $e')),
+      );
+    }
   }
 
   List<Note> sortNotesByMofifiedTime(List<Note> notes) {
@@ -45,7 +76,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
 
   void onSearchTextChanged(String searchText) {
     setState(() {
-      filteredNotes = sampleNotes
+      filteredNotes = allNotes
           .where((note) =>
               note.content.toLowerCase().contains(searchText.toLowerCase()) ||
               note.title.toLowerCase().contains(searchText.toLowerCase()))
@@ -53,18 +84,28 @@ class _DiarioScreenState extends State<DiarioScreen> {
     });
   }
 
-  void deleteNote(int index) {
-    setState(() {
-      Note note = filteredNotes[index];
-      sampleNotes.remove(note);
-      filteredNotes = List.from(sampleNotes);
-    });
+  void deleteNote(int index) async {
+    final noteToDelete = filteredNotes[index];
+    if (noteToDelete.id != null) {
+      try {
+        await _supabaseService.deleteNote(noteToDelete.id!);
+        setState(() {
+          allNotes.remove(noteToDelete);
+          filteredNotes = List.from(allNotes);
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al eliminar la nota: $e')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: themeProvider.themeData.colorScheme.surface,
       body: Padding(
@@ -84,7 +125,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       height: 40,
                       decoration: BoxDecoration(
                           color: isDarkMode
-                              ? Colors.grey.shade800.withValues(alpha: .8)
+                              ? Colors.grey.shade800.withOpacity(.8)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(10)),
                       child: Icon(
@@ -110,7 +151,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       height: 40,
                       decoration: BoxDecoration(
                           color: isDarkMode
-                              ? Colors.grey.shade800.withValues(alpha: .8)
+                              ? Colors.grey.shade800.withOpacity(.8)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(10)),
                       child: Icon(Icons.sort,
@@ -118,9 +159,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
                     ))
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             TextField(
               onChanged: onSearchTextChanged,
               style: TextStyle(
@@ -141,86 +180,145 @@ class _DiarioScreenState extends State<DiarioScreen> {
                       borderSide: BorderSide(color: Colors.transparent))),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.only(top: 30),
-                itemCount: filteredNotes.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.only(bottom: 20),
-                    color: getRandomColor(),
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListTile(
-                        onTap: () async {
-                          final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) => EditScreen(
-                                        note: filteredNotes[index],
-                                      )));
-                          if (result != null) {
-                            setState(() {
-                              int originalIndex =
-                                  sampleNotes.indexOf(filteredNotes[index]);
-                              sampleNotes[originalIndex] = Note(
-                                  id: sampleNotes[originalIndex].id,
-                                  title: result[0],
-                                  content: result[1],
-                                  modifiedTime: DateTime.now());
-                              filteredNotes[index] = Note(
-                                  id: filteredNotes[index].id,
-                                  title: result[0],
-                                  content: result[1],
-                                  modifiedTime: DateTime.now());
-                            });
-                          }
-                        },
-                        title: RichText(
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                                text: '${filteredNotes[index].title}\n',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    height: 1.5),
-                                children: [
-                                  TextSpan(
-                                      text: filteredNotes[index].content,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 14,
-                                          height: 1.5))
-                                ])),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+              child: isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : filteredNotes.isEmpty
+                      ? Center(
                           child: Text(
-                            'Editado: ${DateFormat('EEE MMM d, yyyy h:mm a').format(filteredNotes[index].modifiedTime)}',
+                            'No hay notas para esta fecha',
                             style: TextStyle(
-                                fontSize: 10,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.grey.shade800),
+                              color:
+                                  isDarkMode ? Colors.white70 : Colors.black54,
+                              fontSize: 18,
+                            ),
                           ),
+                        )
+                      : ListView.builder(
+                          padding: EdgeInsets.only(top: 30),
+                          itemCount: filteredNotes.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              margin: EdgeInsets.only(bottom: 20),
+                              color: getRandomColor(),
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ListTile(
+                                  onTap: () async {
+                                    final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                EditScreen(
+                                                  note: filteredNotes[index],
+                                                  selectedDate:
+                                                      widget.selectedDate ??
+                                                          DateTime.now(),
+                                                )));
+
+                                    if (result != null) {
+                                      final String title = result[0];
+                                      final String content = result[1];
+
+                                      // Crear una nota actualizada
+                                      final updatedNote = Note(
+                                        id: filteredNotes[index].id,
+                                        title: title,
+                                        content: content,
+                                        dateNote: filteredNotes[index].dateNote,
+                                        modifiedTime: DateTime.now(),
+                                        userId: _supabaseService
+                                                .getCurrentUserId() ??
+                                            '',
+                                      );
+
+                                      try {
+                                        // Actualizar en Supabase
+                                        final serverUpdatedNote =
+                                            await _supabaseService
+                                                .updateNote(updatedNote);
+                                        if (serverUpdatedNote != null) {
+                                          setState(() {
+                                            // Actualizar en la lista local
+                                            final noteIndex =
+                                                allNotes.indexWhere((note) =>
+                                                    note.id ==
+                                                    serverUpdatedNote.id);
+                                            if (noteIndex != -1) {
+                                              allNotes[noteIndex] =
+                                                  serverUpdatedNote;
+                                            }
+
+                                            // Actualizar en la lista filtrada
+                                            final filteredIndex = filteredNotes
+                                                .indexWhere((note) =>
+                                                    note.id ==
+                                                    serverUpdatedNote.id);
+                                            if (filteredIndex != -1) {
+                                              filteredNotes[filteredIndex] =
+                                                  serverUpdatedNote;
+                                            }
+                                          });
+                                        }
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Error al actualizar la nota: $e')),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  title: RichText(
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      text: TextSpan(
+                                          text:
+                                              '${filteredNotes[index].title}\n',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              height: 1.5),
+                                          children: [
+                                            TextSpan(
+                                                text: filteredNotes[index]
+                                                    .content,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 14,
+                                                    height: 1.5))
+                                          ])),
+                                  subtitle: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Text(
+                                      'Editado: ${DateFormat('EEE MMM d, yyyy h:mm a').format(filteredNotes[index].modifiedTime)}',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontStyle: FontStyle.italic,
+                                          color: Colors.grey.shade800),
+                                    ),
+                                  ),
+                                  trailing: IconButton(
+                                      onPressed: () async {
+                                        final result = await confirmDialog(
+                                            context, isDarkMode);
+                                        if (result != null && result) {
+                                          deleteNote(index);
+                                        }
+                                      },
+                                      icon: Icon(
+                                          color: Colors.black, Icons.delete)),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        trailing: IconButton(
-                            onPressed: () async {
-                              final result =
-                                  await confirmDialog(context, isDarkMode);
-                              if (result != null && result) {
-                                deleteNote(index);
-                              }
-                            },
-                            icon: Icon(color: Colors.black, Icons.delete)),
-                      ),
-                    ),
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -230,16 +328,38 @@ class _DiarioScreenState extends State<DiarioScreen> {
           final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => EditScreen()));
+                  builder: (BuildContext context) => EditScreen(
+                        selectedDate: widget.selectedDate ?? DateTime.now(),
+                      )));
+
           if (result != null) {
-            setState(() {
-              sampleNotes.add(Note(
-                  id: sampleNotes.length,
-                  title: result[0],
-                  content: result[1],
-                  modifiedTime: DateTime.now()));
-              filteredNotes = sampleNotes;
-            });
+            final String title = result[0];
+            final String content = result[1];
+
+            // Crear una nueva nota
+            final newNote = Note(
+              title: title,
+              content: content,
+              dateNote: widget.selectedDate ?? DateTime.now(),
+              modifiedTime: DateTime.now(),
+              userId: _supabaseService.getCurrentUserId() ?? '',
+            );
+
+            try {
+              // Guardar en Supabase
+              final createdNote = await _supabaseService.createNote(newNote);
+              if (createdNote != null) {
+                setState(() {
+                  // Actualizar las listas locales
+                  allNotes.add(createdNote);
+                  filteredNotes = List.from(allNotes);
+                });
+              }
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error al crear la nota: $e')),
+              );
+            }
           }
         },
         elevation: 2,

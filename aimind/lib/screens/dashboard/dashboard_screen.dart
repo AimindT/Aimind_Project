@@ -207,17 +207,16 @@ class HomePage extends StatelessWidget {
                       );
                     },
                   ),
-
-                  // CustomDashButton(
-                  //   iconImagePath: 'assets/images/RapTer.jpeg',
-                  //   buttontext: 'Terapia Rapida',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (context) => const FastTherapyScreen()));
-                  //   },
-                  // ),
+                  CustomDashButton(
+                    iconImagePath: 'assets/images/RapTer.jpeg',
+                    buttontext: 'Terapia Rapida',
+                    onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const FastTherapyScreen()));
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 40),

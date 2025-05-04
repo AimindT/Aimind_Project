@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:aimind/models/note.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
@@ -122,6 +124,135 @@ class SupabaseService {
       print('Error al eliminar perfil: $e');
     }
   }
+
+  Future<List<Note>> getNotesByDate(DateTime date) async {
+    final userId = getCurrentUserId();
+    if (userId == null) return [];
+
+    final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    final response = await Supabase.instance.client
+        .from('notes')
+        .select()
+        .eq('id', userId)
+        .eq('date_note', formattedDate)
+        .order('date_edit', ascending: false);
+
+    return (response as List).map((note) => Note.fromJson(note)).toList();
+  }
+
+  // Obtener todas las notas del usuario
+  Future<List<Note>> getNotes() async {
+    final userId = getCurrentUserId();
+    if (userId == null) return [];
+
+    final response = await Supabase.instance.client
+        .from('notes')
+        .select()
+        .eq('id', userId)
+        .order('date_edit', ascending: false);
+
+    return (response as List).map((note) => Note.fromJson(note)).toList();
+  }
+
+  Future<void> deleteNote(String noteId) async {
+    final userId = getCurrentUserId();
+    if (userId == null) return;
+
+    await Supabase.instance.client
+        .from('notes')
+        .delete()
+        .eq('id_note', noteId)
+        .eq('id', userId);
+  }
+
+  String? getCurrentUserId() {
+    return Supabase.instance.client.auth.currentUser?.id;
+  }
+
+  Future<Note?> updateNote(Note note) async {
+    final userId = getCurrentUserId();
+    if (userId == null || note.id == null) return null;
+
+    final data = note.toJson();
+    final response = await Supabase.instance.client
+        .from('notes')
+        .update(data)
+        .eq('id_note', note.id as Object)
+        .eq('id', userId)
+        .select()
+        .single();
+
+    return Note.fromJson(response);
+  }
+
+  Future<Note?> createNote(Note note) async {
+    final userId = getCurrentUserId();
+    if (userId == null) return null;
+
+    final data = note.toJson();
+    final response = await Supabase.instance.client
+        .from('notes')
+        .insert(data)
+        .select()
+        .single();
+
+    return Note.fromJson(response);
+  }
 }
+
+String? getCurrentUserId() {
+  return Supabase.instance.client.auth.currentUser?.id;
+}
+
+// Obtener todas las notas del usuario
+Future<List<Note>> getNotes() async {
+  final userId = getCurrentUserId();
+  if (userId == null) return [];
+
+  final response = await Supabase.instance.client
+      .from('notes')
+      .select()
+      .eq('id', userId)
+      .order('date_edit', ascending: false);
+
+  return (response as List).map((note) => Note.fromJson(note)).toList();
+}
+
+// Obtener notas por fecha específica
+
+// Crear una nueva nota
+Future<Note?> createNote(Note note) async {
+  final userId = getCurrentUserId();
+  if (userId == null) return null;
+
+  final data = note.toJson();
+  final response = await Supabase.instance.client
+      .from('notes')
+      .insert(data)
+      .select()
+      .single();
+
+  return Note.fromJson(response);
+}
+
+// Actualizar una nota existente
+Future<Note?> updateNote(Note note) async {
+  final userId = getCurrentUserId();
+  if (userId == null || note.id == null) return null;
+
+  final data = note.toJson();
+  final response = await Supabase.instance.client
+      .from('notes')
+      .update(data)
+      .eq('id_note', note.id!)
+      .eq('id', userId)
+      .select()
+      .single();
+
+  return Note.fromJson(response);
+}
+
+// Eliminar una nota
 
 extension on String {}

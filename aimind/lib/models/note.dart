@@ -1,25 +1,43 @@
+// lib/models/note.dart
+import 'package:intl/intl.dart';
+
 class Note {
-  int id;
-  String title;
-  String content;
-  DateTime modifiedTime;
+  final String? id;
+  final String title;
+  final String content;
+  final DateTime dateNote;
+  final DateTime modifiedTime;
+  final String userId;
 
-  Note(
-      {required this.id,
-      required this.title,
-      required this.content,
-      required this.modifiedTime});
+  Note({
+    this.id,
+    required this.title,
+    required this.content,
+    required this.dateNote,
+    required this.modifiedTime,
+    required this.userId,
+  });
+
+  // Factory constructor para crear Note desde un Map (JSON de Supabase)
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      id: json['id_note'],
+      title: json['title'] ?? '',
+      content: json['note'] ?? '',
+      dateNote: DateTime.parse(json['date_note']),
+      modifiedTime: DateTime.parse(json['date_edit']),
+      userId: json['id'],
+    );
+  }
+
+  // Convertir Note a un Map para enviarlo a Supabase
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'note': content,
+      'date_note': DateFormat('yyyy-MM-dd').format(dateNote),
+      'date_edit': modifiedTime.toIso8601String(),
+      'id': userId,
+    };
+  }
 }
-
-List<Note> sampleNotes = [
-  Note(
-      id: 0,
-      title: 'Cumpleaños De Beto',
-      content: 'Todo furro algo mal',
-      modifiedTime: DateTime(2025, 2, 1, 34, 5)),
-  Note(
-      id: 1,
-      title: 'Cumpleaños De Chris',
-      content: 'No hay cp, cumple en decadencia',
-      modifiedTime: DateTime(2025, 1, 1, 34, 5))
-];
