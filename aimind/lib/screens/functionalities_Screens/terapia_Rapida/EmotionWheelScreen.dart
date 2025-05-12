@@ -15,13 +15,13 @@ class _EmotionSelectorScreenState extends State<EmotionSelectorScreen>
     with TickerProviderStateMixin {
   final List<Map<String, dynamic>> emotions = [
     {
-      'name': 'Ansiedad',
+      'name': 'Ansioso',
       'emoji': '😰',
       'color1': Color(0xFFFFAB40), // Naranja claro
       'color2': Color(0xFFFF6F00), // Naranja oscuro
     },
     {
-      'name': 'Depresión',
+      'name': 'Deprimido',
       'emoji': '😞',
       'color1': Color(0xFF64B5F6), // Azul claro
       'color2': Color(0xFF1976D2), // Azul oscuro
@@ -230,14 +230,14 @@ class _EmotionSelectorScreenState extends State<EmotionSelectorScreen>
                       final selected = emotions[currentIndex];
 
                       // Navegación condicional basada en la emoción seleccionada
-                      if (selected['name'] == 'Ansiedad') {
+                      if (selected['name'] == 'Ansioso') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) =>
                                 AnxietyScreen(emotion: selected),
                           ),
                         );
-                      } else if (selected['name'] == 'Depresión') {
+                      } else if (selected['name'] == 'Deprimido') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) =>

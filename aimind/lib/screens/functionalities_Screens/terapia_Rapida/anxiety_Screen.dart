@@ -1,4 +1,5 @@
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/BreathingExerciseScreen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/technique_exercise_screen.dart';
 import 'package:flutter/material.dart';
 
 class AnxietyScreen extends StatefulWidget {
@@ -254,7 +255,7 @@ class _AnxietyScreenState extends State<AnxietyScreen> {
       }).toList(),
     );
   }
-
+    
   Widget _buildTechniquesList(
       List<String> techniques, Color primaryColor, Color secondaryColor) {
     return ListView.separated(
@@ -263,64 +264,77 @@ class _AnxietyScreenState extends State<AnxietyScreen> {
       itemCount: techniques.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                primaryColor.withOpacity(0.1),
-                secondaryColor.withOpacity(0.1),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: primaryColor.withOpacity(0.2),
-            ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.2),
-                  shape: BoxShape.circle,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TechniqueExerciseScreen(
+                  techniqueName: techniques[index],
+                  primaryColor: primaryColor,
+                  secondaryColor: secondaryColor,
                 ),
-                child: Center(
-                  child: Text(
-                    '${index + 1}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
+              ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  primaryColor.withOpacity(0.1),
+                  secondaryColor.withOpacity(0.1)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: primaryColor.withOpacity(0.2)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${index + 1}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  techniques[index],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[800],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    techniques[index],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[800],
+                    ),
                   ),
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: primaryColor,
-              ),
-            ],
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: primaryColor,
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
+
 
   Widget _buildBreatheExercise(Color primaryColor, Color secondaryColor) {
     return Container(
