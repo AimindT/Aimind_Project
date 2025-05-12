@@ -96,8 +96,8 @@ class _AnxietyScreenState extends State<AnxietyScreen> {
                         const SizedBox(height: 16),
                         _buildTechniquesList(
                             anxietyTechniques, primaryColor, secondaryColor),
-                        const SizedBox(height: 24),
-                        _buildBreatheExercise(primaryColor, secondaryColor),
+                        // const SizedBox(height: 24),
+                        // _buildBreatheExercise(primaryColor, secondaryColor),
                         const SizedBox(height: 24),
                         Center(
                           child: ElevatedButton(
@@ -255,7 +255,7 @@ class _AnxietyScreenState extends State<AnxietyScreen> {
       }).toList(),
     );
   }
-    
+
   Widget _buildTechniquesList(
       List<String> techniques, Color primaryColor, Color secondaryColor) {
     return ListView.separated(
@@ -335,84 +335,83 @@ class _AnxietyScreenState extends State<AnxietyScreen> {
     );
   }
 
-
-  Widget _buildBreatheExercise(Color primaryColor, Color secondaryColor) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [primaryColor, secondaryColor],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: primaryColor.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.air,
-                color: Colors.white,
-                size: 28,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Ejercicio de respiración',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Inhala por 4 segundos, mantén por 4 y exhala por 6 segundos. Repite 5 veces.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BreathingExerciseScreen(
-                    primaryColor: primaryColor,
-                    secondaryColor: secondaryColor,
-                  ),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: primaryColor,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            child: const Text(
-              'Comenzar ahora',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildBreatheExercise(Color primaryColor, Color secondaryColor) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       gradient: LinearGradient(
+  //         colors: [primaryColor, secondaryColor],
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //       ),
+  //       borderRadius: BorderRadius.circular(16),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: primaryColor.withOpacity(0.3),
+  //           blurRadius: 8,
+  //           offset: const Offset(0, 4),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         const Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Icon(
+  //               Icons.air,
+  //               color: Colors.white,
+  //               size: 28,
+  //             ),
+  //             SizedBox(width: 10),
+  //             Text(
+  //               'Ejercicio de respiración',
+  //               style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Colors.white,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         const SizedBox(height: 16),
+  //         const Text(
+  //           'Inhala por 4 segundos, mantén por 4 y exhala por 6 segundos. Repite 5 veces.',
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(
+  //             fontSize: 15,
+  //             color: Colors.white,
+  //             height: 1.5,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 16),
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                 builder: (context) => BreathingExerciseScreen(
+  //                   primaryColor: primaryColor,
+  //                   secondaryColor: secondaryColor,
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: Colors.white,
+  //             foregroundColor: primaryColor,
+  //             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(30),
+  //             ),
+  //           ),
+  //           child: const Text(
+  //             'Comenzar ahora',
+  //             style: TextStyle(fontWeight: FontWeight.bold),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
