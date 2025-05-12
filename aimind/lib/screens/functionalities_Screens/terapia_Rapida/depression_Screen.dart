@@ -96,8 +96,8 @@ class _DepressionScreenState extends State<DepressionScreen> {
                         const SizedBox(height: 16),
                         _buildTechniquesList(
                             depressionTechniques, primaryColor, secondaryColor),
-                        const SizedBox(height: 24),
-                        _buildMoodExercise(primaryColor, secondaryColor),
+                        // const SizedBox(height: 24),
+                        // _buildMoodExercise(primaryColor, secondaryColor),
                         const SizedBox(height: 24),
                         Center(
                           child: ElevatedButton(
@@ -323,161 +323,160 @@ class _DepressionScreenState extends State<DepressionScreen> {
     );
   }
 
-  Widget _buildMoodExercise(Color primaryColor, Color secondaryColor) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [primaryColor, secondaryColor],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: primaryColor.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.psychology,
-                color: Colors.white,
-                size: 28,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Ejercicio de activación',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Identifica una pequeña actividad que puedas realizar hoy que normalmente te daría placer o satisfacción, incluso si ahora no te apetece.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                ),
-                builder: (context) {
-                  String activity = '';
-                  bool completed = false;
+  // Widget _buildMoodExercise(Color primaryColor, Color secondaryColor) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       gradient: LinearGradient(
+  //         colors: [primaryColor, secondaryColor],
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //       ),
+  //       borderRadius: BorderRadius.circular(16),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: primaryColor.withOpacity(0.3),
+  //           blurRadius: 8,
+  //           offset: const Offset(0, 4),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         const Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Icon(
+  //               Icons.psychology,
+  //               color: Colors.white,
+  //               size: 28,
+  //             ),
+  //             SizedBox(width: 10),
+  //             Text(
+  //               'Ejercicio de activación',
+  //               style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Colors.white,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         const SizedBox(height: 16),
+  //         const Text(
+  //           'Identifica una pequeña actividad que puedas realizar hoy que normalmente te daría placer o satisfacción, incluso si ahora no te apetece.',
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(
+  //             fontSize: 15,
+  //             color: Colors.white,
+  //             height: 1.5,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 16),
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             showModalBottomSheet(
+  //               context: context,
+  //               isScrollControlled: true,
+  //               shape: const RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+  //               ),
+  //               builder: (context) {
+  //                 String activity = '';
+  //                 bool completed = false;
 
-                  return StatefulBuilder(
-                    builder: (context, setState) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 24,
-                          right: 24,
-                          top: 24,
-                          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text(
-                              'Ejercicio de activación',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'Escribe una actividad sencilla que normalmente te haría sentir mejor.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            const SizedBox(height: 16),
-                            TextField(
-                              decoration: const InputDecoration(
-                                labelText: 'Actividad',
-                                border: OutlineInputBorder(),
-                              ),
-                              onChanged: (value) {
-                                activity = value;
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            CheckboxListTile(
-                              activeColor: Colors.green,
-                              title: const Text('He completado esta actividad'),
-                              value: completed,
-                              onChanged: (value) {
-                                setState(() {
-                                  completed = value ?? false;
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      completed
-                                          ? '¡Buen trabajo completando la actividad!'
-                                          : 'Actividad registrada: "$activity"',
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Guardar',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Comenzando ejercicio de activación...'),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: primaryColor,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            child: const Text(
-              'Comenzar ahora',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  //                 return StatefulBuilder(
+  //                   builder: (context, setState) {
+  //                     return Padding(
+  //                       padding: EdgeInsets.only(
+  //                         left: 24,
+  //                         right: 24,
+  //                         top: 24,
+  //                         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+  //                       ),
+  //                       child: Column(
+  //                         mainAxisSize: MainAxisSize.min,
+  //                         children: [
+  //                           const Text(
+  //                             'Ejercicio de activación',
+  //                             style: TextStyle(
+  //                               fontSize: 20,
+  //                               fontWeight: FontWeight.bold,
+  //                             ),
+  //                           ),
+  //                           const SizedBox(height: 16),
+  //                           const Text(
+  //                             'Escribe una actividad sencilla que normalmente te haría sentir mejor.',
+  //                             textAlign: TextAlign.center,
+  //                             style: TextStyle(fontSize: 15),
+  //                           ),
+  //                           const SizedBox(height: 16),
+  //                           TextField(
+  //                             decoration: const InputDecoration(
+  //                               labelText: 'Actividad',
+  //                               border: OutlineInputBorder(),
+  //                             ),
+  //                             onChanged: (value) {
+  //                               activity = value;
+  //                             },
+  //                           ),
+  //                           const SizedBox(height: 16),
+  //                           CheckboxListTile(
+  //                             activeColor: Colors.green,
+  //                             title: const Text('He completado esta actividad'),
+  //                             value: completed,
+  //                             onChanged: (value) {
+  //                               setState(() {
+  //                                 completed = value ?? false;
+  //                               });
+  //                             },
+  //                           ),
+  //                           const SizedBox(height: 16),
+  //                           ElevatedButton(
+  //                             onPressed: () {
+  //                               Navigator.pop(context);
+  //                               ScaffoldMessenger.of(context).showSnackBar(
+  //                                 SnackBar(
+  //                                   content: Text(
+  //                                     completed
+  //                                         ? '¡Buen trabajo completando la actividad!'
+  //                                         : 'Actividad registrada: "$activity"',
+  //                                   ),
+  //                                 ),
+  //                               );
+  //                             },
+  //                             child: const Text(
+  //                               'Guardar',
+  //                               style: TextStyle(color: Colors.black),
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     );
+  //                   },
+  //                 );
+  //               },
+  //             );
+  //             ScaffoldMessenger.of(context).showSnackBar(
+  //               const SnackBar(
+  //                 content: Text('Comenzando ejercicio de activación...'),
+  //               ),
+  //             );
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: Colors.white,
+  //             foregroundColor: primaryColor,
+  //             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(30),
+  //             ),
+  //           ),
+  //           child: const Text(
+  //             'Comenzar ahora',
+  //             style: TextStyle(fontWeight: FontWeight.bold),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
 }

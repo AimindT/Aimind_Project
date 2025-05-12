@@ -1,4 +1,3 @@
-import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/BreathingExerciseScreen.dart';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/technique_exercise_screen.dart';
 import 'package:flutter/material.dart';
 

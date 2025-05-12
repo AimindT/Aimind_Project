@@ -108,7 +108,7 @@ class TechniqueExerciseScreen extends StatelessWidget {
       child: Text(
         techniqueName == 'Respiración profunda'
             ? 'Inhala profundamente por la nariz, mantén el aire unos segundos y exhala lentamente por la boca.'
-            : 'Instrucción específica de la técnica.',
+            : 'En progreso',
         style: TextStyle(fontSize: 18, color: Colors.white),
         textAlign: TextAlign.center,
       ),
@@ -158,14 +158,6 @@ class TechniqueExerciseScreen extends StatelessWidget {
                 primaryColor: primaryColor,
                 secondaryColor: secondaryColor,
               ),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  '¡Excelente! Has completado el ejercicio de $techniqueName'),
-              backgroundColor: primaryColor,
             ),
           );
         }
