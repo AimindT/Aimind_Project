@@ -1,4 +1,5 @@
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/BreathingExerciseScreen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/ProggresiveMuscleRelaxationScreen.dart';
 import 'package:flutter/material.dart';
 
 class TechniqueExerciseScreen extends StatelessWidget {
@@ -143,6 +144,17 @@ class TechniqueExerciseScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => BreathingExerciseScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        }
+        if (techniqueName == 'Relajación muscular') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProgressiveMuscleRelaxationScreen(
                 primaryColor: primaryColor,
                 secondaryColor: secondaryColor,
               ),

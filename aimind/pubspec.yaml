@@ -11,6 +11,7 @@ dependencies:
   cached_network_image: ^3.4.1
   card_swiper: ^3.0.1
   change_app_package_name: ^1.4.0
+  confetti: ^0.8.0
   curved_navigation_bar: ^1.0.6
   flutter:
     sdk: flutter
