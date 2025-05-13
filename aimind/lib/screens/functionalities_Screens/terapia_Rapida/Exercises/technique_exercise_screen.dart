@@ -1,5 +1,8 @@
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/BreathingExerciseScreen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/Cognitive_distraction_screen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/Mindfulness_Screen.dart';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/ProggresiveMuscleRelaxationScreen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/Visualization_Screen.dart';
 import 'package:flutter/material.dart';
 
 class TechniqueExerciseScreen extends StatelessWidget {
@@ -135,8 +138,7 @@ class TechniqueExerciseScreen extends StatelessWidget {
   //     ],
   //   );
   // }
-
-  Widget _buildActionButton(BuildContext context) {
+Widget _buildActionButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         if (techniqueName == 'Respiración profunda') {
@@ -149,12 +151,41 @@ class TechniqueExerciseScreen extends StatelessWidget {
               ),
             ),
           );
-        }
-        if (techniqueName == 'Relajación muscular') {
+        } else if (techniqueName == 'Relajación muscular') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ProgressiveMuscleRelaxationScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        } else if (techniqueName == 'Mindfulness') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MindfulnessScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        } else if (techniqueName == 'Visualización') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VisualizationScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        } else if (techniqueName == 'Distracción cognitiva') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CognitiveDistractionScreen(
                 primaryColor: primaryColor,
                 secondaryColor: secondaryColor,
               ),

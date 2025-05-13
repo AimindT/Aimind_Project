@@ -5,9 +5,9 @@ class AnxietyScreen extends StatefulWidget {
   final Map<String, dynamic> emotion;
 
   const AnxietyScreen({
-    Key? key,
+    super.key,
     required this.emotion,
-  }) : super(key: key);
+  });
 
   @override
   State<AnxietyScreen> createState() => _AnxietyScreenState();
