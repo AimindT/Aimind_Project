@@ -42,7 +42,7 @@ class _EmotionSelectorScreenState extends State<EmotionSelectorScreen>
     _emojiController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
-    )..forward(); // Add this to animate emoji on initial load
+    )..forward();
 
     _titleController = AnimationController(
       vsync: this,
@@ -64,7 +64,6 @@ class _EmotionSelectorScreenState extends State<EmotionSelectorScreen>
 
   List<Offset> _generateRandomPoints() {
     final rand = Random();
-    // Use a safer way to get the screen size since window.physicalSize is deprecated
     final size = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.first)
         .size;
@@ -226,26 +225,19 @@ class _EmotionSelectorScreenState extends State<EmotionSelectorScreen>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: ElevatedButton(
-                    onPressed: () {
-                      final selected = emotions[currentIndex];
-
-                      // Navegación condicional basada en la emoción seleccionada
-                      if (selected['name'] == 'Ansioso') {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                AnxietyScreen(emotion: selected),
-                          ),
-                        );
-                      } else if (selected['name'] == 'Deprimido') {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DepressionScreen(emotion: selected),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: emotions[currentIndex]['name'] == 'Deprimido'
+                        ? null // Disable button for "Deprimido"
+                        : () {
+                            final selected = emotions[currentIndex];
+                            if (selected['name'] == 'Ansioso') {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AnxietyScreen(emotion: selected),
+                                ),
+                              );
+                            }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: emotion['color2'],
                       padding: const EdgeInsets.symmetric(
@@ -255,10 +247,12 @@ class _EmotionSelectorScreenState extends State<EmotionSelectorScreen>
                       ),
                       elevation: 10,
                     ),
-                    child: const Text(
-                      'Continuar',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    child: Text(
+                      emotions[currentIndex]['name'] == 'Deprimido'
+                          ? 'Próximamente'
+                          : 'Continuar',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

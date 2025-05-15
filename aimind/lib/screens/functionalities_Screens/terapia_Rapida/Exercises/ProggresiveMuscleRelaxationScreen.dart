@@ -72,54 +72,32 @@ class _ProgressiveMuscleRelaxationScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: Container(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Relajación Muscular',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+        flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                widget.primaryColor.withOpacity(0.9),
-                widget.secondaryColor.withOpacity(0.9),
-              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-            ),
-            borderRadius:
-                const BorderRadius.vertical(bottom: Radius.circular(24)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Relajación Muscular',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
-              ),
+              colors: [widget.secondaryColor, widget.primaryColor],
             ),
           ),
         ),
+        leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        elevation: 0, // Keep elevation at 0 for a seamless look
       ),
       body: Stack(
         children: [
