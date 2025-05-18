@@ -93,30 +93,18 @@ class TechniqueExerciseScreen extends StatelessWidget {
   }
 
   Widget _buildInstructionCard() {
-    String instruction;
     switch (techniqueName) {
       case 'Respiración profunda':
-        instruction =
-            'Inhala profundamente por la nariz, mantén el aire unos segundos y exhala lentamente por la boca.';
         break;
       case 'Relajación muscular':
-        instruction =
-            'Tensa y relaja progresivamente cada grupo muscular, empezando por los pies y subiendo hasta la cabeza.';
         break;
       case 'Mindfulness':
-        instruction =
-            'Concéntrate en el momento presente, observando tus pensamientos y sensaciones sin juzgarlos.';
         break;
       case 'Visualización':
-        instruction =
-            'Imagina un lugar tranquilo y seguro, visualizando cada detalle para relajarte.';
         break;
       case 'Distracción cognitiva':
-        instruction =
-            'Realiza una actividad mental, como contar hacia atrás o recordar una lista, para desviar tu atención.';
         break;
       default:
-        instruction = 'Sigue las instrucciones específicas para esta técnica.';
     }
 
     return Container(
@@ -133,13 +121,9 @@ class TechniqueExerciseScreen extends StatelessWidget {
         ],
       ),
       child: Text(
-<<<<<<< HEAD
         techniqueName == 'Respiración profunda'
             ? 'Inhala profundamente por la nariz, mantén el aire unos segundos y exhala lentamente por la boca.'
             : 'En progreso...',
-=======
-        instruction,
->>>>>>> de786a47291386506079efb430ae34dd13f8d70d
         style: TextStyle(fontSize: 18, color: Colors.white),
         textAlign: TextAlign.center,
       ),

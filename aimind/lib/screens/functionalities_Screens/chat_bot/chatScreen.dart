@@ -24,15 +24,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   String? avatarUrl; // To store the user's avatar URL
   final SupabaseService _supabaseService = SupabaseService();
 
-  @override
-  void initState() {
-    super.initState();
-    fetchUserData(); // Fetch user data to get avatarUrl
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _addWelcomeMessage();
-    });
-  }
-
   Future<void> fetchUserData() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user != null) {
@@ -43,22 +34,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         });
       }
     }
-  }
-
-  void _addWelcomeMessage() {
-    final welcomeMessage = ChatMessage(
-      text: "Hola soy AIMIND, ¿cómo puedo ayudarte el día de hoy?",
-      isUser: false,
-      animationController: AnimationController(
-        duration: const Duration(milliseconds: 600),
-        vsync: this,
-      ),
-    );
-
-    setState(() {
-      messages.add(welcomeMessage);
-    });
-    welcomeMessage.animationController.forward();
   }
 
   Future<void> _showRatingDialog() async {
