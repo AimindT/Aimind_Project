@@ -24,15 +24,32 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   String? avatarUrl; // To store the user's avatar URL
   final SupabaseService _supabaseService = SupabaseService();
 
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData(); // Call fetchUserData to load the avatar URL
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addWelcomeMessage();
+    });
+  }
+
   Future<void> fetchUserData() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user != null) {
-      final userData = await _supabaseService.getProfile(user.id);
-      if (mounted) {
-        setState(() {
-          avatarUrl = userData?['avatar_url'];
-        });
+      try {
+        final userData = await _supabaseService.getProfile(user.id);
+        print("User data fetched: $userData"); // Debug log
+        if (mounted) {
+          setState(() {
+            avatarUrl = userData?['avatar_url'];
+            print("Avatar URL set to: $avatarUrl"); // Debug log
+          });
+        }
+      } catch (e) {
+        print("Error fetching user data: $e"); // Debug log for errors
       }
+    } else {
+      print("No user logged in."); // Debug log
     }
   }
 
@@ -64,15 +81,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (result != true) {
       return;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Agregar mensaje de bienvenida inicial
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _addWelcomeMessage();
-    });
   }
 
   void _addWelcomeMessage() {
@@ -269,8 +277,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           backgroundColor: isDarkMode ? Colors.indigo[800] : Colors.indigo[400],
           elevation: 2,
           title: Row(
-            mainAxisSize:
-                MainAxisSize.min, // Minimize the Row's width to center content
+            mainAxisSize: MainAxisSize.min,
             children: [
               CircleAvatar(
                 radius: 16,
@@ -401,15 +408,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               radius: 18,
               backgroundColor: Colors.transparent,
               child: ClipOval(
-                child: avatarUrl != null
+                child: avatarUrl != null && avatarUrl!.isNotEmpty
                     ? CachedNetworkImage(
                         imageUrl: avatarUrl!,
                         fit: BoxFit.cover,
                         width: 36,
                         height: 36,
                         placeholder: (context, url) => _buildImagePlaceholder(),
-                        errorWidget: (context, url, error) =>
-                            _buildImagePlaceholder(),
+                        errorWidget: (context, url, error) {
+                          print(
+                              "Error loading avatar: $error, URL: $url"); // Debug log
+                          return _buildImagePlaceholder();
+                        },
                       )
                     : _buildImagePlaceholder(),
               ),
