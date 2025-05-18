@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/anxiety_Screen.dart';
-import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/depression_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 
