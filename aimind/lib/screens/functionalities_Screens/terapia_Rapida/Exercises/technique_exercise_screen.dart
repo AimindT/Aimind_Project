@@ -1,5 +1,8 @@
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/BreathingExerciseScreen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/Cognitive_distraction_screen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/Mindfulness_Screen.dart';
 import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/ProggresiveMuscleRelaxationScreen.dart';
+import 'package:aimind/screens/functionalities_Screens/terapia_Rapida/Exercises/Visualization_Screen.dart';
 import 'package:flutter/material.dart';
 
 class TechniqueExerciseScreen extends StatelessWidget {
@@ -66,8 +69,6 @@ class TechniqueExerciseScreen extends StatelessWidget {
                 _buildTitle(),
                 const SizedBox(height: 20),
                 _buildInstructionCard(),
-                // const SizedBox(height: 30),
-                // _buildProgressIndicator(),
                 const Spacer(),
                 _buildActionButton(context),
               ],
@@ -92,6 +93,32 @@ class TechniqueExerciseScreen extends StatelessWidget {
   }
 
   Widget _buildInstructionCard() {
+    String instruction;
+    switch (techniqueName) {
+      case 'Respiración profunda':
+        instruction =
+            'Inhala profundamente por la nariz, mantén el aire unos segundos y exhala lentamente por la boca.';
+        break;
+      case 'Relajación muscular':
+        instruction =
+            'Tensa y relaja progresivamente cada grupo muscular, empezando por los pies y subiendo hasta la cabeza.';
+        break;
+      case 'Mindfulness':
+        instruction =
+            'Concéntrate en el momento presente, observando tus pensamientos y sensaciones sin juzgarlos.';
+        break;
+      case 'Visualización':
+        instruction =
+            'Imagina un lugar tranquilo y seguro, visualizando cada detalle para relajarte.';
+        break;
+      case 'Distracción cognitiva':
+        instruction =
+            'Realiza una actividad mental, como contar hacia atrás o recordar una lista, para desviar tu atención.';
+        break;
+      default:
+        instruction = 'Sigue las instrucciones específicas para esta técnica.';
+    }
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -106,35 +133,18 @@ class TechniqueExerciseScreen extends StatelessWidget {
         ],
       ),
       child: Text(
+<<<<<<< HEAD
         techniqueName == 'Respiración profunda'
             ? 'Inhala profundamente por la nariz, mantén el aire unos segundos y exhala lentamente por la boca.'
             : 'En progreso...',
+=======
+        instruction,
+>>>>>>> de786a47291386506079efb430ae34dd13f8d70d
         style: TextStyle(fontSize: 18, color: Colors.white),
         textAlign: TextAlign.center,
       ),
     );
   }
-
-  // Widget _buildProgressIndicator() {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         'Progreso',
-  //         style: TextStyle(color: Colors.white70, fontSize: 16),
-  //       ),
-  //       const SizedBox(height: 8),
-  //       ClipRRect(
-  //         borderRadius: BorderRadius.circular(10),
-  //         child: LinearProgressIndicator(
-  //           value: 0.2,
-  //           backgroundColor: Colors.white24,
-  //           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-  //           minHeight: 10,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildActionButton(BuildContext context) {
     return ElevatedButton(
@@ -149,12 +159,41 @@ class TechniqueExerciseScreen extends StatelessWidget {
               ),
             ),
           );
-        }
-        if (techniqueName == 'Relajación muscular') {
+        } else if (techniqueName == 'Relajación muscular') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ProgressiveMuscleRelaxationScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        } else if (techniqueName == 'Mindfulness') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MindfulnessScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        } else if (techniqueName == 'Visualización') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VisualizationScreen(
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+              ),
+            ),
+          );
+        } else if (techniqueName == 'Distracción cognitiva') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CognitiveDistractionScreen(
                 primaryColor: primaryColor,
                 secondaryColor: secondaryColor,
               ),
@@ -172,7 +211,7 @@ class TechniqueExerciseScreen extends StatelessWidget {
         elevation: 6,
       ),
       child: const Text(
-        '¡Hecho!',
+        'Comenzar',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );

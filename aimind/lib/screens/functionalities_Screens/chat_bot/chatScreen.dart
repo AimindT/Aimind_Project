@@ -91,6 +91,31 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    // Agregar mensaje de bienvenida inicial
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addWelcomeMessage();
+    });
+  }
+
+  void _addWelcomeMessage() {
+    final welcomeMessage = ChatMessage(
+      text: "Hola soy AIMIND, ¿cómo puedo ayudarte el día de hoy?",
+      isUser: false,
+      animationController: AnimationController(
+        duration: const Duration(milliseconds: 400),
+        vsync: this,
+      ),
+    );
+
+    setState(() {
+      messages.add(welcomeMessage);
+    });
+    welcomeMessage.animationController.forward();
+  }
+
   void sendMessage() async {
     String userInput = controller.text.trim();
     if (userInput.isEmpty) return;

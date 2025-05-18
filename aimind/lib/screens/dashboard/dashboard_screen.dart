@@ -200,7 +200,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   CustomDashButton(
                     iconImagePath: 'assets/images/background.png',
-                    buttontext: 'Habla Con Aimind',
+                    buttontext: 'Habla Con AIMIND',
                     onPressed: () {
                       Navigator.push(
                         context,
