@@ -17,6 +17,7 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
   int _selectedRating = 0;
   bool _isSubmitting = false;
   String? _selectedEmotion; // Variable para almacenar la emoción seleccionada
+  bool _showThankYou = false; // New state to show thank-you message
 
   // Lista de emojis y colores para la escala
   final List<IconData> _emojis = [
@@ -63,6 +64,15 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
         });
       }
 
+      // Show thank-you message before closing
+      setState(() {
+        _showThankYou = true;
+        _isSubmitting = false;
+      });
+
+      // Delay to show thank-you message for 1.5 seconds
+      await Future.delayed(const Duration(milliseconds: 1500));
+
       if (widget.onComplete != null) {
         widget.onComplete!();
       }
@@ -75,9 +85,6 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error al enviar la calificación: $e')),
         );
-      }
-    } finally {
-      if (mounted) {
         setState(() {
           _isSubmitting = false;
         });
@@ -118,137 +125,170 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Text(
-            'ESCALA DE LIKERT',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+          if (!_showThankYou) ...[
+            const Text(
+              'ESCALA DE LIKERT',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 25),
-          const Text(
-            '¿CÓMO CALIFICARÍAS EL DESEMPEÑO DE AIMIND?',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(
-              5,
-              (index) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedRating = index + 1;
-                    _selectedEmotion = _labels[index].replaceAll(
-                        '\n', ' '); // Almacenar la emoción sin salto de línea
-                  });
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: _selectedRating == index + 1
-                            ? _colors[index].withOpacity(0.2)
-                            : Colors.transparent,
-                        shape: BoxShape.circle,
-                        border: _selectedRating == index + 1
-                            ? Border.all(color: _colors[index], width: 2)
+            const SizedBox(height: 25),
+            const Text(
+              '¿CÓMO CALIFICARÍAS EL DESEMPEÑO DE AIMIND?',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                5,
+                (index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedRating = index + 1;
+                      _selectedEmotion = _labels[index].replaceAll(
+                          '\n', ' '); // Almacenar la emoción sin salto de línea
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: _selectedRating == index + 1
+                              ? _colors[index].withOpacity(0.2)
+                              : Colors.transparent,
+                          shape: BoxShape.circle,
+                          border: _selectedRating == index + 1
+                              ? Border.all(color: _colors[index], width: 2)
+                              : null,
+                        ),
+                        child: Icon(
+                          _emojis[index],
+                          color: _colors[index],
+                          size: 40,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _labels[index],
+                        style: TextStyle(
+                          fontSize: 12,
+                          color:
+                              isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                          fontWeight: _selectedRating == index + 1
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                height: 10,
+                child: Row(
+                  children: List.generate(
+                    5,
+                    (index) => Expanded(
+                      child: Container(
+                        color: _colors[index],
+                        child: _selectedRating == index + 1
+                            ? const Center(
+                                child: Icon(
+                                  Icons.star,
+                                  color: Colors.white,
+                                  size: 10,
+                                ),
+                              )
                             : null,
                       ),
-                      child: Icon(
-                        _emojis[index],
-                        color: _colors[index],
-                        size: 40,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _labels[index],
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                        fontWeight: _selectedRating == index + 1
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              height: 10,
-              child: Row(
-                children: List.generate(
-                  5,
-                  (index) => Expanded(
-                    child: Container(
-                      color: _colors[index],
-                      child: _selectedRating == index + 1
-                          ? const Center(
-                              child: Icon(
-                                Icons.star,
-                                color: Colors.white,
-                                size: 10,
-                              ),
-                            )
-                          : null,
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  'OMITIR',
-                  style: TextStyle(
-                    color: isDarkMode ? Colors.grey : Colors.grey[700],
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    'OMITIR',
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.grey : Colors.grey[700],
+                    ),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: _selectedRating == 0 || _isSubmitting
-                    ? null
-                    : _submitRating,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _selectedRating == 0
-                      ? Colors.grey
-                      : _colors[_selectedRating - 1],
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                ElevatedButton(
+                  onPressed: _selectedRating == 0 || _isSubmitting
+                      ? null
+                      : _submitRating,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _selectedRating == 0
+                        ? Colors.grey
+                        : _colors[_selectedRating - 1],
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
+                  child: _isSubmitting
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text('ENVIAR'),
                 ),
-                child: _isSubmitting
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text('ENVIAR'),
+              ],
+            ),
+          ] else ...[
+            const Text(
+              '¡Gracias por tu calificación!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
               ),
-            ],
-          ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                if (widget.onComplete != null) {
+                  widget.onComplete!();
+                }
+                Navigator.of(context).pop(true);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    isDarkMode ? Colors.indigo[600] : Colors.indigo[400],
+                foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: const Text('CERRAR'),
+            ),
+          ],
         ],
       ),
     );

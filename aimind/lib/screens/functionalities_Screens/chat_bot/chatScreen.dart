@@ -430,8 +430,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           CircleAvatar(
             radius: 18,
             backgroundImage: const AssetImage('assets/images/background.png'),
-            backgroundColor:
-                isDarkMode ? Colors.indigo[700] : Colors.indigo[300],
           ),
           const SizedBox(width: 10),
           Container(
