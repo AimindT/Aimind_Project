@@ -108,7 +108,7 @@ class TechniqueExerciseScreen extends StatelessWidget {
       child: Text(
         techniqueName == 'Respiración profunda'
             ? 'Inhala profundamente por la nariz, mantén el aire unos segundos y exhala lentamente por la boca.'
-            : 'En progreso',
+            : 'En progreso...',
         style: TextStyle(fontSize: 18, color: Colors.white),
         textAlign: TextAlign.center,
       ),

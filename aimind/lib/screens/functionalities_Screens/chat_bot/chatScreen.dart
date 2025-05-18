@@ -1,8 +1,12 @@
+import 'package:aimind/services/supabase_Service%20.dart';
+import 'package:aimind/widgets/likert_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aimind/theme/theme_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -17,6 +21,75 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
   final String backendUrl = 'https://aimind-project.onrender.com/chat/';
   bool isLoading = false;
+  String? avatarUrl; // To store the user's avatar URL
+  final SupabaseService _supabaseService = SupabaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData(); // Fetch user data to get avatarUrl
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addWelcomeMessage();
+    });
+  }
+
+  Future<void> fetchUserData() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) {
+      final userData = await _supabaseService.getProfile(user.id);
+      if (mounted) {
+        setState(() {
+          avatarUrl = userData?['avatar_url'];
+        });
+      }
+    }
+  }
+
+  void _addWelcomeMessage() {
+    final welcomeMessage = ChatMessage(
+      text: "Hola soy AIMIND, ¿cómo puedo ayudarte el día de hoy?",
+      isUser: false,
+      animationController: AnimationController(
+        duration: const Duration(milliseconds: 600),
+        vsync: this,
+      ),
+    );
+
+    setState(() {
+      messages.add(welcomeMessage);
+    });
+    welcomeMessage.animationController.forward();
+  }
+
+  Future<void> _showRatingDialog() async {
+    if (!mounted) return;
+
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: LikertScaleDialog(
+            onComplete: () {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('¡Gracias por tu calificación!'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
+    );
+
+    if (result != true) {
+      return;
+    }
+  }
 
   void sendMessage() async {
     String userInput = controller.text.trim();
@@ -26,7 +99,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       text: userInput,
       isUser: true,
       animationController: AnimationController(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 600),
         vsync: this,
       ),
     );
@@ -40,7 +113,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _scrollToBottom();
 
     try {
-      // Print the request being sent for debugging
       print("Sending request to: $backendUrl");
       print("Request body: ${jsonEncode({"text": userInput})}");
 
@@ -50,15 +122,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         body: jsonEncode({"text": userInput}),
       );
 
-      // Print response details for debugging
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 307) {
-        // Parse the response body
         final responseBody = jsonDecode(response.body);
-
-        // Check which field exists in the response
         String reply = "";
         if (responseBody.containsKey('respuesta')) {
           reply = responseBody['respuesta'];
@@ -70,14 +138,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           reply = "No se pudo interpretar la respuesta.";
         }
 
-        // Fix encoding issues with Latin-1 characters
         reply = _fixEncoding(reply);
 
         final botMessage = ChatMessage(
           text: reply,
           isUser: false,
           animationController: AnimationController(
-            duration: const Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 600),
             vsync: this,
           ),
         );
@@ -98,16 +165,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _scrollToBottom();
   }
 
-  // Function to fix encoding issues
   String _fixEncoding(String text) {
-    // Replace common encoding issues with proper Spanish characters
     final Map<String, String> replacements = {
       'Ã¡': 'á',
       'Ã©': 'é',
       'Ã­': 'í',
       'Ã³': 'ó',
       'Ãº': 'ú',
-      'Ã±': 'ñ',
+      'Ãñ': 'ñ',
       'Ã': 'í',
       'Â¿': '¿',
       'Â¡': '¡',
@@ -124,12 +189,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       result = result.replaceAll(key, value);
     });
 
-    // Alternative approach - try to decode as Latin-1 and re-encode as UTF-8
     try {
       final bytes = latin1.encode(result);
       result = utf8.decode(bytes);
     } catch (e) {
-      // If that fails, keep the original after replacements
       print("Encoding fix error: $e");
     }
 
@@ -141,7 +204,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       text: "Error al conectar con la IA.",
       isUser: false,
       animationController: AnimationController(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 600),
         vsync: this,
       ),
     );
@@ -174,130 +237,243 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Widget _buildImagePlaceholder() {
+    return Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey[200],
+      ),
+      child: Icon(Icons.person, size: 20, color: Colors.grey[400]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: themeProvider.themeData.colorScheme.surface,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: themeProvider.themeData.colorScheme.surface,
-        elevation: 0,
-        title: Text(
-          "AIMIND",
-          style: TextStyle(
-            color: isDarkMode ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 28,
-            letterSpacing: 1.2,
+    return WillPopScope(
+      onWillPop: () async {
+        if (mounted) {
+          Navigator.pop(context);
+          await _showRatingDialog();
+        }
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.grey[100],
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: isDarkMode ? Colors.indigo[800] : Colors.indigo[400],
+          elevation: 2,
+          title: Row(
+            mainAxisSize:
+                MainAxisSize.min, // Minimize the Row's width to center content
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundImage:
+                    const AssetImage('assets/images/background.png'),
+                backgroundColor: Colors.white,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                "AIMIND",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () async {
+              if (mounted) {
+                Navigator.pop(context);
+                await _showRatingDialog();
+              }
+            },
           ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios,
-              color: isDarkMode ? Colors.white : Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: scrollController,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              itemCount: messages.length + (isLoading ? 1 : 0),
-              itemBuilder: (_, i) {
-                if (i < messages.length) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, 0.5),
-                      end: Offset.zero,
-                    ).animate(CurvedAnimation(
-                      parent: messages[i].animationController,
-                      curve: Curves.easeOutBack,
-                    )),
-                    child: buildMessage(messages[i], isDarkMode),
-                  );
-                } else {
-                  return buildLoadingBubble(isDarkMode);
-                }
-              },
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: isDarkMode
+                  ? [Colors.grey[900]!, Colors.grey[850]!]
+                  : [Colors.grey[100]!, Colors.white],
             ),
           ),
-          buildInputField(isDarkMode),
-        ],
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemCount: messages.length + (isLoading ? 1 : 0),
+                  itemBuilder: (_, i) {
+                    if (i < messages.length) {
+                      return FadeTransition(
+                        opacity: messages[i].animationController,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: messages[i].isUser
+                                ? const Offset(1, 0)
+                                : const Offset(-1, 0),
+                            end: Offset.zero,
+                          ).animate(CurvedAnimation(
+                            parent: messages[i].animationController,
+                            curve: Curves.easeOutCubic,
+                          )),
+                          child: buildMessage(messages[i], isDarkMode),
+                        ),
+                      );
+                    } else {
+                      return buildLoadingBubble(isDarkMode);
+                    }
+                  },
+                ),
+              ),
+              buildInputField(isDarkMode),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget buildMessage(ChatMessage msg, bool isDarkMode) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      alignment: msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
-        decoration: BoxDecoration(
-          color: msg.isUser
-              ? (isDarkMode ? Colors.indigo[400] : Colors.indigo[300])
-              : (isDarkMode ? Colors.grey[700] : Colors.grey[300]),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: isDarkMode ? Colors.black26 : Colors.grey.withOpacity(0.4),
-              blurRadius: 8,
-              offset: const Offset(2, 2),
-            )
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: Row(
+        mainAxisAlignment:
+            msg.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!msg.isUser) ...[
+            CircleAvatar(
+              radius: 18,
+              backgroundImage: const AssetImage('assets/images/background.png'),
+            ),
+            const SizedBox(width: 10),
           ],
-        ),
-        child: Text(
-          msg.text,
-          style: TextStyle(
-            fontSize: 18,
-            height: 1.4,
-            color: msg.isUser
-                ? Colors.white
-                : (isDarkMode ? Colors.white70 : Colors.black87),
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.7),
+              decoration: BoxDecoration(
+                color: msg.isUser
+                    ? (isDarkMode ? Colors.indigo[500] : Colors.indigo[400])
+                    : (isDarkMode ? Colors.grey[800] : Colors.white),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDarkMode
+                        ? Colors.black26
+                        : Colors.grey.withOpacity(0.3),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Text(
+                msg.text,
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 1.5,
+                  color: msg.isUser
+                      ? Colors.white
+                      : (isDarkMode ? Colors.white : Colors.black87),
+                ),
+              ),
+            ),
           ),
-        ),
+          if (msg.isUser) ...[
+            const SizedBox(width: 10),
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.transparent,
+              child: ClipOval(
+                child: avatarUrl != null
+                    ? CachedNetworkImage(
+                        imageUrl: avatarUrl!,
+                        fit: BoxFit.cover,
+                        width: 36,
+                        height: 36,
+                        placeholder: (context, url) => _buildImagePlaceholder(),
+                        errorWidget: (context, url, error) =>
+                            _buildImagePlaceholder(),
+                      )
+                    : _buildImagePlaceholder(),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
 
   Widget buildLoadingBubble(bool isDarkMode) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        decoration: BoxDecoration(
-          color: isDarkMode ? Colors.grey[700] : Colors.grey[300],
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-              ),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundImage: const AssetImage('assets/images/background.png'),
+            backgroundColor:
+                isDarkMode ? Colors.indigo[700] : Colors.indigo[300],
+          ),
+          const SizedBox(width: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: isDarkMode ? Colors.grey[800] : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: isDarkMode
+                      ? Colors.black26
+                      : Colors.grey.withOpacity(0.3),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            const SizedBox(width: 12),
-            Text(
-              "Escribiendo...",
-              style: TextStyle(
-                fontSize: 16,
-                color: isDarkMode ? Colors.white70 : Colors.black87,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      isDarkMode ? Colors.indigo[300]! : Colors.indigo[500]!,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  "Escribiendo...",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isDarkMode ? Colors.white70 : Colors.black54,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -305,8 +481,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget buildInputField(bool isDarkMode) {
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isDarkMode ? Colors.grey[850] : Colors.white,
           borderRadius: BorderRadius.circular(30),
@@ -314,7 +490,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             BoxShadow(
               color: isDarkMode ? Colors.black26 : Colors.grey.withOpacity(0.2),
               blurRadius: 8,
-              offset: const Offset(2, 2),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -326,7 +502,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 onSubmitted: (_) => sendMessage(),
                 style: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black87,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
                 decoration: InputDecoration(
                   hintText: "Escribe tu mensaje...",
@@ -339,16 +515,28 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             ),
             GestureDetector(
               onTap: sendMessage,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.all(12),
+              child: Container(
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: isDarkMode ? Colors.indigo[400] : Colors.indigo,
+                  gradient: LinearGradient(
+                    colors: isDarkMode
+                        ? [Colors.indigo[600]!, Colors.indigo[400]!]
+                        : [Colors.indigo[400]!, Colors.indigo[300]!],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.indigo.withOpacity(0.3),
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: const Icon(
                   Icons.send_rounded,
-                  size: 26,
+                  size: 24,
                   color: Colors.white,
                 ),
               ),
