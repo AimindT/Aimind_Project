@@ -5,7 +5,7 @@ import os
 # In[]:
 
 # Step 1: Define the custom path where you want to save the image
-save_path = "C:/Users/chris/OneDrive/Escritorio/Aimind/Aimin_Project/plots/emotion_scatter.png"  # Adjust to your desired path
+save_path = "Graphs/Sastifacion_Dispersion.png" 
 
 # Ensure the directory exists, create it if it doesn't
 os.makedirs(os.path.dirname(save_path), exist_ok=True)
