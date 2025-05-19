@@ -1,11 +1,11 @@
-import 'dart:io';
+// import 'dart:io';
 import 'package:aimind/config/palette.dart';
 import 'package:aimind/screens/dashboard/dashboard_screen.dart';
 import 'package:aimind/services/auth_services.dart';
 import 'package:aimind/widgets/animated_submit_button.dart';
 import 'package:aimind/widgets/custom_text_field.dart';
-import 'package:aimind/widgets/login_button.dart';
-import 'package:aimind/widgets/login_button_with_image.dart';
+// import 'package:aimind/widgets/login_button.dart';
+// import 'package:aimind/widgets/login_button_with_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -257,77 +257,76 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            // Botones de inicio de sesión con redes sociales (debajo del container)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: isSignupScreen
-                    ? EdgeInsets.symmetric(vertical: 0.5)
-                    : EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  children: [
-                    Text(
-                      !isSignupScreen
-                          ? "O inicia sesión con"
-                          : "O registrate con",
-                      style: TextStyle(fontSize: isSmall ? 16 : 18),
-                    ),
-                    SizedBox(height: isSmall ? 10 : 20),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            LoginButton(
-                              icon: Icons.facebook,
-                              text: "Facebook",
-                              backgroundColor: Color(0xFF3B5999),
-                              iconColor: Colors.white,
-                              textColor: Colors.white,
-                              voidCallback: () {
-                                signInWithFacebook();
-                              },
-                            ),
-                            SizedBox(width: 10),
-                            LoginButtonWithImage(
-                              imagePath: 'assets/images/google_logo.png',
-                              text: "Google",
-                              backgroundColor: Colors.white,
-                              textColor: Colors.black87,
-                              voidCallback: () async {
-                                if (!kIsWeb &&
-                                    (Platform.isAndroid || Platform.isIOS)) {
-                                  await signInWithGoogle(context);
-                                } else {
-                                  Supabase.instance.client.auth
-                                      .signInWithOAuth(OAuthProvider.google);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            LoginButtonWithImage(
-                              imagePath: 'assets/images/x_logo.png',
-                              text: "",
-                              backgroundColor: Colors.black,
-                              voidCallback: () {
-                                signInWithTwitter();
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
+                // Positioned(
+                //   bottom: 0,
+                //   left: 0,
+                //   right: 0,
+                //   child: Container(
+                //     padding: isSignupScreen
+                //         ? EdgeInsets.symmetric(vertical: 0.5)
+                //         : EdgeInsets.symmetric(vertical: 10),
+                //     child: Column(
+                //       children: [
+                //         Text(
+                //           isSignupScreen
+                //               ? "O inicia sesión con"
+                //               : "O registrate con",
+                //           style: TextStyle(fontSize: isSmall ? 16 : 18),
+                //         ),
+                //         SizedBox(height: isSmall ? 10 : 20),
+                //         Column(
+                //           children: [
+                //             Row(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 LoginButton(
+                //                   icon: Icons.facebook,
+                //                   text: "Facebook",
+                //                   backgroundColor: Color.fromARGB(255, 31, 33, 37),
+                //                   iconColor: Colors.white,
+                //                   textColor: Colors.white,
+                //                   voidCallback: () {
+                //                     signInWithFacebook();
+                //                   },
+                //                 ),
+                //                 SizedBox(width: 10),
+                //                 LoginButtonWithImage(
+                //                   imagePath: 'assets/images/google_logo.png',
+                //                   text: "Google",
+                //                   backgroundColor: Colors.white,
+                //                   textColor: Colors.black87,
+                //                   voidCallback: () async {
+                //                     if (!kIsWeb &&
+                //                         (Platform.isAndroid || Platform.isIOS)) {
+                //                       await signInWithGoogle(context);
+                //                     } else {
+                //                       Supabase.instance.client.auth
+                //                           .signInWithOAuth(OAuthProvider.google);
+                //                     }
+                //                   },
+                //                 ),
+                //               ],
+                //             ),
+                //             SizedBox(height: 10),
+                //             Row(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 LoginButtonWithImage(
+                //                   imagePath: 'assets/images/x_logo.png',
+                //                   text: "",
+                //                   backgroundColor: Colors.black,
+                //                   voidCallback: () {
+                //                     signInWithTwitter();
+                //                   },
+                //                 ),
+                //               ],
+                //             ),
+                //           ],
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // )
           ],
         ),
       ),
