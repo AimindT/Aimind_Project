@@ -16,8 +16,8 @@ class LikertScaleDialog extends StatefulWidget {
 class _LikertScaleDialogState extends State<LikertScaleDialog> {
   int _selectedRating = 0;
   bool _isSubmitting = false;
-  String? _selectedEmotion; // Variable para almacenar la emoción seleccionada
-  bool _showThankYou = false; // New state to show thank-you message
+  String? _selectedEmotion;
+  bool _showThankYou = false;
 
   // Lista de emojis y colores para la escala
   final List<IconData> _emojis = [
@@ -36,13 +36,23 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
     Colors.green,
   ];
 
-  // Lista de etiquetas de emoción para cada opción, con salto de línea
-  final List<String> _labels = [
-    'Muy\ninsatisfecho',
+  // Lista de etiquetas de emoción para cada opción
+  // Versión corta para pantallas pequeñas
+  final List<String> _shortLabels = [
+    'Muy mal',
+    'Mal',
+    'Neutral',
+    'Bien',
+    'Muy bien',
+  ];
+  
+  // Versión completa para pantallas más grandes
+  final List<String> _fullLabels = [
+    'Muy insatisfecho',
     'Insatisfecho',
     'Neutral',
     'Satisfecho',
-    'Muy\nsatisfecho',
+    'Muy satisfecho',
   ];
 
   Future<void> _submitRating() async {
@@ -60,17 +70,15 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
           'user_id': user.id,
           'question_id': '00000000-0000-0000-0000-000000000001',
           'rating': _selectedRating,
-          'emotion': _selectedEmotion, // Enviar la emoción seleccionada
+          'emotion': _selectedEmotion,
         });
       }
 
-      // Show thank-you message before closing
       setState(() {
         _showThankYou = true;
         _isSubmitting = false;
       });
 
-      // Delay to show thank-you message for 1.5 seconds
       await Future.delayed(const Duration(milliseconds: 1500));
 
       if (widget.onComplete != null) {
@@ -100,16 +108,38 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
-      child: contentBox(context),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return contentBox(context, constraints);
+        },
+      ),
     );
   }
 
-  Widget contentBox(BuildContext context) {
+  Widget contentBox(BuildContext context, BoxConstraints constraints) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    // Determine if we're in a compact layout
+    final isCompact = screenWidth < 360;
+    
+    // Determine icon size based on available width
+    final iconSize = isCompact ? 30.0 : (screenWidth < 400 ? 35.0 : 40.0);
+    
+    // Choose which labels to use based on screen width
+    final useShortLabels = screenWidth < 400;
+    
+    // Calculate padding based on screen size
+    final horizontalPadding = isCompact ? 12.0 : 20.0;
+    final verticalPadding = isCompact ? 15.0 : 20.0;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      width: constraints.maxWidth,
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
+      ),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: isDarkMode ? Colors.grey[900] : Colors.white,
@@ -129,71 +159,86 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
             const Text(
               'ESCALA DE LIKERT',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: isCompact ? 15 : 20),
             const Text(
               '¿CÓMO CALIFICARÍAS EL DESEMPEÑO DE AIMIND?',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14),
             ),
-            const SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                5,
-                (index) => GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedRating = index + 1;
-                      _selectedEmotion = _labels[index].replaceAll(
-                          '\n', ' '); // Almacenar la emoción sin salto de línea
-                    });
-                  },
-                  child: Column(
+            SizedBox(height: isCompact ? 15 : 20),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Use a grid for very small screens
+                if (constraints.maxWidth < 300) {
+                  // Distribuir con 3 arriba y 2 abajo centrados
+                  return Column(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: _selectedRating == index + 1
-                              ? _colors[index].withOpacity(0.2)
-                              : Colors.transparent,
-                          shape: BoxShape.circle,
-                          border: _selectedRating == index + 1
-                              ? Border.all(color: _colors[index], width: 2)
-                              : null,
-                        ),
-                        child: Icon(
-                          _emojis[index],
-                          color: _colors[index],
-                          size: 40,
+                      // Primera fila: 3 elementos
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                          3,
+                          (index) => buildRatingItem(
+                            index,
+                            useShortLabels,
+                            iconSize,
+                            isDarkMode,
+                            isCompact,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        _labels[index],
-                        style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                          fontWeight: _selectedRating == index + 1
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                        textAlign: TextAlign.center,
+                      SizedBox(height: isCompact ? 10 : 15),
+                      // Segunda fila: 2 elementos centrados
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buildRatingItem(
+                            3,
+                            useShortLabels,
+                            iconSize,
+                            isDarkMode,
+                            isCompact,
+                          ),
+                          SizedBox(width: 20),
+                          buildRatingItem(
+                            4,
+                            useShortLabels,
+                            iconSize,
+                            isDarkMode,
+                            isCompact,
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                ),
-              ),
+                  );
+                } else {
+                  // Use row for larger screens
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      5,
+                      (index) => buildRatingItem(
+                        index,
+                        useShortLabels,
+                        iconSize,
+                        isDarkMode,
+                        isCompact,
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: isCompact ? 10 : 15),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Container(
-                height: 10,
+                height: 8,
                 child: Row(
                   children: List.generate(
                     5,
@@ -205,7 +250,7 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.white,
-                                  size: 10,
+                                  size: 8,
                                 ),
                               )
                             : null,
@@ -215,60 +260,34 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text(
-                    'OMITIR',
-                    style: TextStyle(
-                      color: isDarkMode ? Colors.grey : Colors.grey[700],
-                    ),
+            SizedBox(height: isCompact ? 20 : 30),
+            // Use a Row for larger screens, Column for smaller screens
+            (constraints.maxWidth < 300)
+                ? Column(
+                    children: [
+                      buildSubmitButton(isDarkMode),
+                      const SizedBox(height: 10),
+                      buildSkipButton(isDarkMode),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildSkipButton(isDarkMode),
+                      buildSubmitButton(isDarkMode),
+                    ],
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: _selectedRating == 0 || _isSubmitting
-                      ? null
-                      : _submitRating,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _selectedRating == 0
-                        ? Colors.grey
-                        : _colors[_selectedRating - 1],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: _isSubmitting
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Text('ENVIAR'),
-                ),
-              ],
-            ),
           ] else ...[
             const Text(
               '¡Gracias por tu calificación!',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.green,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: isCompact ? 15 : 20),
             ElevatedButton(
               onPressed: () {
                 if (widget.onComplete != null) {
@@ -291,6 +310,105 @@ class _LikertScaleDialogState extends State<LikertScaleDialog> {
           ],
         ],
       ),
+    );
+  }
+
+  Widget buildRatingItem(
+    int index,
+    bool useShortLabels,
+    double iconSize,
+    bool isDarkMode,
+    bool isCompact,
+  ) {
+    final labels = useShortLabels ? _shortLabels : _fullLabels;
+    final fontSize = isCompact ? 10.0 : 12.0;
+    
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedRating = index + 1;
+          _selectedEmotion = _fullLabels[index];
+        });
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.all(isCompact ? 5 : 8),
+            decoration: BoxDecoration(
+              color: _selectedRating == index + 1
+                  ? _colors[index].withOpacity(0.2)
+                  : Colors.transparent,
+              shape: BoxShape.circle,
+              border: _selectedRating == index + 1
+                  ? Border.all(color: _colors[index], width: 2)
+                  : null,
+            ),
+            child: Icon(
+              _emojis[index],
+              color: _colors[index],
+              size: iconSize,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            labels[index],
+            style: TextStyle(
+              fontSize: fontSize,
+              color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+              fontWeight: _selectedRating == index + 1
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSkipButton(bool isDarkMode) {
+    return TextButton(
+      onPressed: () {
+        Navigator.of(context).pop(false);
+      },
+      child: Text(
+        'OMITIR',
+        style: TextStyle(
+          color: isDarkMode ? Colors.grey : Colors.grey[700],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSubmitButton(bool isDarkMode) {
+    return ElevatedButton(
+      onPressed: _selectedRating == 0 || _isSubmitting
+          ? null
+          : _submitRating,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _selectedRating == 0
+            ? Colors.grey
+            : _colors[_selectedRating - 1],
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(
+            horizontal: 30, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+      child: _isSubmitting
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              ),
+            )
+          : const Text('ENVIAR'),
     );
   }
 }
