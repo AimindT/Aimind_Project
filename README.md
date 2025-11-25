@@ -52,7 +52,7 @@ An AI-powered mental health companion providing 24/7 conversational support, evi
 ## Installation
 ```bash
 # Clone repository
-git clone https://github.com/your-org/aimind.git
+git clone https://github.com/AimindT/Aimin_Project.git
 cd aimind
 
 # Install dependencies
