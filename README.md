@@ -2,7 +2,7 @@
   <img src="./assets/logo.png" alt="AIMind Logo" width="200"/>
   
   # AIMind
-  ### Your Virtual Psychology Companion
+  ### Your Virtual Psychology
 </div>
 
 ## Overview
