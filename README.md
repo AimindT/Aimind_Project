@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="536" height="504" alt="image" src="https://github.com/user-attachments/assets/d3e46e73-0e68-4014-8fb0-4762a7feab36" />
+  <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/d3e46e73-0e68-4014-8fb0-4762a7feab36" />
   
   # AIMind
   ### Your Virtual Psychology
