@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/logo.png" alt="AIMind Logo" width="200"/>
+  <img width="536" height="504" alt="image" src="https://github.com/user-attachments/assets/d3e46e73-0e68-4014-8fb0-4762a7feab36" />
   
   # AIMind
   ### Your Virtual Psychology
