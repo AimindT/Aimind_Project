@@ -5,6 +5,18 @@
   ### Your Virtual Psychology
 </div>
 
+![Flutter](https://img.shields.io/badge/Flutter-Mobile%20App-02569B?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-Programming%20Language-0175C2?logo=dart&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E?logo=supabase&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?logo=postgresql&logoColor=white)
+![Llama 4](https://img.shields.io/badge/Llama%204-AI%20Model-FF6B6B)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20Architecture-purple)
+![Pattern](https://img.shields.io/badge/Pattern-MVVM-blue)
+![Auth](https://img.shields.io/badge/Auth-Secure%20Authentication-orange)
+![Encryption](https://img.shields.io/badge/Security-End--to--End%20Encryption-red)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)
+![Status](https://img.shields.io/badge/Status-Active%20Development-yellow)
+
 ## Overview
 
 **AIMind** is a virtual psychologist mobile application powered by Llama 4 AI that provides mental health support through conversational therapy, Cognitive Behavioral Therapy (CBT) exercises, and therapeutic journaling.
